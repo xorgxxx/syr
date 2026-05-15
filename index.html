@@ -30,7 +30,6 @@
     overflow-x: hidden;
   }
 
-  /* ───── LOCK SCREEN ───── */
   #lock {
     position: fixed; inset: 0;
     background: var(--bg);
@@ -132,7 +131,7 @@
     transition: opacity .3s;
   }
 
-  /* ───── MAIN APP ───── */
+
   #app {
     display: none;
     flex-direction: column;
@@ -339,9 +338,9 @@
 </head>
 <body>
 
-<!-- LOCK -->
+
 <div id="lock">
-  <div class="lock-glyph">ص&nbsp;ف&nbsp;ر</div>
+  <div class="lock-glyph">&nbsp;my gwen&nbsp;</div>
   <div class="lock-wrap">
     <div class="lock-label">مفتاح الدخول</div>
     <input id="pw-input" type="password" autocomplete="off" inputmode="numeric" maxlength="20" />
@@ -350,7 +349,7 @@
   </div>
 </div>
 
-<!-- APP -->
+
 <div id="app">
   <header>
     <div class="logo">my Gwen &nbsp;<span>/ نظام التشفير</span></div>
@@ -392,7 +391,7 @@
 <script>
 (function(){
 
-// ── auth ──────────────────────────────────────────────────
+
 const _k = (function(){
   const p=[50,51,49,49,50,48,48,56];
   return String.fromCharCode(...p);
@@ -445,66 +444,54 @@ window.copyOut=function(){
   });
 };
 
-// ── Arabic alphabet ───────────────────────────────────────
+
 const ALPHA = 'ءابتثجحخدذرزسشصضطظعغفقكلمنهوي';
-// index → next letter
+
 function nextLetter(ch){
   const i = ALPHA.indexOf(ch);
   if(i===-1) return ch;
   return ALPHA[(i+1)%ALPHA.length];
 }
 
-// ── normalise ─────────────────────────────────────────────
-// Returns array of char objects: {ch, addedBinary}
-// Ta marbuta → تْ (two chars: ت with sukun marker)
-// Binary word → add next-letter with kasratan diacritic
+
 const KASRATAN = '\u064D'; // ٍ
 const SUKUN    = '\u0652'; // ْ
 
 function normaliseWord(word){
-  // strip any existing harakat for length counting (keep them for display?)
-  // We work on the base letters (no harakat) for structure
-  const base = word.replace(/[\u064B-\u0652]/g,''); // strip diacritics
+  
+  const base = word.replace(/[\u064B-\u0652]/g,''); //
   let chars;
 
-  // replace ta marbuta
+ 
   let processed = base.replace(/ة$/,'ت');
 
-  chars = [...processed]; // array of base chars
+  chars = [...processed];
 
-  // binary → make trinary
+ 
   if(chars.length===2){
     const last = chars[chars.length-1];
     const extra = nextLetter(last);
-    chars.push(extra+KASRATAN); // mark with kasratan to identify later
+    chars.push(extra+KASRATAN); 
   }
-  return chars; // array of strings (single chars or char+kasratan)
+  return chars; 
 }
 
 function baseChar(c){ return c.replace(/[\u064B-\u0652]/g,''); }
 function hasKasratan(c){ return c.includes(KASRATAN); }
 
-// ── pattern assignment ────────────────────────────────────
-// Group index (0-based), size 3 each
-// sequence: 1A, 3B, 3A, 3B, 3A...
-// group 0 → A
-// groups 1,2,3 → B
-// groups 4,5,6 → A
-// groups 7,8,9 → B
-// ...
+
 function groupPattern(gIdx){
   if(gIdx===0) return 'A';
-  // after group 0: repeat (3B,3A)
+ 
   const r = (gIdx-1)%6;
   return r<3 ? 'B' : 'A';
 }
 
-// ── reorder chars ─────────────────────────────────────────
+
 function reorderA(chars){
   const n=chars.length;
   if(n===3) return [chars[1],chars[2],chars[0]];
-  // 4+: (3, last, 1, rest in order)
-  // positions: 0-indexed → (2, n-1, 0, 1..n-2 except 2 and n-1)
+ 
   let result=[];
   result.push(chars[2]);
   result.push(chars[n-1]);
@@ -516,8 +503,7 @@ function reorderA(chars){
 function reorderB(chars){
   const n=chars.length;
   if(n===3) return [chars[0],chars[2],chars[1]];
-  // 4+: (1,2, chars[3..n-2], last, 3)
-  // 0-indexed: (0,1, 3..n-2, n-1, 2)
+ 
   let result=[];
   result.push(chars[0]);
   result.push(chars[1]);
@@ -527,40 +513,36 @@ function reorderB(chars){
   return result;
 }
 
-// ── punctuation map ───────────────────────────────────────
+
 const PUNCT_ENC = { '.':'ط', '،':'ص', '؟':'ه', '!':'ج' };
 const PUNCT_DEC = {};
 Object.keys(PUNCT_ENC).forEach(k=>PUNCT_DEC[PUNCT_ENC[k]]=k);
 
-// ── harakat for space ─────────────────────────────────────
-// We'll always use damma (ُ) for simplicity since the rule says "one of three"
-// but no rule specifies which; using damma consistently
+
 const DAMMA  = '\u064F';
 const FATHA  = '\u064E';
 const KASRA  = '\u0650';
 const HARAKATS=[DAMMA,FATHA,KASRA];
 
 function spaceHaraka(wordChars, pattern, wordIdx){
-  // pattern A → 2nd char of normalised word (index 1)
-  // pattern B → 1st char (index 0)
+ 
   const idx = pattern==='A'?1:0;
   const c = baseChar(wordChars[idx]||wordChars[0]);
-  // cycle harakat based on word index to add variation
+  
   const h = HARAKATS[wordIdx%3];
   return c+h;
 }
 
-// ── ENCRYPT ──────────────────────────────────────────────
+
 function encrypt(text){
-  // split into tokens: words + punctuation
-  // tokenise preserving punctuation positions
+
   const tokens = tokenise(text);
 
-  // filter words only for indexing
+ 
   const words=[];
   tokens.forEach(t=>{ if(t.type==='word') words.push(t); });
 
-  // assign group/pattern
+
   words.forEach((w,i)=>{
     w.wIdx=i;
     w.gIdx=Math.floor(i/3);
@@ -578,17 +560,17 @@ function encrypt(text){
       const reordered=(w.pattern==='A')?reorderA(norm):reorderB(norm);
       out+=reordered.join('');
 
-      // space char
+     
       const sp=spaceHaraka(norm,w.pattern,w.wIdx);
 
-      // check if next token is punct
+     
       const nextTok=tokens[ti+1];
       if(nextTok&&nextTok.type==='punct'){
         const pChar=PUNCT_ENC[nextTok.value]||nextTok.value;
-        // space + punct-char + 2nd-base-char (no haraka)
+       
         const secondBase=baseChar(norm[1]||norm[0]);
         out+=sp+pChar+secondBase;
-        ti++; // skip punct token
+        ti++; 
       } else {
         out+=sp;
       }
@@ -597,13 +579,9 @@ function encrypt(text){
   return out.trim();
 }
 
-// ── DECRYPT ──────────────────────────────────────────────
-// Decryption is complex since we must reverse the process
-// Strategy: parse the ciphertext by identifying space-harakat boundaries
+
 function decrypt(cipher){
-  // Step 1: split into encrypted word tokens by detecting harakated chars
-  // A "space char" is a single arabic letter followed by a harakat (damma/fatha/kasra)
-  // optionally followed by punct-cipher + second-base-char
+ 
   
   const encTokens = parseEncrypted(cipher);
   if(!encTokens||encTokens.length===0) return '(تعذّر فك التشفير)';
@@ -620,8 +598,7 @@ function decrypt(cipher){
 }
 
 function parseEncrypted(s){
-  // Walk character by character
-  // Collect chars until we hit a letter+harakat sequence (space marker)
+
   const HARAKAT_SET=new Set([DAMMA,FATHA,KASRA]);
   const PUNCT_CIPHERS=new Set(Object.values(PUNCT_ENC));
   
@@ -630,18 +607,18 @@ function parseEncrypted(s){
   let i=0;
   while(i<s.length){
     const ch=s[i];
-    // detect harakat (space signal)
+   
     if(i>0 && HARAKAT_SET.has(ch) && isArabicLetter(s[i-1])){
-      // The previous char was the space-letter, remove it from cur
+      
       cur.pop();
-      // save word token
+     
       if(cur.length>0){
         let punct=null;
-        // check if next chars are punct-cipher + base-letter (no harakat)
+      
         if(i+1<s.length && PUNCT_CIPHERS.has(s[i+1])){
           const pKey=Object.keys(PUNCT_ENC).find(k=>PUNCT_ENC[k]===s[i+1]);
           punct=pKey||null;
-          i+=2; // skip punct char + following base-char
+          i+=2; 
         }
         tokens.push({chars:[...cur],punct});
         cur=[];
@@ -661,11 +638,10 @@ function decodeWord(chars,pattern){
   let original;
   if(pattern==='A'){
     if(n===3){
-      // encoded: [1,2,0] → original: [2,0,1]
+      
       original=[chars[2],chars[0],chars[1]];
     } else {
-      // encoded: (2,n-1,0,1..n-2 skip 2)
-      // reverse: encoded[0]=orig[2], encoded[1]=orig[n-1], encoded[2]=orig[0], rest=orig[1..n-2 skip 2]
+      
       original=new Array(n);
       original[2]=chars[0];
       original[n-1]=chars[1];
@@ -676,10 +652,10 @@ function decodeWord(chars,pattern){
     }
   } else {
     if(n===3){
-      // encoded: [0,2,1] → original: [0,2,1] reverse → [0,2,1]
+    
       original=[chars[0],chars[2],chars[1]];
     } else {
-      // encoded: (0,1, 3..n-2, n-1, 2)
+     
       original=new Array(n);
       original[0]=chars[0];
       original[1]=chars[1];
@@ -690,12 +666,11 @@ function decodeWord(chars,pattern){
     }
   }
 
-  // post-process: remove kasratan-marked chars (were added for binary)
+  
   let filtered=original.filter(c=>!hasKasratan(c));
-  // convert تْ back to ة if at end
+ 
   let word=filtered.map(baseChar).join('');
-  // تْ at end → ة (but sukun was stripped; we look for ت at end after we know it came from ة)
-  // Since we can't know for sure, we leave as is (or optionally restore)
+ 
   word=word.replace(/ت$/,'ة');
   return word;
 }
@@ -713,7 +688,7 @@ function tokenise(text){
   const parts=text.trim().split(/\s+/);
   parts.forEach(p=>{
     if(!p) return;
-    // check trailing punct
+   
     const last=p[p.length-1];
     if(PUNCTS.has(last)){
       const word=p.slice(0,-1);
@@ -726,7 +701,7 @@ function tokenise(text){
   return tokens;
 }
 
-// ── process ───────────────────────────────────────────────
+
 window.process=function(){
   const inp=document.getElementById('input-text').value.trim();
   if(!inp){ return; }
