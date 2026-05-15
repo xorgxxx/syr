@@ -2,463 +2,215 @@
 <html dir="rtl" lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام التشفير العربية | نظرية التشفير الجذري المتشكل</title>
+    <title>نظام تحويل النصوص</title>
     <style>
-        * {
-            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
-        }
-        body {
-            background: linear-gradient(135deg, #0a2f2f, #043535);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            margin: 0;
-        }
-        .container {
-            background: rgba(255,255,255,0.95);
-            border-radius: 40px;
-            padding: 30px;
-            max-width: 900px;
-            width: 100%;
-            box-shadow: 0 25px 45px rgba(0,0,0,0.3);
-            backdrop-filter: blur(2px);
-        }
-        h1 {
-            text-align: center;
-            color: #0a4e4e;
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        .sub {
-            text-align: center;
-            color: #2c7878;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-        .password-box {
-            background: #eef4f4;
-            padding: 15px;
-            border-radius: 30px;
-            margin-bottom: 25px;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .password-box label {
-            font-weight: bold;
-            color: #035;
-        }
-        #passInput {
-            padding: 10px 20px;
-            border-radius: 50px;
-            border: 1px solid #2c7878;
-            font-size: 18px;
-            text-align: center;
-            width: 160px;
-            font-family: monospace;
-        }
-        .pass-status {
-            font-size: 13px;
-            padding: 5px 12px;
-            border-radius: 30px;
-            background: #ddd;
-        }
-        .mode-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-        .mode-btn {
-            background: #cfe9e9;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 60px;
-            font-weight: bold;
-            font-size: 18px;
-            cursor: pointer;
-            transition: 0.2s;
-            color: #043535;
-        }
-        .mode-btn.active {
-            background: #0a6b6b;
-            color: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-        textarea {
-            width: 100%;
-            padding: 18px;
-            font-size: 18px;
-            border-radius: 28px;
-            border: 1.5px solid #bdd4d4;
-            background: #fefefe;
-            resize: vertical;
-            font-family: 'Courier New', 'Segoe UI', monospace;
-            box-sizing: border-box;
-        }
-        .btn-action {
-            background: #0f5c5c;
-            color: white;
-            font-size: 20px;
-            padding: 12px;
-            width: 100%;
-            border: none;
-            border-radius: 60px;
-            margin: 15px 0;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-        .btn-action:hover {
-            background: #0a4747;
-            transform: scale(0.98);
-        }
-        .result-area {
-            background: #e9f3f3;
-            border-radius: 30px;
-            padding: 15px;
-            margin-top: 20px;
-            word-break: break-word;
-            border-right: 8px solid #0a6b6b;
-        }
-        .label {
-            font-weight: bold;
-            margin-bottom: 6px;
-            color: #023e3e;
-        }
-        footer {
-            font-size: 12px;
-            text-align: center;
-            margin-top: 20px;
-            color: #608b8b;
-        }
+        * { font-family: 'Segoe UI', Tahoma, Arial, sans-serif; }
+        body { background: linear-gradient(135deg, #0a2f2f, #043535); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; margin: 0; }
+        .container { background: rgba(255,255,255,0.95); border-radius: 40px; padding: 30px; max-width: 900px; width: 100%; box-shadow: 0 25px 45px rgba(0,0,0,0.3); }
+        h1 { text-align: center; color: #0a4e4e; }
+        .pass-box { background: #eef4f4; padding: 15px; border-radius: 30px; margin-bottom: 25px; display: flex; gap: 12px; align-items: center; justify-content: center; flex-wrap: wrap; }
+        #pwd { padding: 10px 20px; border-radius: 50px; border: 1px solid #2c7878; font-size: 18px; width: 160px; text-align: center; }
+        .mode-btns { display: flex; gap: 20px; justify-content: center; margin-bottom: 30px; }
+        .mode { background: #cfe9e9; border: none; padding: 12px 28px; border-radius: 60px; font-weight: bold; font-size: 18px; cursor: pointer; }
+        .mode.active { background: #0a6b6b; color: white; }
+        textarea { width: 100%; padding: 18px; font-size: 18px; border-radius: 28px; border: 1.5px solid #bdd4d4; box-sizing: border-box; }
+        .run { background: #0f5c5c; color: white; font-size: 20px; padding: 12px; width: 100%; border: none; border-radius: 60px; margin: 15px 0; cursor: pointer; }
+        .res { background: #e9f3f3; border-radius: 30px; padding: 15px; margin-top: 20px; border-right: 8px solid #0a6b6b; }
+        footer { font-size: 12px; text-align: center; margin-top: 20px; color: #608b8b; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>🔐 التشفير الجذري المتشكّل</h1>
-    <div class="sub">نظرية عربية للتشفير القوي وسهل الحفظ</div>
-
-    <div class="password-box">
-        <label>🔑 كلمة مرور الموقع:</label>
-        <input type="password" id="passInput" placeholder="23112008" value="23112008">
-        <span id="passStatus" class="pass-status">⚪ لم يُتحقق</span>
+    <h1>نظام تحويل النصوص</h1>
+    <div class="pass-box">
+        <label>مفتاح:</label>
+        <input type="password" id="pwd" placeholder="••••">
+        <span id="pst">⚪</span>
     </div>
-
-    <div class="mode-buttons">
-        <button id="encryptModeBtn" class="mode-btn active">🔒 تشفير</button>
-        <button id="decryptModeBtn" class="mode-btn">🔓 فك التشفير</button>
+    <div class="mode-btns">
+        <button id="b1" class="mode active">تحويل →</button>
+        <button id="b2" class="mode">← تحويل عكسي</button>
     </div>
-
-    <textarea id="inputText" rows="4" placeholder="أدخل النص هنا ..."></textarea>
-    <button id="processBtn" class="btn-action">⚡ تنفيذ</button>
-
-    <div class="result-area">
-        <div class="label">📄 النتيجة:</div>
-        <div id="outputText" style="font-family: monospace; font-size: 18px;">—</div>
+    <textarea id="inp" rows="4" placeholder="أدخل النص..."></textarea>
+    <button id="go" class="run">تنفيذ</button>
+    <div class="res">
+        <div>النتيجة:</div>
+        <div id="out" style="font-family: monospace; font-size: 18px;">—</div>
     </div>
-    <footer>النظرية تعتمد على الأنماط A/B وإعادة الترتيب + فراغات مشفرة + معالجة التاء المربوطة والثنائي</footer>
+    <footer>نظام مغلق</footer>
 </div>
 
 <script>
-    // ------------------- الأبجدية العربية للحصول على الحرف التالي ------------------
-    const alphabet = "ابتثجحخدذرزسشصضطظعغفقكلمنهوي";
-    function getNextLetter(letter) {
-        let idx = alphabet.indexOf(letter);
-        if (idx !== -1 && idx + 1 < alphabet.length) return alphabet[idx + 1];
-        return "ا"; // افتراضي آمن
+(function(){
+    let s1 = "ODAwMjExMzI=";
+    let s2 = atob(s1);
+    let s3 = s2.split('').reverse().join('');
+    let KEY = s3;
+
+    let ab = "ابتثجحخدذرزسشصضطظعغفقكلمنهوي";
+
+    function fa(x){
+        let i = ab.indexOf(x);
+        if(i>=0 && i+1<ab.length) return ab[i+1];
+        return "ا";
     }
 
-    // ------ تطبيع الكلمة: التاء المربوطة + معالجة الثنائي ------
-    function normalizeWord(word) {
-        // 1. تاء مربوطة => تْ
-        let w = word;
-        if (w.endsWith("ة")) {
-            w = w.slice(0, -1) + "تْ";
+    function za(w){
+        let r = w;
+        if(r.endsWith("ة")) r = r.slice(0,-1)+"تْ";
+        let h = [];
+        for(let i=0;i<r.length;i++) if(r[i]!='ْ') h.push(r[i]);
+        if(h.length===2){
+            let n = fa(h[1]);
+            h.push(n,"ٍ");
         }
-        // 2. إذا صارت ثنائية (بعد معالجة التاء) أو كانت بالأصل ثنائية
-        let letters = [...w]; // يفك الحروف مع احترام تْ كحرفين؟ نتعامل مع تْ كحرفين منفصلين لكنهما يمثلان صوتاً.
-        // لكن لتسهيل الخوارزمية سنتعامل مع الحروف كأحرف مفردة ، و"تْ" عبارة عن حرف ت يتبعه سكون نعتبرها كمقطعين لكن في مصفوفة سنحتاج توحيد.
-        // الأسهل: نعيد بناء المصفوفة بحيث يتم التعامل مع "تْ" كحرفين "ت" و "ْ" . ولكن هذا يعقّد. سأبسط: التعامل مع النص كحروف عادية مع شرط إذا كان الطول 2 
-        // لكن لأن التاء المربوطة أصبحت ت + سكون (حركة) فعدد الحروف يزيد. لحل دقيق: سنعتبر "تْ" رمز واحد مميز؟ لحل سريع وعملي: نتعامل مع كل حرف وحركة السكون نعتبرها زائدة.
-        // سنعيد الصياغة لضمان اشتغال القاعدة: نأخذ النص الخام ونستخرج الحروف الأساسية.
-        let rawLetters = [];
-        for (let i = 0; i < w.length; i++) {
-            if (w[i] === 'ْ') continue; // تجاهل السكون الظاهر
-            rawLetters.push(w[i]);
-        }
-        if (rawLetters.length === 2) {
-            let last = rawLetters[1];
-            let nextL = getNextLetter(last);
-            rawLetters.push(nextL);
-            rawLetters.push("ٍ");   // تنوين كسر
-        }
-        return rawLetters;
+        return h;
     }
 
-    // إعادة ترتيب حسب النمط A أو B
-    function rearrangeLetters(letters, pattern, isEncrypt = true) {
-        // letters: مصفوفة الحروف بعد التطبيع (بدون الفراغات)
-        let n = letters.length;
-        if (n === 0) return [];
-        if (pattern === 'A') {
-            if (n === 3) {
-                return [letters[1], letters[2], letters[0]];
-            } else { // n >= 4
-                // (3, last, 1, الباقي)
-                let result = [letters[2], letters[n-1], letters[0]];
-                for (let i = 3; i <= n-2; i++) result.push(letters[i]);
-                return result;
-            }
-        } else { // pattern B
-            if (n === 3) {
-                return [letters[0], letters[2], letters[1]];
-            } else {
-                // (1,2, الباقي, last, 3)
-                let result = [letters[0], letters[1]];
-                for (let i = 3; i <= n-2; i++) result.push(letters[i]);
-                result.push(letters[n-1]);
-                result.push(letters[2]);
-                return result;
-            }
-        }
+    function raA(a){
+        let n=a.length;
+        if(n===3) return [a[1],a[2],a[0]];
+        let r=[a[2],a[n-1],a[0]];
+        for(let i=3;i<=n-2;i++) r.push(a[i]);
+        return r;
+    }
+    function raB(a){
+        let n=a.length;
+        if(n===3) return [a[0],a[2],a[1]];
+        let r=[a[0],a[1]];
+        for(let i=3;i<=n-2;i++) r.push(a[i]);
+        r.push(a[n-1],a[2]);
+        return r;
     }
 
-    // حساب حرف الفراغ حسب النمط (من الكلمة قبل التشفير)
-    function getSpaceChar(originalLetters, pattern) {
-        if (pattern === 'A') {
-            // الحرف الثاني (index 1)
-            return originalLetters[1] + "ُ";
-        } else {
-            // الحرف الأول
-            return originalLetters[0] + "ُ";
-        }
+    function sp(l,p){
+        let i = p==='A'?1:0;
+        return l[i]+"ُ";
     }
 
-    // لتوليد تتابع الأنماط لكل مجموعة كلمات (كل 3 كلمات مجموعة)
-    function getPatternSequence(numGroups) {
-        let seq = [];
-        if (numGroups === 0) return seq;
-        seq.push('A'); // المجموعة الأولى نمط A
-        let last = 'A';
-        while (seq.length < numGroups) {
-            if (last === 'A') {
-                seq.push('B','B','B');
-                last = 'B';
-            } else {
-                seq.push('A','A','A');
-                last = 'A';
+    function pt(g){
+        let o=['A'];
+        let l='A';
+        while(o.length<g){
+            if(l==='A'){o.push('B','B','B'); l='B';}
+            else {o.push('A','A','A'); l='A';}
+        }
+        return o.slice(0,g);
+    }
+
+    function enc(t){
+        let w = t.trim().split(/\s+/);
+        if(!w.length) return "";
+        let nw = w.map(z=>za(z));
+        let gr=[];
+        for(let i=0;i<nw.length;i+=3) gr.push(nw.slice(i,i+3));
+        let ps = pt(gr.length);
+        let out=[];
+        for(let i=0;i<gr.length;i++){
+            let pa = ps[i];
+            for(let tk of gr[i]){
+                let rr = pa==='A'?raA(tk):raB(tk);
+                let spc = sp(tk,pa);
+                out.push(rr.join('')+spc);
             }
         }
-        return seq.slice(0, numGroups);
+        let r = out.join('');
+        r = r.replace(/؟/g,'هـ').replace(/!/g,'ج').replace(/\./g,'ط').replace(/،/g,'ص');
+        return r;
     }
 
-    // ======================= التشفير الرئيسي =======================
-    function encryptText(plain) {
-        // 1. تقسيم النص إلى كلمات (بالمسافات العربية)
-        let words = plain.trim().split(/\s+/);
-        if (words.length === 0) return "";
-
-        // 2. تطبيع كل كلمة -> تخزين الحروف الأصلية (مصفوفة)
-        let normalizedTokens = [];
-        for (let w of words) {
-            let norm = normalizeWord(w);
-            normalizedTokens.push(norm);
+    function dec(c){
+        let dk = ['ُ','َ','ِ'];
+        let toks = [];
+        let cur = "";
+        for(let ch of c){
+            if(dk.includes(ch)){
+                if(cur.length){ toks.push({e:cur,sc:ch}); cur=""; }
+            } else cur+=ch;
         }
-
-        // 3. تجميع (كل 3 كلمات) وتحديد الأنماط
-        let groups = [];
-        for (let i = 0; i < normalizedTokens.length; i += 3) {
-            groups.push(normalizedTokens.slice(i, i+3));
+        if(cur.length) toks.push({e:cur,sc:null});
+        let wc = toks.length;
+        let gc = Math.ceil(wc/3);
+        let ps = pt(gc);
+        let wp = [];
+        for(let i=0;i<gc;i++){
+            let p = ps[i];
+            for(let j=0;j<3 && (i*3+j)<wc;j++) wp.push(p);
         }
-        let patternSeq = getPatternSequence(groups.length);
-        
-        let encryptedParts = [];
-        let groupIdx = 0;
-        for (let group of groups) {
-            let pattern = patternSeq[groupIdx];
-            for (let tokenLetters of group) {
-                // إعادة الترتيب حسب النمط
-                let rearranged = rearrangeLetters(tokenLetters, pattern, true);
-                let rearrangedStr = rearranged.join('');
-                // حرف الفراغ
-                let spaceSym = getSpaceChar(tokenLetters, pattern);
-                encryptedParts.push(rearrangedStr + spaceSym);
-            }
-            groupIdx++;
-        }
-        // دمج الكل بدون فراغات إضافية
-        let result = encryptedParts.join('');
-        // معالجة علامات الترقيم المضمنة (إن وردت)
-        result = result.replace(/؟/g, 'هـ').replace(/!/g, 'ج').replace(/\./g, 'ط').replace(/،/g, 'ص');
-        return result;
-    }
-
-    // ============== فك التشفير (مبدئي معكوس) ==============
-    // لعكس العملية نحتاج لاستعادة المجموعات والأنماط لكن الصعوبة أن الفراغات ليست محددة.
-    // سنقوم بفك بسيط حسب القاعدة المتبعة: كل وحدة = (كلمة مشفرة + حرف فراغ متحرك)
-    // لكن تحديد مكان انتهاء الكلمة يعتمد على تحليل الحرف الأخير الذي عليه حركة (ُ َ ِ)
-    function decryptText(cipher) {
-        // مرحلة أولى: استخراج الرموز (الكلمات المشفرة + أحرف الفراغ)
-        const diacritics = ['ُ','َ','ِ'];
-        let tokens = [];
-        let current = "";
-        for (let i = 0; i < cipher.length; i++) {
-            let ch = cipher[i];
-            if (diacritics.includes(ch)) {
-                // هذا الحرف السابق + الحركة = فراغ
-                if (current.length > 0) {
-                    tokens.push({ encryptedWord: current, spaceMark: ch });
-                    current = "";
+        let orig=[];
+        for(let i=0;i<toks.length;i++){
+            let eL = [...toks[i].e];
+            let p = wp[i];
+            let n = eL.length;
+            let oL = new Array(n);
+            if(p==='A'){
+                if(n===3){
+                    oL = [eL[2],eL[0],eL[1]];
                 } else {
-                    // حالة نادرة .. نتجاهل
-                }
-            } else {
-                current += ch;
-            }
-        }
-        if (current.length > 0) tokens.push({ encryptedWord: current, spaceMark: null });
-        
-        // الآن نحتاج إلى استعادة الأنماط الأصلية مع افتراض أن عدد الكلمات = عدد tokens
-        let wordsCount = tokens.length;
-        let groupsCount = Math.ceil(wordsCount / 3);
-        let patternSeq = getPatternSequence(groupsCount);
-        // توزيع الأنماط على الكلمات
-        let patternsForWords = [];
-        for (let g = 0; g < groupsCount; g++) {
-            let pat = patternSeq[g];
-            let start = g*3;
-            let end = Math.min(start+3, wordsCount);
-            for (let i = start; i < end; i++) patternsForWords.push(pat);
-        }
-        
-        let originalWords = [];
-        for (let idx = 0; idx < tokens.length; idx++) {
-            let token = tokens[idx];
-            let pattern = patternsForWords[idx];
-            // نعكس عملية إعادة الترتيب (نحتاج الى معرفة الحروف الأصلية بعد إعادة الترتيب المعكوس)
-            let encryptedLetters = [...token.encryptedWord];
-            let n = encryptedLetters.length;
-            // لعكس التبديل حسب النمط (هنا نعكس نفس الدالة rearrangement بالعكس)
-            let reversedLetters = [];
-            if (pattern === 'A') {
-                if (n === 3) {
-                    // A الأصلي (2,3,1) --> لعكس الترتيب نستخدم الخريطة: المعكوس = (3,1,2)
-                    reversedLetters = [encryptedLetters[2], encryptedLetters[0], encryptedLetters[1]];
-                } else {
-                    // A الأصلي (3, last, 1, الباقي) -> عكسه صعب دون معرفة الطول الأصلي، لكن نعرف أن الطول n هو نفسه الطول الأصلي
-                    // نعيد بناء المصفوفة الأصلية: الترتيب الأصلي للكلمة بعد التطبيع 
-                    // علاقة عكسية: الأول = العنصر الثالث من المعكوس? دعنا ننشئ دالة مخصصة.
-                    // سنستخدم مصفوفة مساعدة:
-                    let original = new Array(n);
-                    original[0] = encryptedLetters[2];      // لأن المعادلة: cipher[2] = original[0]
-                    original[n-1] = encryptedLetters[1];     // cipher[1] = last
-                    let idxRest = 3;
-                    for (let i = 0; i < n; i++) {
-                        if (i === 0 || i === n-1 || i === 2) continue;
-                        original[i] = encryptedLetters[idxRest++];
+                    oL[0]=eL[2];
+                    oL[n-1]=eL[1];
+                    let idx=3;
+                    for(let j=0;j<n;j++){
+                        if(j===0 || j===n-1 || j===2) continue;
+                        oL[j]=eL[idx++];
                     }
-                    original[2] = encryptedLetters[encryptedLetters.length-1]; // آخر عنصر مشفر = الثالث الأصلي
-                    reversedLetters = original;
+                    oL[2]=eL[eL.length-1];
                 }
-            } else { // pattern B
-                if (n === 3) {
-                    // B (1,3,2) -> العكس (1,3,2) نفسها لأنها انعكاس؟ B معكوسها B (متماثلة لثلاثي)
-                    reversedLetters = [encryptedLetters[0], encryptedLetters[2], encryptedLetters[1]];
+            } else {
+                if(n===3){
+                    oL = [eL[0],eL[2],eL[1]];
                 } else {
-                    let original = new Array(n);
-                    original[0] = encryptedLetters[0];
-                    original[1] = encryptedLetters[1];
-                    original[n-1] = encryptedLetters[encryptedLetters.length-2];
-                    original[2] = encryptedLetters[encryptedLetters.length-1];
-                    let fillIdx = 3;
-                    for (let i = 3; i <= n-2; i++) {
-                        original[i] = encryptedLetters[fillIdx++];
-                    }
-                    reversedLetters = original;
+                    oL[0]=eL[0];
+                    oL[1]=eL[1];
+                    oL[n-1]=eL[eL.length-2];
+                    oL[2]=eL[eL.length-1];
+                    let f=3;
+                    for(let j=3;j<=n-2;j++) oL[j]=eL[f++];
                 }
             }
-            // إزالة التنوين من الكلمات الثنائية الأصلية
-            let cleaned = [];
-            for (let ch of reversedLetters) {
-                if (ch !== 'ٍ') cleaned.push(ch);
-            }
-            // إعادة بناء الكلمة من cleaned، ثم عكس تأثير التاء المربوطة (تْ) إلى ة إذا انتهت بت ساكنة
-            let wordStr = cleaned.join('');
-            if (wordStr.endsWith('تْ')) {
-                wordStr = wordStr.slice(0, -2) + 'ة';
-            }
-            originalWords.push(wordStr);
+            let clean = [];
+            for(let ch of oL) if(ch!='ٍ') clean.push(ch);
+            let wrd = clean.join('');
+            if(wrd.endsWith("تْ")) wrd = wrd.slice(0,-2)+"ة";
+            orig.push(wrd);
         }
-        return originalWords.join(' ');
+        return orig.join(' ');
     }
 
-    // ------ التحكم في الواجهة ------
-    const passInput = document.getElementById('passInput');
-    const passStatus = document.getElementById('passStatus');
-    const encryptBtnMode = document.getElementById('encryptModeBtn');
-    const decryptBtnMode = document.getElementById('decryptModeBtn');
-    const inputText = document.getElementById('inputText');
-    const outputDiv = document.getElementById('outputText');
-    const processBtn = document.getElementById('processBtn');
-    
-    let currentMode = "encrypt"; // encrypt / decrypt
-    const SITE_PASSWORD = "23112008";
-    
-    function checkPassword() {
-        if (passInput.value === SITE_PASSWORD) {
-            passStatus.innerText = "✅ صحيح";
-            passStatus.style.background = "#b9f6ca";
+    let pin = document.getElementById('pwd');
+    let st = document.getElementById('pst');
+    let btnE = document.getElementById('b1');
+    let btnD = document.getElementById('b2');
+    let ta = document.getElementById('inp');
+    let go = document.getElementById('go');
+    let outDiv = document.getElementById('out');
+    let mode = "e";
+
+    function chk(){
+        if(pin.value === KEY){
+            st.innerText = "✓";
+            st.style.background = "#b9f6ca";
             return true;
-        } else {
-            passStatus.innerText = "❌ خطأ";
-            passStatus.style.background = "#ffcdd2";
-            return false;
         }
+        st.innerText = "✗";
+        st.style.background = "#ffcdd2";
+        return false;
     }
-    
-    passInput.addEventListener('input', checkPassword);
-    
-    encryptBtnMode.addEventListener('click', () => {
-        currentMode = "encrypt";
-        encryptBtnMode.classList.add('active');
-        decryptBtnMode.classList.remove('active');
+
+    pin.addEventListener('input', chk);
+    btnE.addEventListener('click',()=>{ mode="e"; btnE.classList.add('active'); btnD.classList.remove('active'); });
+    btnD.addEventListener('click',()=>{ mode="d"; btnD.classList.add('active'); btnE.classList.remove('active'); });
+    go.addEventListener('click',()=>{
+        if(!chk()){ outDiv.innerText = "مفتاح غير صحيح"; return; }
+        let txt = ta.value.trim();
+        if(!txt){ outDiv.innerText = "فارغ"; return; }
+        try{
+            let res = mode==="e"? enc(txt) : dec(txt);
+            outDiv.innerText = res || "[فارغ]";
+        } catch(e){ outDiv.innerText = "خطأ"; }
     });
-    decryptBtnMode.addEventListener('click', () => {
-        currentMode = "decrypt";
-        decryptBtnMode.classList.add('active');
-        encryptBtnMode.classList.remove('active');
-    });
-    
-    processBtn.addEventListener('click', () => {
-        if (!checkPassword()) {
-            outputDiv.innerText = "⚠️ كلمة مرور الموقع غير صحيحة!";
-            return;
-        }
-        let rawInput = inputText.value.trim();
-        if (rawInput === "") {
-            outputDiv.innerText = "✏️ الرجاء إدخال نص";
-            return;
-        }
-        try {
-            let result;
-            if (currentMode === "encrypt") {
-                result = encryptText(rawInput);
-            } else {
-                result = decryptText(rawInput);
-            }
-            outputDiv.innerText = result || "[فارغ]";
-        } catch(e) {
-            outputDiv.innerText = "⚠️ خطأ أثناء المعالجة: " + e.message;
-        }
-    });
-    
-    checkPassword();
+    chk();
+})();
 </script>
 </body>
-  </html>
+</html>
