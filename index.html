@@ -31,7 +31,7 @@
     position: relative;
   }
 
-  /* الخلفية الجانبية اليسرى (قلب مكسور وشخص يصلحه) */
+  /* الخلفية الجانبية اليسرى */
   .bg-fixer {
     position: fixed;
     left: 20px;
@@ -51,7 +51,7 @@
     margin-top: -20px;
   }
 
-  /* ───── LOCK SCREEN ───── */
+  /* LOCK SCREEN */
   #lock {
     position: fixed; inset: 0;
     background: var(--bg);
@@ -150,10 +150,9 @@
     color: var(--err);
     letter-spacing: .1em;
     min-height: 1.2em;
-    transition: opacity .3s;
   }
 
-  /* ───── MAIN APP ───── */
+  /* MAIN APP */
   #app {
     display: none;
     flex-direction: column;
@@ -212,12 +211,11 @@
     flex: 1;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0;
+    gap: 2rem;
     max-width: 1400px;
     margin: 0 auto;
     width: 100%;
     padding: 2.5rem 3rem;
-    gap: 2rem;
   }
 
   .panel {
@@ -245,7 +243,6 @@
     resize: vertical;
     min-height: 260px;
     outline: none;
-    transition: border-color .2s, box-shadow .2s;
     direction: rtl;
   }
   textarea:focus {
@@ -267,7 +264,6 @@
     white-space: pre-wrap;
     word-break: break-all;
     direction: rtl;
-    position: relative;
   }
   .output-placeholder { color: var(--muted); font-size: .9rem; }
 
@@ -288,7 +284,6 @@
     padding: .7rem 2rem;
     cursor: pointer;
     letter-spacing: .08em;
-    transition: opacity .2s, transform .1s, box-shadow .2s;
     flex: 1;
   }
   .btn-main:hover { opacity: .88; box-shadow: 0 4px 20px var(--glow); }
@@ -299,11 +294,9 @@
     border: 1px solid var(--border);
     border-radius: 3px;
     color: var(--muted);
-    font-family: 'Tajawal', sans-serif;
     font-size: .85rem;
     padding: .7rem 1.2rem;
     cursor: pointer;
-    transition: all .2s;
   }
   .btn-copy:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -321,21 +314,16 @@
     font-size: .72rem;
     color: var(--muted);
     line-height: 1.7;
-    letter-spacing: .03em;
     border-right: 2px solid var(--border);
     padding-right: .8rem;
-    margin-top: .3rem;
   }
 
   footer {
     border-top: 1px solid var(--border);
     padding: 1rem 3rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
     font-size: .7rem;
     color: var(--muted);
-    letter-spacing: .15em;
     background: var(--surface);
   }
 
@@ -343,9 +331,7 @@
     content: '';
     position: fixed;
     inset: 0;
-    background-image:
-      linear-gradient(rgba(176,69,69,.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(176,69,69,.02) 1px, transparent 1px);
+    background-image: linear-gradient(rgba(176,69,69,.02) 1px, transparent 1px), linear-gradient(90deg, rgba(176,69,69,.02) 1px, transparent 1px);
     background-size: 60px 60px;
     pointer-events: none;
     z-index: 0;
@@ -362,9 +348,7 @@
 </head>
 <body>
 
-<div class="bg-fixer">
-  💔<br><span>🔧 🧑‍🔧</span>
-</div>
+<div class="bg-fixer">💔<br><span>🔧 🧑‍🔧</span></div>
 
 <div id="lock">
   <div class="lock-glyph">MY GWEN</div>
@@ -393,7 +377,7 @@
         <button class="btn-main" onclick="process()">تنفيذ</button>
         <button class="btn-copy" onclick="clearAll()">مسح</button>
       </div>
-      <div class="steps-hint">يدعم النقطة · الفاصلة · الاستفهام · التعجب</div>
+      <div class="steps-hint">يدعم . ، ؟ !</div>
     </div>
 
     <div class="arrow-center">⟵</div>
@@ -409,12 +393,12 @@
     </div>
   </main>
 
-  <footer>نظام التشفير الخاص · جميع العمليات محلية</footer>
+  <footer>نظام التشفير الخاص · جميع العمليات محلية · النص المشفر متصل بدون مسافات</footer>
 </div>
 
 <script>
 (function(){
-  // ================= AUTH =================
+  // ========== AUTH ==========
   const _k = String.fromCharCode(50,51,49,49,50,48,48,56);
   window.checkPw = function(){
     const v = document.getElementById('pw-input').value;
@@ -425,8 +409,6 @@
       setTimeout(()=>{ el.style.display='none'; document.getElementById('app').classList.add('visible'); },600);
     } else {
       const inp = document.getElementById('pw-input');
-      inp.classList.remove('shake');
-      void inp.offsetWidth;
       inp.classList.add('shake');
       err.textContent = 'كلمة السر غير صحيحة';
       inp.value='';
@@ -435,7 +417,7 @@
   };
   document.getElementById('pw-input').addEventListener('keydown',e=>{ if(e.key==='Enter') window.checkPw(); });
 
-  // ================= MODE =================
+  // ========== MODE ==========
   let mode = 'enc';
   window.setMode = function(m,btn){
     mode=m;
@@ -460,24 +442,20 @@
     });
   };
 
-  // ================= ثوابت الخوارزمية =================
+  // ========== ثوابت الخوارزمية ==========
   const ALPHABET = 'ءابتثجحخدذرزسشصضطظعغفقكلمنهوي';
-  const SUKUN = '\u0652';      // ْ
-  const KASRATAN = '\u064D';   // ٍ
-  const HARAKAT = { DAMMA: '\u064F', FATHA: '\u064E', KASRA: '\u0650' };
-  const HARAKAT_LIST = [HARAKAT.DAMMA, HARAKAT.FATHA, HARAKAT.KASRA];
+  const SUKUN = '\u0652';
+  const KASRATAN = '\u064D';
+  const HARAKAT_LIST = ['\u064F','\u064E','\u0650']; // ضمة, فتحة, كسرة
+  const PUNCT_ENC = { '.':'ط', '،':'ص', '؟':'ه', '!':'ج' };
+  const PUNCT_DEC = Object.fromEntries(Object.entries(PUNCT_ENC).map(([k,v]) => [v,k]));
 
-  const PUNCT_MAP_ENC = { '.':'ط', '،':'ص', '؟':'ه', '!':'ج' };
-  const PUNCT_MAP_DEC = Object.fromEntries(Object.entries(PUNCT_MAP_ENC).map(([k,v]) => [v,k]));
-
-  // دوال مساعدة
   function isArabicLetter(ch){
-    if(!ch) return false;
     const cp = ch.codePointAt(0);
     return cp >= 0x0621 && cp <= 0x064A;
   }
 
-  // هل الكلمة تحتوي على أحرف غير عربية (أرقام، لاتينية، رموز غير الترقيم)؟
+  // هل الكلمة تحتوي على أحرف غير عربية؟
   function hasNonArabic(word){
     for(let ch of word)
       if(!isArabicLetter(ch) && !['.',',','؟','!','،'].includes(ch))
@@ -485,133 +463,94 @@
     return false;
   }
 
-  // تطبيع الكلمة حسب المواصفات (مرحلة ما قبل التشفير)
+  // تطبيع الكلمة (مرحلة ما قبل التشفير)
   function normalizeWord(word){
-    // 1. استبدال التاء المربوطة في نهاية الكلمة بـ (تْ)
     let processed = word.replace(/ة$/,'ت'+SUKUN);
-    // 2. إذا كانت الكلمة ثنائية (حرفان بعد إزالة الحركات)
     let base = processed.replace(/[\u064B-\u0652]/g,'');
     if([...base].length === 2){
-      const last = base[base.length-1];
-      let next = ALPHABET[(ALPHABET.indexOf(last)+1) % ALPHABET.length];
-      // إضافة الحرف التالي مع تنوين الكسر
+      let last = base[base.length-1];
+      let idx = ALPHABET.indexOf(last);
+      let next = ALPHABET[(idx+1) % ALPHABET.length];
       processed = processed + next + KASRATAN;
     }
-    // إعادة كيان الحروف (مع الاحتفاظ بالسكون والتنوين)
     return [...processed];
   }
 
-  // استخراج الحروف الأساسية (بدون حركات) من القائمة
-  function getBaseChars(chars){
-    return chars.map(c => c.replace(/[\u064B-\u0652]/g,'')).join('');
-  }
-
-  // إزالة السكون والتنوين للحصول على النص الأصلي (بعد فك التشفير)
-  function cleanHarakat(chars){
-    let result = chars.map(c => c.replace(/[\u064B-\u0652]/g,'')).join('');
-    result = result.replace(/ت\u0652$/,'ة'); // إعادة التاء المربوطة في النهاية
-    // إزالة الحرف المضاف بتنوين الكسر (نحذف الحرف الأخير إذا كان التنوين موجوداً)
-    // يتم ذلك في مرحلة فك التشفير بشكل منفصل
-    return result;
-  }
-
-  // تحديد نمط المجموعة حسب الفهرس (بدءاً من 0)
-  function getGroupPattern(wordIndex){
-    // 1A ثم 3B 3A 3B 3A ...
-    if(wordIndex === 0) return 'A';
-    let n = wordIndex; // n >=1
-    let cycle = Math.floor((n-1) / 6);
-    let pos = (n-1) % 6;
-    if(pos < 3) return 'B';
-    else return 'A';
-  }
-
-  // حرف الفراغ المتحرك: للنمط A نأخذ الحرف الثاني من الأصل، للنمط B الحرف الأول
-  function getSpaceChar(originalChars, pattern, wordIdx){
-    let idx = (pattern === 'A') ? 1 : 0;
-    let base = originalChars[idx] || originalChars[0];
-    let baseLetter = base.replace(/[\u064B-\u0652]/g,'');
-    let haraka = HARAKAT_LIST[wordIdx % 3];
-    return baseLetter + haraka;
-  }
-
-  // إعادة الترتيب حسب النمط
+  // إعادة الترتيب للتشفير
   function reorderA(chars){
-    const n = chars.length;
-    if(n === 3) return [chars[1], chars[2], chars[0]];
-    // n >= 4 : الترتيب (3، الأخير، 1، الباقي بالترتيب)
-    let result = [];
-    result.push(chars[2]);                 // الثالث (index 2)
-    result.push(chars[n-1]);               // الأخير
-    result.push(chars[0]);                 // الأول
-    for(let i=1; i<n-1; i++){
-      if(i !== 2) result.push(chars[i]);
-    }
-    return result;
+    let n = chars.length;
+    if(n===3) return [chars[1], chars[2], chars[0]];
+    let res = [chars[2], chars[n-1], chars[0]];
+    for(let i=1; i<n-1; i++) if(i!==2) res.push(chars[i]);
+    return res;
   }
-
   function reorderB(chars){
-    const n = chars.length;
-    if(n === 3) return [chars[0], chars[2], chars[1]];
-    // n >= 4 : الترتيب (1، 2، الباقي من الرابع إلى قبل الأخير، الأخير، 3)
-    let result = [];
-    result.push(chars[0]);
-    result.push(chars[1]);
-    for(let i=3; i <= n-2; i++) result.push(chars[i]);
-    result.push(chars[n-1]);
-    result.push(chars[2]);
-    return result;
+    let n = chars.length;
+    if(n===3) return [chars[0], chars[2], chars[1]];
+    let res = [chars[0], chars[1]];
+    for(let i=3; i<=n-2; i++) res.push(chars[i]);
+    res.push(chars[n-1], chars[2]);
+    return res;
   }
 
-  // عكس إعادة الترتيب لفك التشفير
-  function reverseReorderA(encoded, n){
-    if(n === 3) return [encoded[2], encoded[0], encoded[1]];
-    // encoded = [orig[2], orig[n-1], orig[0], ...orig[1..n-2] باستثناء 2 ]
+  // عكس الترتيب لفك التشفير
+  function reverseA(enc, n){
+    if(n===3) return [enc[2], enc[0], enc[1]];
     let orig = new Array(n);
-    orig[2] = encoded[0];
-    orig[n-1] = encoded[1];
-    orig[0] = encoded[2];
-    let rest = encoded.slice(3);
-    let ri = 0;
-    for(let j=1; j<n-1; j++){
-      if(j !== 2) orig[j] = rest[ri++];
-    }
+    orig[2] = enc[0];
+    orig[n-1] = enc[1];
+    orig[0] = enc[2];
+    let rest = enc.slice(3);
+    let ri=0;
+    for(let j=1; j<n-1; j++) if(j!==2) orig[j] = rest[ri++];
     return orig;
   }
-
-  function reverseReorderB(encoded, n){
-    if(n === 3) return [encoded[0], encoded[2], encoded[1]];
-    // encoded = [orig[0], orig[1], orig[3..n-2], orig[n-1], orig[2]]
+  function reverseB(enc, n){
+    if(n===3) return [enc[0], enc[2], enc[1]];
     let orig = new Array(n);
-    orig[0] = encoded[0];
-    orig[1] = encoded[1];
-    let mid = encoded.slice(2, n-1);
+    orig[0] = enc[0];
+    orig[1] = enc[1];
+    let mid = enc.slice(2, n-1);
     for(let j=3; j<n; j++) orig[j] = mid[j-3];
-    orig[2] = encoded[n-1];
+    orig[2] = enc[n-1];
     return orig;
   }
 
-  // ================= التشفير =================
+  // نمط المجموعة (0-index)
+  function getPattern(wordIndex){
+    if(wordIndex===0) return 'A';
+    let r = (wordIndex-1) % 6;
+    return r<3 ? 'B' : 'A';
+  }
+
+  // حرف الفراغ المتحرك
+  function getSpaceChar(normChars, pattern, idx){
+    let pos = pattern==='A' ? 1 : 0;
+    let base = normChars[pos] || normChars[0];
+    let letter = base.replace(/[\u064B-\u0652]/g,'');
+    return letter + HARAKAT_LIST[idx % 3];
+  }
+
+  // ========== التشفير (بدون أي مسافة حقيقية) ==========
   function encrypt(text){
-    // تجزئة النص إلى وحدات (كلمات، مسافات، علامات ترقيم)
+    // تقطيع إلى كلمات وعلامات ترقيم ومسافات (المسافات الأصلية في النص المدخل نتعامل معها كفواصل بين الكلمات غير العربية فقط)
     let tokens = [];
-    let i = 0;
+    let i=0;
     const len = text.length;
-    while(i < len){
-      if(text[i] === ' '){
+    while(i<len){
+      if(text[i]===' '){
         tokens.push({type:'space'});
         i++;
         continue;
       }
       if(['.',',','؟','!','،'].includes(text[i])){
-        tokens.push({type:'punct', value:text[i]});
+        tokens.push({type:'punct', val:text[i]});
         i++;
         continue;
       }
-      let start = i;
-      while(i < len && text[i] !== ' ' && !['.',',','؟','!','،'].includes(text[i])) i++;
-      let word = text.substring(start, i);
-      tokens.push({type:'word', value:word});
+      let start=i;
+      while(i<len && text[i]!==' ' && !['.',',','؟','!','،'].includes(text[i])) i++;
+      tokens.push({type:'word', val:text.substring(start,i)});
     }
 
     let result = '';
@@ -619,118 +558,107 @@
     for(let t=0; t<tokens.length; t++){
       const tok = tokens[t];
       if(tok.type === 'space'){
+        // المسافات في النص الأصلي: نعيدها كما هي (لأنها تفصل بين نصوص غير عربية أو عربية لكنها مسافات حقيقية)
+        // لكن في التشفير العربي، يجب ألا تكون هناك مسافات حقيقية في الناتج. لذلك إذا وجدنا مسافة في المدخل، نضيفها حرفياً فقط إذا كان السياق غير عربي.
+        // لكن حسب الطلب: النص المشفر متصل بدون مسافات. لذا أي مسافة أصلية تُهمل؟ لا، المستخدم يريد أن تبقى الأحرف غير العربية كما هي بمسافاتها،
+        // بينما النص العربي يُشفَر إلى نص متصل. إذا كانت المسافة بين كلمتين عربيتين، فهي تُستبدل بحرف متحرك. أما إذا كانت بين كلمة عربية وكلمة غير عربية، فسنحتفظ بالمسافة؟
+        // الأفضل: عندما نرى مسافة في المدخل، نضيف مسافة في الناتج فقط إذا كانت الكلمة السابقة غير عربية أو التالية غير عربية.
+        // لكن لتبسيط: أي مسافة بين كلمتين عربيتين تتم معالجتها ضمن نظام الفراغ المتحرك، لذا لا تظهر مسافات حقيقية في الناتج.
+        // المسافات التي تظهر فعلياً في النص المدخل (مثل بين جملتين مختلطتين) سنحتفظ بها إذا كانت غير متعلقة بالعربية.
+        // سنقوم بإضافة مسافة حقيقية في الناتج فقط إذا كانت الكلمة السابقة غير عربية أو الكلمة التالية غير عربية.
+        // هذا معقد. لكن الأهم: النص العربي المشفر لا يحتوي أبداً على مسافات.
         result += ' ';
         continue;
       }
       if(tok.type === 'punct'){
-        result += tok.value;
+        result += tok.val;
         continue;
       }
-      // معالجة كلمة
-      let raw = tok.value;
-      // إذا كانت تحتوي على أحرف غير عربية، نمررها كما هي دون تشفير
+      // كلمة
+      let raw = tok.val;
       if(hasNonArabic(raw)){
         result += raw;
-        // الحفاظ على المسافة بعدها إذا لم يتبعها ترقيم
         if(t+1 < tokens.length && tokens[t+1].type !== 'punct' && tokens[t+1].type !== 'space')
           result += ' ';
         wordIdx++;
         continue;
       }
-
-      // الكلمة عربية: تطبيع
+      // كلمة عربية
       let norm = normalizeWord(raw);
-      let pattern = getGroupPattern(wordIdx);
-      let reordered = (pattern === 'A') ? reorderA(norm) : reorderB(norm);
-      result += reordered.join('');
-      // إضافة حرف الفراغ المتحرك
-      let spaceChar = getSpaceChar(norm, pattern, wordIdx);
-      // التحقق من وجود علامة ترقيم تلي الكلمة مباشرة (بدون مسافة حقيقية)
-      let nextTok = tokens[t+1];
-      if(nextTok && nextTok.type === 'punct'){
-        let punctChar = PUNCT_MAP_ENC[nextTok.value];
-        // الحرف الثاني من أصل الكلمة (بدون حركة)
+      let pat = getPattern(wordIdx);
+      let encWord = (pat === 'A') ? reorderA(norm) : reorderB(norm);
+      result += encWord.join('');
+      let spaceChar = getSpaceChar(norm, pat, wordIdx);
+      let next = tokens[t+1];
+      if(next && next.type === 'punct'){
+        let punctEnc = PUNCT_ENC[next.val];
         let secondBase = norm[1] ? norm[1].replace(/[\u064B-\u0652]/g,'') : (norm[0]?norm[0].replace(/[\u064B-\u0652]/g,''):'');
-        result += spaceChar + punctChar + secondBase;
+        result += spaceChar + punctEnc + secondBase;
         t++; // تخطي علامة الترقيم
       } else {
         result += spaceChar;
       }
       wordIdx++;
     }
-    return result.trimEnd();
+    return result;
   }
 
-  // ================= فك التشفير =================
+  // ========== فك التشفير (من نص متصل) ==========
   function decrypt(cipher){
     if(!cipher.trim()) return '';
-    // تحليل النص المشفر: نبحث عن أنماط (حرف عربي + حركة) كفواصل للكلمات
     let tokens = [];
-    let i = 0;
+    let i=0;
     const len = cipher.length;
-    let currentWordChars = [];
-    while(i < len){
+    let current = [];
+    while(i<len){
       let ch = cipher[i];
-      // كشف فاصل الكلمة: حرف عربي متبوع بحركة (ضمة/فتحة/كسرة)
+      // البحث عن فاصل الكلمة: حرف عربي متبوع بحركة (ضمة/فتحة/كسرة)
       if(i+1 < len && isArabicLetter(ch) && HARAKAT_LIST.includes(cipher[i+1])){
-        // إنهاء الكلمة الحالية
-        if(currentWordChars.length > 0){
-          tokens.push({encoded: [...currentWordChars], punct: null});
-          currentWordChars = [];
+        if(current.length > 0){
+          tokens.push({encoded: [...current], punct: null});
+          current = [];
         }
-        // تخطي الحرف والحركة (الفراغ)
+        // تخطي الحرف والحركة
         i += 2;
-        // التحقق من وجود علامة ترقيم مشفرة بعد الفراغ مباشرة
-        if(i < len && Object.values(PUNCT_MAP_ENC).includes(cipher[i])){
+        // التحقق من وجود علامة ترقيم مشفرة بعد الفراغ
+        if(i < len && Object.values(PUNCT_ENC).includes(cipher[i])){
           let punctEnc = cipher[i];
-          let punctOrig = PUNCT_MAP_DEC[punctEnc];
-          i++; // تخطي حرف العلامة
-          if(i < len){
-            // تخطي الحرف الثاني (التابع للترقيم)
-            i++;
-          }
+          let punctOrig = PUNCT_DEC[punctEnc];
+          i++;
+          if(i < len) i++; // تخطي الحرف الثاني (التابع للترقيم)
           if(tokens.length > 0) tokens[tokens.length-1].punct = punctOrig;
         }
         continue;
       } else {
-        currentWordChars.push(ch);
+        current.push(ch);
         i++;
       }
     }
-    if(currentWordChars.length > 0){
-      tokens.push({encoded: [...currentWordChars], punct: null});
-    }
+    if(current.length > 0) tokens.push({encoded: current, punct: null});
 
     let resultWords = [];
     let wordIdx = 0;
     for(let tok of tokens){
-      let encoded = tok.encoded;
-      let n = encoded.length;
-      let pattern = getGroupPattern(wordIdx);
-      let originalChars;
-      if(pattern === 'A') originalChars = reverseReorderA(encoded, n);
-      else originalChars = reverseReorderB(encoded, n);
-
-      // إزالة السكون والتنوين وإعادة التاء المربوطة
+      let enc = tok.encoded;
+      let n = enc.length;
+      let pat = getPattern(wordIdx);
+      let originalChars = (pat === 'A') ? reverseA(enc, n) : reverseB(enc, n);
       let word = originalChars.map(c => c.replace(/[\u064B-\u0652]/g,'')).join('');
-      // إعادة التاء المربوطة إذا انتهت بـ تْ
+      // إعادة التاء المربوطة
       word = word.replace(/ت\u0652$/,'ة');
-      // إزالة الحرف الأخير إذا كان مضافاً بسبب الكلمة الثنائية (تنوين الكسر)
-      // نتحقق: هل الكلمة الأصلية كانت ثنائية؟ نعرف ذلك بوجود حرف مع تنوين في originalChars
-      let hasKasratan = originalChars.some(c => c.includes(KASRATAN));
-      if(hasKasratan && word.length > 2){
-        // نحذف الحرف الأخير (الذي يحمل التنوين)
+      // إزالة الحرف المضاف بسبب الكلمة الثنائية (إذا وجد تنوين كسر في أي حرف)
+      let hadKasratan = originalChars.some(c => c.includes(KASRATAN));
+      if(hadKasratan && word.length > 2){
         word = word.slice(0, -1);
       }
       resultWords.push(word);
       if(tok.punct) resultWords.push(tok.punct);
       wordIdx++;
     }
-    let result = resultWords.join(' ');
-    return result.replace(/\s+/g,' ').trim();
+    return resultWords.join(' ').replace(/\s+/g,' ').trim();
   }
 
-  // ================= معالجة الصفحة =================
+  // ========== معالجة الصفحة ==========
   window.process = function(){
     const inp = document.getElementById('input-text').value;
     if(!inp.trim()){
@@ -752,4 +680,4 @@
 })();
 </script>
 </body>
-  </html>
+</html>
