@@ -1,1 +1,755 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MY GWEN</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@200;400;700;900&family=IBM+Plex+Mono:wght@300;400&display=swap');
 
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #16161f;
+    --accent: #b04545;        /* لون خمري مريح */
+    --accent2: #7b5ea7;
+    --text: #e8e4dc;
+    --muted: #5a5870;
+    --border: #1e1e2a;
+    --glow: rgba(176,69,69,0.15);
+    --err: #c96e6e;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Tajawal', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* الخلفية الجانبية اليسرى (قلب مكسور وشخص يصلحه) */
+  .bg-fixer {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    font-size: 70px;
+    opacity: 0.18;
+    z-index: 0;
+    pointer-events: none;
+    direction: ltr;
+    text-align: left;
+    line-height: 1;
+    filter: drop-shadow(0 0 3px var(--accent));
+  }
+  .bg-fixer span {
+    display: block;
+    font-size: 45px;
+    margin-top: -20px;
+  }
+
+  /* ───── LOCK SCREEN ───── */
+  #lock {
+    position: fixed; inset: 0;
+    background: var(--bg);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 999;
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  #lock.fade-out { opacity: 0; transform: scale(1.04); pointer-events: none; }
+
+  .lock-glyph {
+    font-size: 3rem;
+    letter-spacing: .15em;
+    color: var(--accent);
+    margin-bottom: 2.5rem;
+    font-weight: 900;
+    text-shadow: 0 0 40px rgba(176,69,69,.4);
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { text-shadow: 0 0 40px rgba(176,69,69,.3); }
+    50%      { text-shadow: 0 0 70px rgba(176,69,69,.7); }
+  }
+
+  .lock-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2.5rem 3rem;
+  }
+
+  .lock-label {
+    font-size: .75rem;
+    letter-spacing: .2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: .5rem;
+  }
+
+  #pw-input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--accent);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 1.4rem;
+    letter-spacing: .3em;
+    padding: .7rem 1.4rem;
+    text-align: center;
+    outline: none;
+    width: 220px;
+    transition: border-color .2s, box-shadow .2s;
+    -webkit-text-security: disc;
+  }
+  #pw-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px var(--glow);
+  }
+  #pw-input.shake {
+    animation: shake .4s ease;
+    border-color: var(--err);
+    box-shadow: 0 0 20px rgba(201,110,110,.3);
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%      { transform: translateX(-8px); }
+    40%      { transform: translateX(8px); }
+    60%      { transform: translateX(-5px); }
+    80%      { transform: translateX(5px); }
+  }
+
+  .lock-btn {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 3px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: .95rem;
+    font-weight: 700;
+    padding: .65rem 2.5rem;
+    cursor: pointer;
+    letter-spacing: .1em;
+    transition: opacity .2s, transform .1s;
+    margin-top: .4rem;
+    width: 220px;
+  }
+  .lock-btn:hover { opacity: .85; }
+  .lock-btn:active { transform: scale(.97); }
+
+  #lock-err {
+    font-size: .78rem;
+    color: var(--err);
+    letter-spacing: .1em;
+    min-height: 1.2em;
+    transition: opacity .3s;
+  }
+
+  /* ───── MAIN APP ───── */
+  #app {
+    display: none;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+    z-index: 2;
+  }
+  #app.visible { display: flex; }
+
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 1.4rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface);
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: .15em;
+  }
+  .logo span { color: var(--muted); font-weight: 200; font-size: 1rem; }
+
+  .tabs {
+    display: flex;
+    gap: .5rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px;
+  }
+  .tab {
+    padding: .5rem 1.6rem;
+    border-radius: 3px;
+    font-size: .9rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    transition: all .2s;
+    letter-spacing: .05em;
+    font-family: 'Tajawal', sans-serif;
+  }
+  .tab.active {
+    background: var(--accent);
+    color: var(--bg);
+    box-shadow: 0 0 12px var(--glow);
+  }
+  .tab:hover:not(.active) { color: var(--text); }
+
+  main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 2.5rem 3rem;
+    gap: 2rem;
+  }
+
+  .panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .panel-label {
+    font-size: .7rem;
+    letter-spacing: .25em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  textarea {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.9;
+    padding: 1.4rem;
+    resize: vertical;
+    min-height: 260px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    direction: rtl;
+  }
+  textarea:focus {
+    border-color: var(--accent2);
+    box-shadow: 0 0 20px rgba(123,94,167,.15);
+  }
+  textarea::placeholder { color: var(--muted); }
+
+  .output-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    min-height: 260px;
+    padding: 1.4rem;
+    font-size: 1.05rem;
+    line-height: 2;
+    color: var(--accent);
+    font-family: 'Tajawal', sans-serif;
+    white-space: pre-wrap;
+    word-break: break-all;
+    direction: rtl;
+    position: relative;
+  }
+  .output-placeholder { color: var(--muted); font-size: .9rem; }
+
+  .action-row {
+    display: flex;
+    gap: .8rem;
+    align-items: center;
+  }
+
+  .btn-main {
+    background: linear-gradient(135deg, var(--accent), #8f3a3a);
+    color: var(--bg);
+    border: none;
+    border-radius: 3px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: .95rem;
+    font-weight: 900;
+    padding: .7rem 2rem;
+    cursor: pointer;
+    letter-spacing: .08em;
+    transition: opacity .2s, transform .1s, box-shadow .2s;
+    flex: 1;
+  }
+  .btn-main:hover { opacity: .88; box-shadow: 0 4px 20px var(--glow); }
+  .btn-main:active { transform: scale(.98); }
+
+  .btn-copy {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--muted);
+    font-family: 'Tajawal', sans-serif;
+    font-size: .85rem;
+    padding: .7rem 1.2rem;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .btn-copy:hover { border-color: var(--accent); color: var(--accent); }
+
+  .arrow-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 1.8rem;
+    padding-top: 2rem;
+    opacity: .4;
+  }
+
+  .steps-hint {
+    font-size: .72rem;
+    color: var(--muted);
+    line-height: 1.7;
+    letter-spacing: .03em;
+    border-right: 2px solid var(--border);
+    padding-right: .8rem;
+    margin-top: .3rem;
+  }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 1rem 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: .7rem;
+    color: var(--muted);
+    letter-spacing: .15em;
+    background: var(--surface);
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(176,69,69,.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(176,69,69,.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @media (max-width: 768px) {
+    main { grid-template-columns: 1fr; padding: 1.5rem; }
+    header { padding: 1rem 1.5rem; flex-direction: column; gap: 1rem; }
+    .arrow-center { transform: rotate(90deg); }
+    .bg-fixer { font-size: 45px; left: 10px; bottom: 10px; }
+    .bg-fixer span { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-fixer">
+  💔<br><span>🔧 🧑‍🔧</span>
+</div>
+
+<div id="lock">
+  <div class="lock-glyph">MY GWEN</div>
+  <div class="lock-wrap">
+    <div class="lock-label">مفتاح الدخول</div>
+    <input id="pw-input" type="password" autocomplete="off" inputmode="numeric" maxlength="20" />
+    <div id="lock-err">&nbsp;</div>
+    <button class="lock-btn" onclick="checkPw()">دخول</button>
+  </div>
+</div>
+
+<div id="app">
+  <header>
+    <div class="logo">MY GWEN &nbsp;<span>/ نظام التشفير</span></div>
+    <div class="tabs">
+      <button class="tab active" onclick="setMode('enc',this)">تشفير</button>
+      <button class="tab" onclick="setMode('dec',this)">فك التشفير</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="panel">
+      <div class="panel-label" id="in-label">النص الأصلي</div>
+      <textarea id="input-text" placeholder="اكتب النص هنا..."></textarea>
+      <div class="action-row">
+        <button class="btn-main" onclick="process()">تنفيذ</button>
+        <button class="btn-copy" onclick="clearAll()">مسح</button>
+      </div>
+      <div class="steps-hint">يدعم النقطة · الفاصلة · الاستفهام · التعجب</div>
+    </div>
+
+    <div class="arrow-center">⟵</div>
+
+    <div class="panel">
+      <div class="panel-label" id="out-label">النص المشفَّر</div>
+      <div class="output-box" id="output-box">
+        <span class="output-placeholder">النتيجة تظهر هنا...</span>
+      </div>
+      <div class="action-row">
+        <button class="btn-copy" onclick="copyOut()" style="flex:1">نسخ النتيجة</button>
+      </div>
+    </div>
+  </main>
+
+  <footer>نظام التشفير الخاص · جميع العمليات محلية</footer>
+</div>
+
+<script>
+(function(){
+  // ================= AUTH =================
+  const _k = String.fromCharCode(50,51,49,49,50,48,48,56);
+  window.checkPw = function(){
+    const v = document.getElementById('pw-input').value;
+    const el = document.getElementById('lock');
+    const err = document.getElementById('lock-err');
+    if(v === _k){
+      el.classList.add('fade-out');
+      setTimeout(()=>{ el.style.display='none'; document.getElementById('app').classList.add('visible'); },600);
+    } else {
+      const inp = document.getElementById('pw-input');
+      inp.classList.remove('shake');
+      void inp.offsetWidth;
+      inp.classList.add('shake');
+      err.textContent = 'كلمة السر غير صحيحة';
+      inp.value='';
+      setTimeout(()=>{ inp.classList.remove('shake'); err.textContent='\u00a0'; },1500);
+    }
+  };
+  document.getElementById('pw-input').addEventListener('keydown',e=>{ if(e.key==='Enter') window.checkPw(); });
+
+  // ================= MODE =================
+  let mode = 'enc';
+  window.setMode = function(m,btn){
+    mode=m;
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('in-label').textContent  = m==='enc'?'النص الأصلي':'النص المشفَّر';
+    document.getElementById('out-label').textContent = m==='enc'?'النص المشفَّر':'النص الأصلي';
+    document.getElementById('input-text').placeholder= m==='enc'?'اكتب النص هنا...':'الصق النص المشفَّر هنا...';
+    clearAll();
+  };
+  window.clearAll = function(){
+    document.getElementById('input-text').value='';
+    document.getElementById('output-box').innerHTML='<span class="output-placeholder">النتيجة تظهر هنا...</span>';
+  };
+  window.copyOut = function(){
+    const txt = document.getElementById('output-box').textContent.trim();
+    if(txt==='النتيجة تظهر هنا...' || !txt) return;
+    navigator.clipboard.writeText(txt).then(()=>{
+      const b = document.querySelector('.btn-copy[onclick="copyOut()"]');
+      const old = b.textContent; b.textContent='تم النسخ ✓';
+      setTimeout(()=>b.textContent=old,1500);
+    });
+  };
+
+  // ================= ثوابت الخوارزمية =================
+  const ALPHABET = 'ءابتثجحخدذرزسشصضطظعغفقكلمنهوي';
+  const SUKUN = '\u0652';      // ْ
+  const KASRATAN = '\u064D';   // ٍ
+  const HARAKAT = { DAMMA: '\u064F', FATHA: '\u064E', KASRA: '\u0650' };
+  const HARAKAT_LIST = [HARAKAT.DAMMA, HARAKAT.FATHA, HARAKAT.KASRA];
+
+  const PUNCT_MAP_ENC = { '.':'ط', '،':'ص', '؟':'ه', '!':'ج' };
+  const PUNCT_MAP_DEC = Object.fromEntries(Object.entries(PUNCT_MAP_ENC).map(([k,v]) => [v,k]));
+
+  // دوال مساعدة
+  function isArabicLetter(ch){
+    if(!ch) return false;
+    const cp = ch.codePointAt(0);
+    return cp >= 0x0621 && cp <= 0x064A;
+  }
+
+  // هل الكلمة تحتوي على أحرف غير عربية (أرقام، لاتينية، رموز غير الترقيم)؟
+  function hasNonArabic(word){
+    for(let ch of word)
+      if(!isArabicLetter(ch) && !['.',',','؟','!','،'].includes(ch))
+        return true;
+    return false;
+  }
+
+  // تطبيع الكلمة حسب المواصفات (مرحلة ما قبل التشفير)
+  function normalizeWord(word){
+    // 1. استبدال التاء المربوطة في نهاية الكلمة بـ (تْ)
+    let processed = word.replace(/ة$/,'ت'+SUKUN);
+    // 2. إذا كانت الكلمة ثنائية (حرفان بعد إزالة الحركات)
+    let base = processed.replace(/[\u064B-\u0652]/g,'');
+    if([...base].length === 2){
+      const last = base[base.length-1];
+      let next = ALPHABET[(ALPHABET.indexOf(last)+1) % ALPHABET.length];
+      // إضافة الحرف التالي مع تنوين الكسر
+      processed = processed + next + KASRATAN;
+    }
+    // إعادة كيان الحروف (مع الاحتفاظ بالسكون والتنوين)
+    return [...processed];
+  }
+
+  // استخراج الحروف الأساسية (بدون حركات) من القائمة
+  function getBaseChars(chars){
+    return chars.map(c => c.replace(/[\u064B-\u0652]/g,'')).join('');
+  }
+
+  // إزالة السكون والتنوين للحصول على النص الأصلي (بعد فك التشفير)
+  function cleanHarakat(chars){
+    let result = chars.map(c => c.replace(/[\u064B-\u0652]/g,'')).join('');
+    result = result.replace(/ت\u0652$/,'ة'); // إعادة التاء المربوطة في النهاية
+    // إزالة الحرف المضاف بتنوين الكسر (نحذف الحرف الأخير إذا كان التنوين موجوداً)
+    // يتم ذلك في مرحلة فك التشفير بشكل منفصل
+    return result;
+  }
+
+  // تحديد نمط المجموعة حسب الفهرس (بدءاً من 0)
+  function getGroupPattern(wordIndex){
+    // 1A ثم 3B 3A 3B 3A ...
+    if(wordIndex === 0) return 'A';
+    let n = wordIndex; // n >=1
+    let cycle = Math.floor((n-1) / 6);
+    let pos = (n-1) % 6;
+    if(pos < 3) return 'B';
+    else return 'A';
+  }
+
+  // حرف الفراغ المتحرك: للنمط A نأخذ الحرف الثاني من الأصل، للنمط B الحرف الأول
+  function getSpaceChar(originalChars, pattern, wordIdx){
+    let idx = (pattern === 'A') ? 1 : 0;
+    let base = originalChars[idx] || originalChars[0];
+    let baseLetter = base.replace(/[\u064B-\u0652]/g,'');
+    let haraka = HARAKAT_LIST[wordIdx % 3];
+    return baseLetter + haraka;
+  }
+
+  // إعادة الترتيب حسب النمط
+  function reorderA(chars){
+    const n = chars.length;
+    if(n === 3) return [chars[1], chars[2], chars[0]];
+    // n >= 4 : الترتيب (3، الأخير، 1، الباقي بالترتيب)
+    let result = [];
+    result.push(chars[2]);                 // الثالث (index 2)
+    result.push(chars[n-1]);               // الأخير
+    result.push(chars[0]);                 // الأول
+    for(let i=1; i<n-1; i++){
+      if(i !== 2) result.push(chars[i]);
+    }
+    return result;
+  }
+
+  function reorderB(chars){
+    const n = chars.length;
+    if(n === 3) return [chars[0], chars[2], chars[1]];
+    // n >= 4 : الترتيب (1، 2، الباقي من الرابع إلى قبل الأخير، الأخير، 3)
+    let result = [];
+    result.push(chars[0]);
+    result.push(chars[1]);
+    for(let i=3; i <= n-2; i++) result.push(chars[i]);
+    result.push(chars[n-1]);
+    result.push(chars[2]);
+    return result;
+  }
+
+  // عكس إعادة الترتيب لفك التشفير
+  function reverseReorderA(encoded, n){
+    if(n === 3) return [encoded[2], encoded[0], encoded[1]];
+    // encoded = [orig[2], orig[n-1], orig[0], ...orig[1..n-2] باستثناء 2 ]
+    let orig = new Array(n);
+    orig[2] = encoded[0];
+    orig[n-1] = encoded[1];
+    orig[0] = encoded[2];
+    let rest = encoded.slice(3);
+    let ri = 0;
+    for(let j=1; j<n-1; j++){
+      if(j !== 2) orig[j] = rest[ri++];
+    }
+    return orig;
+  }
+
+  function reverseReorderB(encoded, n){
+    if(n === 3) return [encoded[0], encoded[2], encoded[1]];
+    // encoded = [orig[0], orig[1], orig[3..n-2], orig[n-1], orig[2]]
+    let orig = new Array(n);
+    orig[0] = encoded[0];
+    orig[1] = encoded[1];
+    let mid = encoded.slice(2, n-1);
+    for(let j=3; j<n; j++) orig[j] = mid[j-3];
+    orig[2] = encoded[n-1];
+    return orig;
+  }
+
+  // ================= التشفير =================
+  function encrypt(text){
+    // تجزئة النص إلى وحدات (كلمات، مسافات، علامات ترقيم)
+    let tokens = [];
+    let i = 0;
+    const len = text.length;
+    while(i < len){
+      if(text[i] === ' '){
+        tokens.push({type:'space'});
+        i++;
+        continue;
+      }
+      if(['.',',','؟','!','،'].includes(text[i])){
+        tokens.push({type:'punct', value:text[i]});
+        i++;
+        continue;
+      }
+      let start = i;
+      while(i < len && text[i] !== ' ' && !['.',',','؟','!','،'].includes(text[i])) i++;
+      let word = text.substring(start, i);
+      tokens.push({type:'word', value:word});
+    }
+
+    let result = '';
+    let wordIdx = 0;
+    for(let t=0; t<tokens.length; t++){
+      const tok = tokens[t];
+      if(tok.type === 'space'){
+        result += ' ';
+        continue;
+      }
+      if(tok.type === 'punct'){
+        result += tok.value;
+        continue;
+      }
+      // معالجة كلمة
+      let raw = tok.value;
+      // إذا كانت تحتوي على أحرف غير عربية، نمررها كما هي دون تشفير
+      if(hasNonArabic(raw)){
+        result += raw;
+        // الحفاظ على المسافة بعدها إذا لم يتبعها ترقيم
+        if(t+1 < tokens.length && tokens[t+1].type !== 'punct' && tokens[t+1].type !== 'space')
+          result += ' ';
+        wordIdx++;
+        continue;
+      }
+
+      // الكلمة عربية: تطبيع
+      let norm = normalizeWord(raw);
+      let pattern = getGroupPattern(wordIdx);
+      let reordered = (pattern === 'A') ? reorderA(norm) : reorderB(norm);
+      result += reordered.join('');
+      // إضافة حرف الفراغ المتحرك
+      let spaceChar = getSpaceChar(norm, pattern, wordIdx);
+      // التحقق من وجود علامة ترقيم تلي الكلمة مباشرة (بدون مسافة حقيقية)
+      let nextTok = tokens[t+1];
+      if(nextTok && nextTok.type === 'punct'){
+        let punctChar = PUNCT_MAP_ENC[nextTok.value];
+        // الحرف الثاني من أصل الكلمة (بدون حركة)
+        let secondBase = norm[1] ? norm[1].replace(/[\u064B-\u0652]/g,'') : (norm[0]?norm[0].replace(/[\u064B-\u0652]/g,''):'');
+        result += spaceChar + punctChar + secondBase;
+        t++; // تخطي علامة الترقيم
+      } else {
+        result += spaceChar;
+      }
+      wordIdx++;
+    }
+    return result.trimEnd();
+  }
+
+  // ================= فك التشفير =================
+  function decrypt(cipher){
+    if(!cipher.trim()) return '';
+    // تحليل النص المشفر: نبحث عن أنماط (حرف عربي + حركة) كفواصل للكلمات
+    let tokens = [];
+    let i = 0;
+    const len = cipher.length;
+    let currentWordChars = [];
+    while(i < len){
+      let ch = cipher[i];
+      // كشف فاصل الكلمة: حرف عربي متبوع بحركة (ضمة/فتحة/كسرة)
+      if(i+1 < len && isArabicLetter(ch) && HARAKAT_LIST.includes(cipher[i+1])){
+        // إنهاء الكلمة الحالية
+        if(currentWordChars.length > 0){
+          tokens.push({encoded: [...currentWordChars], punct: null});
+          currentWordChars = [];
+        }
+        // تخطي الحرف والحركة (الفراغ)
+        i += 2;
+        // التحقق من وجود علامة ترقيم مشفرة بعد الفراغ مباشرة
+        if(i < len && Object.values(PUNCT_MAP_ENC).includes(cipher[i])){
+          let punctEnc = cipher[i];
+          let punctOrig = PUNCT_MAP_DEC[punctEnc];
+          i++; // تخطي حرف العلامة
+          if(i < len){
+            // تخطي الحرف الثاني (التابع للترقيم)
+            i++;
+          }
+          if(tokens.length > 0) tokens[tokens.length-1].punct = punctOrig;
+        }
+        continue;
+      } else {
+        currentWordChars.push(ch);
+        i++;
+      }
+    }
+    if(currentWordChars.length > 0){
+      tokens.push({encoded: [...currentWordChars], punct: null});
+    }
+
+    let resultWords = [];
+    let wordIdx = 0;
+    for(let tok of tokens){
+      let encoded = tok.encoded;
+      let n = encoded.length;
+      let pattern = getGroupPattern(wordIdx);
+      let originalChars;
+      if(pattern === 'A') originalChars = reverseReorderA(encoded, n);
+      else originalChars = reverseReorderB(encoded, n);
+
+      // إزالة السكون والتنوين وإعادة التاء المربوطة
+      let word = originalChars.map(c => c.replace(/[\u064B-\u0652]/g,'')).join('');
+      // إعادة التاء المربوطة إذا انتهت بـ تْ
+      word = word.replace(/ت\u0652$/,'ة');
+      // إزالة الحرف الأخير إذا كان مضافاً بسبب الكلمة الثنائية (تنوين الكسر)
+      // نتحقق: هل الكلمة الأصلية كانت ثنائية؟ نعرف ذلك بوجود حرف مع تنوين في originalChars
+      let hasKasratan = originalChars.some(c => c.includes(KASRATAN));
+      if(hasKasratan && word.length > 2){
+        // نحذف الحرف الأخير (الذي يحمل التنوين)
+        word = word.slice(0, -1);
+      }
+      resultWords.push(word);
+      if(tok.punct) resultWords.push(tok.punct);
+      wordIdx++;
+    }
+    let result = resultWords.join(' ');
+    return result.replace(/\s+/g,' ').trim();
+  }
+
+  // ================= معالجة الصفحة =================
+  window.process = function(){
+    const inp = document.getElementById('input-text').value;
+    if(!inp.trim()){
+      document.getElementById('output-box').innerHTML = '<span class="output-placeholder">النتيجة تظهر هنا...</span>';
+      return;
+    }
+    let out;
+    try{
+      out = (mode === 'enc') ? encrypt(inp) : decrypt(inp);
+    } catch(e){
+      out = '(خطأ أثناء المعالجة)';
+      console.error(e);
+    }
+    const box = document.getElementById('output-box');
+    box.innerHTML = '';
+    box.textContent = out;
+    box.style.color = (mode === 'enc') ? 'var(--accent)' : 'var(--text)';
+  };
+})();
+</script>
+</body>
+  </html>
