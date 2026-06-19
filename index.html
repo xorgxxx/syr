@@ -3,597 +3,672 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لوحة التحكم - إدارة الوقت والدراسة</title>
-  <!-- Font Awesome (أيقونات) -->
+  <title>منصة الأسطورة - خطة بكالوريا 2027 سوريا | إدارة وقت خارقة</title>
+  <!-- خطوط وأيقونات -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Changa:wght@200..800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Cairo', 'Changa', sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    :root {
+      --neon-red: #ff1a1a;
+      --neon-red-glow: #ff0040;
+      --neon-pink: #ff3366;
+      --neon-dark-bg: #080808;
+      --glass-bg: rgba(20, 0, 0, 0.25);
+      --glass-border: rgba(255, 26, 26, 0.3);
+      --text-primary: #ffeaea;
+      --text-secondary: #ffb3b3;
+      --card-bg: rgba(15, 0, 0, 0.45);
+      --input-bg: rgba(30, 5, 5, 0.6);
+      --shadow-neon: 0 0 25px rgba(255, 26, 26, 0.5), 0 0 60px rgba(255, 0, 64, 0.25);
+      --shadow-neon-sm: 0 0 12px rgba(255, 26, 26, 0.4);
+      --gradient-neon: linear-gradient(135deg, #ff0040, #ff1a1a, #ff3366);
+      --transition-smooth: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
 
     body {
-      background-color: #0b0e17;
-      color: #e0f0ff;
+      background: var(--neon-dark-bg);
+      color: var(--text-primary);
       min-height: 100vh;
-      padding: 20px;
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow-x: hidden;
+      position: relative;
     }
 
-    .dashboard {
-      max-width: 1300px;
+    /* جسيمات خلفية */
+    #particles-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      background: rgba(18, 25, 40, 0.7);
-      backdrop-filter: blur(8px);
-      border-radius: 40px;
-      padding: 30px 30px 40px;
-      box-shadow: 0 20px 40px rgba(0, 10, 30, 0.8), 0 0 0 1px rgba(0, 255, 255, 0.15);
-      border: 1px solid rgba(0, 255, 255, 0.2);
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
     }
 
-    /* الأقسام العلوية */
-    .top-bar {
+    .app-container {
+      position: relative;
+      z-index: 1;
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-      gap: 15px;
+      width: 100%;
+      max-width: 1500px;
+      height: 95vh;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border-radius: 36px;
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--shadow-neon), inset 0 0 40px rgba(255, 0, 64, 0.05);
+      overflow: hidden;
+      margin: 16px;
     }
 
-    h1 {
-      font-size: 2rem;
-      font-weight: 300;
-      letter-spacing: 1px;
-      background: linear-gradient(135deg, #9f7aff, #2ad4ff);
+    /* الشريط الجانبي */
+    .sidebar {
+      width: 260px;
+      background: rgba(5, 0, 0, 0.65);
+      backdrop-filter: blur(16px);
+      border-left: 1px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 12px;
+      gap: 8px;
+      flex-shrink: 0;
+      z-index: 2;
+      border-radius: 0 36px 36px 0;
+    }
+
+    .sidebar-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .sidebar-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: var(--gradient-neon);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      text-shadow: 0 0 15px rgba(42, 212, 255, 0.3);
+      text-shadow: 0 0 20px #ff0040;
+      letter-spacing: 2px;
+    }
+    .sidebar-header .subtitle {
+      font-size: 0.7rem;
+      color: #ff8080;
+      margin-top: -4px;
     }
 
-    .mode-toggle {
+    .nav-item {
       display: flex;
       align-items: center;
       gap: 12px;
-      background: rgba(0, 20, 40, 0.6);
-      padding: 8px 18px 8px 20px;
-      border-radius: 60px;
-      border: 1px solid #2ad4ff44;
-      backdrop-filter: blur(4px);
-    }
-
-    .mode-toggle span {
-      font-size: 0.9rem;
-      opacity: 0.7;
-    }
-
-    .toggle-switch {
-      width: 60px;
-      height: 30px;
-      background: #1e2a3a;
-      border-radius: 30px;
-      position: relative;
+      padding: 12px 16px;
+      border-radius: 16px;
       cursor: pointer;
-      transition: 0.3s;
-      box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
-      border: 1px solid #3a4a6a;
-    }
-
-    .toggle-switch.active {
-      background: #3a2a5a;
-      border-color: #b48aff;
-    }
-
-    .toggle-switch::after {
-      content: '';
-      width: 24px;
-      height: 24px;
-      background: #b0caf0;
-      border-radius: 50%;
-      position: absolute;
-      top: 2px;
-      right: 3px;
-      transition: 0.3s;
-      box-shadow: 0 0 12px #2ad4ff66;
-    }
-
-    .toggle-switch.active::after {
-      right: 30px;
-      background: #d4b0ff;
-      box-shadow: 0 0 18px #b48aff;
-    }
-
-    .toggle-label {
+      transition: var(--transition-smooth);
+      color: #ffcccc;
       font-weight: 500;
-      color: #9bbaff;
+      border: 1px solid transparent;
+      margin: 2px 0;
+      font-size: 0.9rem;
+    }
+    .nav-item i {
+      width: 22px;
+      font-size: 1.1rem;
+      color: var(--neon-red);
+      text-shadow: 0 0 10px #ff0040;
+    }
+    .nav-item:hover {
+      background: rgba(255, 26, 26, 0.15);
+      border-color: rgba(255, 26, 26, 0.4);
+      box-shadow: 0 0 25px rgba(255, 0, 64, 0.3);
+      color: #fff;
+      transform: translateX(-4px);
+    }
+    .nav-item.active {
+      background: rgba(255, 26, 26, 0.25);
+      border-color: var(--neon-red);
+      box-shadow: var(--shadow-neon-sm);
+      color: white;
+      font-weight: 700;
     }
 
-    /* شبكة الكروت */
-    .grid {
-      display: grid;
-      grid-template-columns: 1.2fr 0.9fr 1.2fr;
-      gap: 25px;
-      margin-bottom: 30px;
+    .sidebar-footer {
+      margin-top: auto;
+      font-size: 0.65rem;
+      text-align: center;
+      color: #993333;
+      padding: 10px 0;
     }
 
-    @media (max-width: 900px) {
-      .grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-    @media (max-width: 600px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: rgba(10, 18, 32, 0.7);
-      backdrop-filter: blur(4px);
-      border-radius: 28px;
-      padding: 22px 20px;
-      border: 1px solid rgba(42, 212, 255, 0.15);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-      transition: all 0.2s;
+    /* المحتوى الرئيسي */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 20px 24px;
+      gap: 20px;
     }
 
-    .card:hover {
-      border-color: #2ad4ff55;
-      box-shadow: 0 0 25px rgba(42, 212, 255, 0.1);
+    /* ترويسة */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
     }
-
-    .card-title {
-      font-size: 1.2rem;
-      font-weight: 400;
-      margin-bottom: 18px;
+    .greeting {
+      font-size: 1.7rem;
+      font-weight: 700;
+      background: var(--gradient-neon);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 18px #ff1a1a;
+    }
+    .date-badge {
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      padding: 8px 20px;
+      border-radius: 40px;
+      box-shadow: var(--shadow-neon-sm);
       display: flex;
       align-items: center;
       gap: 10px;
-      color: #b4d9ff;
-      border-bottom: 1px solid #2a3a5a;
-      padding-bottom: 12px;
+      font-size: 0.9rem;
+    }
+    .date-badge i {
+      color: var(--neon-red);
     }
 
+    /* شبكة البطاقات */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      border-radius: 28px;
+      padding: 20px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+      transition: var(--transition-smooth);
+    }
+    .card:hover {
+      border-color: rgba(255, 26, 26, 0.7);
+      box-shadow: var(--shadow-neon-sm);
+    }
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px dashed rgba(255, 100, 100, 0.3);
+      padding-bottom: 10px;
+      color: #ffaaaa;
+    }
     .card-title i {
-      color: #9f7aff;
-      font-size: 1.3rem;
+      color: var(--neon-red);
+      text-shadow: 0 0 10px #ff0040;
     }
 
-    /* بومودورو */
-    .timer-display {
-      font-size: 4rem;
+    /* مؤقت بومودورو */
+    .pomodoro-display {
+      font-size: 4.5rem;
       font-weight: 300;
       text-align: center;
-      letter-spacing: 6px;
-      color: #b4e6ff;
-      text-shadow: 0 0 25px #2ad4ff77;
-      margin: 10px 0 18px;
+      letter-spacing: 8px;
+      color: #ffe0e0;
+      text-shadow: 0 0 35px #ff0040, 0 0 70px #ff1a1a;
+      margin: 8px 0 16px;
       font-variant-numeric: tabular-nums;
     }
-
-    .timer-controls {
+    .pomodoro-controls {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       justify-content: center;
       flex-wrap: wrap;
     }
 
     .btn {
-      background: rgba(30, 60, 100, 0.5);
-      border: 1px solid #2ad4ff44;
-      color: #d0ecff;
-      padding: 8px 22px;
-      border-radius: 60px;
-      font-size: 0.9rem;
+      background: rgba(30, 5, 5, 0.6);
+      border: 1px solid rgba(255, 26, 26, 0.5);
+      color: #ffdddd;
+      padding: 8px 20px;
+      border-radius: 40px;
       cursor: pointer;
-      transition: 0.2s;
-      backdrop-filter: blur(2px);
+      transition: var(--transition-smooth);
+      font-weight: 500;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-    }
-
-    .btn:hover {
-      background: #2ad4ff22;
-      border-color: #2ad4ffaa;
-      box-shadow: 0 0 20px #2ad4ff33;
-      transform: scale(1.02);
-    }
-
-    .btn-primary {
-      background: #6a4aff55;
-      border-color: #9f7aff;
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: #7a5aff99;
-    }
-
-    /* قائمة المهام */
-    .task-category {
-      margin-bottom: 18px;
-    }
-
-    .category-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.85rem;
-      color: #8ab4ff;
-      margin-bottom: 6px;
-      border-bottom: 1px dashed #2a4060;
-      padding-bottom: 4px;
-    }
-
-    .task-list {
-      list-style: none;
-      padding: 0;
-    }
-
-    .task-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 5px 0;
-      border-bottom: 1px solid #1a2a3a;
-      font-size: 0.9rem;
-    }
-
-    .task-item .task-text {
-      flex: 1;
-    }
-
-    .task-item.completed .task-text {
-      text-decoration: line-through;
-      opacity: 0.5;
-    }
-
-    .task-item input[type="checkbox"] {
-      accent-color: #9f7aff;
-      width: 16px;
-      height: 16px;
-      cursor: pointer;
-    }
-
-    .task-item .delete-btn {
-      background: none;
-      border: none;
-      color: #ff6b7a;
-      cursor: pointer;
-      opacity: 0.6;
-      font-size: 0.9rem;
-      transition: 0.2s;
-    }
-
-    .task-item .delete-btn:hover {
-      opacity: 1;
-      transform: scale(1.2);
-    }
-
-    .add-task-form {
-      display: flex;
       gap: 6px;
-      margin-top: 6px;
+      font-size: 0.85rem;
     }
-
-    .add-task-form input {
-      flex: 1;
-      background: #0f1a2a;
-      border: 1px solid #2a4060;
-      border-radius: 40px;
-      padding: 8px 14px;
-      color: #e0f0ff;
-      outline: none;
-      font-size: 0.8rem;
+    .btn:hover {
+      background: rgba(255, 26, 26, 0.25);
+      border-color: var(--neon-red);
+      box-shadow: var(--shadow-neon-sm);
+      color: #fff;
     }
-
-    .add-task-form input:focus {
-      border-color: #9f7aff;
+    .btn-primary {
+      background: rgba(255, 0, 64, 0.3);
+      border-color: var(--neon-red-glow);
+      font-weight: 700;
     }
-
-    .add-task-form button {
-      background: #2a4a7a55;
-      border: 1px solid #4a7aff55;
-      border-radius: 40px;
-      padding: 0 16px;
-      color: white;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .add-task-form button:hover {
-      background: #4a7aff77;
-    }
-
-    .small-select {
-      background: #0f1a2a;
-      border: 1px solid #2a4060;
-      border-radius: 40px;
-      padding: 6px 12px;
-      color: #b4d9ff;
-      font-size: 0.75rem;
-      outline: none;
+    .btn-primary:hover {
+      background: rgba(255, 0, 64, 0.5);
     }
 
     /* شريط التقدم */
     .progress-container {
-      margin-top: 12px;
+      margin: 10px 0;
     }
-
-    .progress-bar-bg {
+    .progress-bg {
       width: 100%;
-      height: 14px;
-      background: #1a2a3a;
+      height: 16px;
+      background: #1a0000;
       border-radius: 40px;
       overflow: hidden;
-      box-shadow: inset 0 0 8px #00000066;
+      box-shadow: inset 0 0 12px black;
     }
-
     .progress-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #9f7aff, #2ad4ff);
+      background: var(--gradient-neon);
       border-radius: 40px;
-      transition: width 0.5s ease;
-      box-shadow: 0 0 20px #2ad4ff55;
+      transition: width 0.6s ease;
+      box-shadow: 0 0 20px #ff0040;
     }
-
-    .progress-label {
+    .progress-text {
       display: flex;
       justify-content: space-between;
-      font-size: 0.8rem;
       margin-top: 6px;
-      color: #9bbaff;
-    }
-
-    .auto-tasks {
-      margin-top: 16px;
-      background: #0b1422;
-      padding: 10px 14px;
-      border-radius: 20px;
-      border: 1px solid #2a4a6a55;
-    }
-
-    .auto-task-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 3px 0;
-      font-size: 0.85rem;
-      border-bottom: 1px solid #1a2a3a;
-    }
-
-    .auto-task-item:last-child {
-      border: none;
-    }
-
-    .badge {
-      background: #2a4a7a;
-      padding: 0 12px;
-      border-radius: 30px;
-      font-size: 0.7rem;
-      color: #b4d9ff;
-    }
-
-    /* تذييل */
-    .footer {
-      margin-top: 20px;
-      text-align: center;
       font-size: 0.8rem;
-      opacity: 0.5;
-      letter-spacing: 0.5px;
+      color: #ff8888;
+    }
+
+    /* قائمة المهام */
+    .task-list {
+      list-style: none;
+      max-height: 260px;
+      overflow-y: auto;
+      padding-left: 4px;
+    }
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 6px;
+      border-bottom: 1px solid rgba(255, 80, 80, 0.2);
+      font-size: 0.9rem;
+    }
+    .task-item.completed .task-text {
+      text-decoration: line-through;
+      opacity: 0.4;
+    }
+    .task-item input[type="checkbox"] {
+      accent-color: #ff1a1a;
+      width: 17px;
+      height: 17px;
+      cursor: pointer;
+    }
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #ff4444;
+      cursor: pointer;
+      font-size: 1rem;
+      opacity: 0.6;
+      transition: 0.2s;
+    }
+    .delete-btn:hover {
+      opacity: 1;
+      transform: scale(1.3);
+      text-shadow: 0 0 12px red;
+    }
+    .add-task-form {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .add-task-form input {
+      flex: 1;
+      background: var(--input-bg);
+      border: 1px solid rgba(255, 80, 80, 0.4);
+      border-radius: 30px;
+      padding: 8px 14px;
+      color: #ffdddd;
+      outline: none;
+    }
+    .add-task-form input:focus {
+      border-color: var(--neon-red);
+      box-shadow: 0 0 15px #ff004066;
+    }
+
+    /* الجدول الزمني */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+    .timeline-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: rgba(20, 0, 0, 0.5);
+      border-radius: 20px;
+      padding: 10px 14px;
+      border: 1px solid transparent;
+      transition: var(--transition-smooth);
+    }
+    .timeline-item:hover {
+      border-color: rgba(255, 26, 26, 0.6);
+      box-shadow: 0 0 15px #ff000040;
+    }
+    .time-badge {
+      background: #ff1a1a33;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #ffaaaa;
+    }
+
+    /* إحصائيات */
+    .stats-row {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .stat-box {
+      flex: 1;
+      min-width: 120px;
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 16px;
+      text-align: center;
+      border: 1px solid var(--glass-border);
+    }
+    .stat-box .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--neon-red);
+      text-shadow: 0 0 20px #ff0040;
+    }
+
+    /* Canvas الرسم البياني */
+    .chart-container {
+      width: 100%;
+      height: 220px;
+      margin-top: 12px;
+    }
+
+    select, textarea {
+      background: var(--input-bg);
+      border: 1px solid rgba(255, 80, 80, 0.4);
+      border-radius: 20px;
+      padding: 8px 14px;
+      color: #ffdddd;
+      outline: none;
+      font-family: inherit;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      resize: vertical;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .section-panel {
+      display: none;
+    }
+    .section-panel.active {
+      display: block;
+    }
+
+    /* شريط التمرير */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0000;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #ff1a1a55;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .app-container {
+        flex-direction: column;
+        height: auto;
+      }
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        border-radius: 36px 36px 0 0;
+      }
     }
   </style>
 </head>
 <body>
-<div class="dashboard" id="app">
-  <!-- الشريط العلوي -->
-  <div class="top-bar">
-    <h1><i class="fas fa-brain" style="margin-left: 12px; opacity: 0.7;"></i>دراسة ذكية</h1>
-    <div class="mode-toggle">
-      <span><i class="fas fa-sun"></i></span>
-      <div class="toggle-switch" id="modeToggle" @click="toggleMode" :class="{ active: isSummer }"></div>
-      <span><i class="fas fa-moon"></i></span>
-      <span class="toggle-label">{{ isSummer ? 'صيفي' : 'شتوي' }}</span>
+<canvas id="particles-canvas"></canvas>
+
+<div class="app-container" id="app">
+  <!-- الشريط الجانبي -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>⚡ الأسطورة</h2>
+      <div class="subtitle">بكالوريا 2027 · سوريا</div>
     </div>
-  </div>
+    <nav>
+      <div class="nav-item active" data-section="dashboard"><i class="fas fa-th-large"></i> لوحة اليوم</div>
+      <div class="nav-item" data-section="yearplan"><i class="fas fa-calendar-alt"></i> الخطة السنوية</div>
+      <div class="nav-item" data-section="subjects"><i class="fas fa-book-open"></i> المواد والدروس</div>
+      <div class="nav-item" data-section="stats"><i class="fas fa-chart-pie"></i> إحصائيات</div>
+      <div class="nav-item" data-section="notes"><i class="fas fa-sticky-note"></i> ملاحظات</div>
+      <div class="nav-item" data-section="settings"><i class="fas fa-cog"></i> إعدادات</div>
+    </nav>
+    <div class="sidebar-footer">⏳ صُممت لتتفوق · 240/240</div>
+  </aside>
 
-  <!-- الشبكة الرئيسية -->
-  <div class="grid">
-    <!-- بومودورو -->
-    <div class="card">
-      <div class="card-title"><i class="fas fa-hourglass-half"></i> مؤقت بومودورو</div>
-      <div class="timer-display">{{ formattedTime }}</div>
-      <div class="timer-controls">
-        <button class="btn" @click="startTimer"><i class="fas fa-play"></i> بدء</button>
-        <button class="btn" @click="pauseTimer"><i class="fas fa-pause"></i> إيقاف</button>
-        <button class="btn" @click="resetTimer"><i class="fas fa-undo-alt"></i> إعادة</button>
+  <!-- المحتوى الرئيسي -->
+  <main class="main-content">
+    <!-- لوحة اليوم -->
+    <section id="section-dashboard" class="section-panel active">
+      <div class="top-header">
+        <div class="greeting" id="greetingMsg">أهلاً بك أيها البطل 🚀</div>
+        <div class="date-badge"><i class="fas fa-calendar"></i> <span id="currentDate"></span></div>
       </div>
-      <div style="margin-top: 12px; font-size:0.8rem; opacity:0.7; text-align:center;">25 دقيقة تركيز</div>
-    </div>
-
-    <!-- المهام (To-Do) -->
-    <div class="card">
-      <div class="card-title"><i class="fas fa-tasks"></i> مهام اليوم</div>
-      <div v-for="(category, key) in taskCategories" :key="key" class="task-category">
-        <div class="category-header">
-          <span>{{ category.label }}</span>
-          <span>{{ getCategoryProgress(key) }}%</span>
+      <div class="cards-grid">
+        <!-- بومودورو -->
+        <div class="card">
+          <div class="card-title"><i class="fas fa-hourglass-half"></i> مؤقت بومودورو</div>
+          <div class="pomodoro-display" id="pomodoroDisplay">25:00</div>
+          <div class="pomodoro-controls">
+            <button class="btn" id="btnPomoStart"><i class="fas fa-play"></i> بدء</button>
+            <button class="btn" id="btnPomoPause"><i class="fas fa-pause"></i> إيقاف</button>
+            <button class="btn" id="btnPomoReset"><i class="fas fa-undo-alt"></i> إعادة</button>
+          </div>
         </div>
-        <ul class="task-list">
-          <li v-for="(task, idx) in category.tasks" :key="idx" class="task-item" :class="{ completed: task.done }">
-            <input type="checkbox" v-model="task.done" @change="updateProgress">
-            <span class="task-text">{{ task.text }}</span>
-            <button class="delete-btn" @click="deleteTask(key, idx)"><i class="fas fa-times-circle"></i></button>
-          </li>
-        </ul>
-        <div class="add-task-form">
-          <input type="text" v-model="newTaskText" :placeholder="`إضافة مهمة ${category.label}`" @keyup.enter="addTask(key)">
-          <button @click="addTask(key)"><i class="fas fa-plus"></i></button>
+        <!-- مهام اليوم -->
+        <div class="card">
+          <div class="card-title"><i class="fas fa-tasks"></i> مهام اليوم</div>
+          <ul class="task-list" id="taskList"></ul>
+          <div class="add-task-form">
+            <input type="text" id="newTaskInput" placeholder="أضف مهمة جديدة..." autocomplete="off">
+            <button class="btn" id="btnAddTask"><i class="fas fa-plus"></i></button>
+          </div>
+          <div class="progress-container">
+            <div class="progress-bg"><div class="progress-fill" id="taskProgressFill" style="width:0%"></div></div>
+            <div class="progress-text"><span>إنجاز المهام</span><span id="taskProgressPercent">0%</span></div>
+          </div>
         </div>
-      </div>
-    </div>
-
-    <!-- التقدم + الجدول التلقائي -->
-    <div class="card">
-      <div class="card-title"><i class="fas fa-chart-line"></i> التقدم والإنجاز</div>
-      <div class="progress-container">
-        <div class="progress-bar-bg">
-          <div class="progress-fill" :style="{ width: overallProgress + '%' }"></div>
-        </div>
-        <div class="progress-label">
-          <span>مكتمل</span>
-          <span>{{ overallProgress }}%</span>
-        </div>
-      </div>
-
-      <!-- المهام التلقائية (حسب النظام) -->
-      <div class="auto-tasks">
-        <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
-          <span style="font-size:0.85rem;"><i class="fas fa-robot"></i> مهام تلقائية</span>
-          <span class="badge">{{ isSummer ? 'صيفي' : 'شتوي' }}</span>
-        </div>
-        <div v-for="(item, idx) in autoTasks" :key="idx" class="auto-task-item">
-          <span>{{ item }}</span>
-          <span style="opacity:0.5;"><i class="far fa-clock"></i></span>
+        <!-- جدول اليوم -->
+        <div class="card">
+          <div class="card-title"><i class="fas fa-clock"></i> جدول اليوم</div>
+          <div class="timeline" id="dailySchedule"></div>
+          <button class="btn btn-primary" id="btnResetSchedule" style="margin-top:10px;"><i class="fas fa-sync-alt"></i> إعادة ضبط الجدول</button>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="footer">⏳ ركز .. أنجز .. تفوق</div>
+      <!-- تقدم المواد السريع -->
+      <div class="card">
+        <div class="card-title"><i class="fas fa-graduation-cap"></i> تقدم المواد (نظرة سريعة)</div>
+        <div id="subjectsQuickProgress"></div>
+      </div>
+    </section>
+
+    <!-- الخطة السنوية -->
+    <section id="section-yearplan" class="section-panel">
+      <div class="card">
+        <div class="card-title"><i class="fas fa-calendar-alt"></i> خطة العام الدراسي حتى البكالوريا</div>
+        <div id="yearPlanContainer"></div>
+      </div>
+    </section>
+
+    <!-- المواد والدروس -->
+    <section id="section-subjects" class="section-panel">
+      <div class="card">
+        <div class="card-title"><i class="fas fa-book-open"></i> المواد الدراسية (بكالوريا علمي / أدبي)</div>
+        <div id="subjectsDetail"></div>
+      </div>
+    </section>
+
+    <!-- إحصائيات -->
+    <section id="section-stats" class="section-panel">
+      <div class="stats-row" id="statsRow">
+        <div class="stat-box"><div class="value" id="statTotalHours">0</div><small>ساعة دراسة</small></div>
+        <div class="stat-box"><div class="value" id="statTasksDone">0</div><small>مهمة منجزة</small></div>
+        <div class="stat-box"><div class="value" id="statAvgFocus">0%</div><small>تركيز متوسط</small></div>
+      </div>
+      <div class="card" style="margin-top:20px;">
+        <div class="card-title"><i class="fas fa-chart-line"></i> ساعات الدراسة الأسبوعية</div>
+        <div class="chart-container"><canvas id="weeklyChart"></canvas></div>
+      </div>
+    </section>
+
+    <!-- ملاحظات -->
+    <section id="section-notes" class="section-panel">
+      <div class="card">
+        <div class="card-title"><i class="fas fa-sticky-note"></i> دفتر الملاحظات السريع</div>
+        <textarea id="notesArea" placeholder="اكتب أفكارك، ملخصات، نصائح لنفسك..."></textarea>
+        <button class="btn btn-primary" id="btnSaveNotes" style="margin-top:8px;">💾 حفظ الملاحظات</button>
+      </div>
+    </section>
+
+    <!-- إعدادات -->
+    <section id="section-settings" class="section-panel">
+      <div class="card">
+        <div class="card-title"><i class="fas fa-cog"></i> الإعدادات</div>
+        <label>اختر الفرع: 
+          <select id="branchSelect">
+            <option value="scientific">علمي (رياضيات/فيزياء)</option>
+            <option value="literary">أدبي (عربي/تاريخ)</option>
+          </select>
+        </label>
+        <button class="btn btn-primary" id="btnSaveSettings" style="margin-top:12px;">تطبيق الإعدادات</button>
+        <p style="margin-top:12px; font-size:0.8rem; color:#ff8888;">* الإعدادات تُحفظ تلقائياً في المتصفح</p>
+      </div>
+    </section>
+  </main>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 <script>
-  new Vue({
-    el: '#app',
-    data: {
-      // بومودورو
-      timerSeconds: 25 * 60,
-      timerInterval: null,
-      isRunning: false,
-
-      // النظام (صيفي/شتوي)
-      isSummer: true,
-
-      // المهام
-      newTaskText: '',
-      taskCategories: {
-        study: { label: '📘 مهام دراسية', tasks: [] },
-        personal: { label: '🧑‍🌾 شخصية وحياة يومية', tasks: [] },
-        tutoring: { label: '🧑‍🏫 دروس خصوصية', tasks: [] }
-      },
-
-      // المهام التلقائية (تعتمد على isSummer)
-      autoTasksSummer: ['مراجعة مواد الغد', 'قراءة 20 صفحة', 'حل تمارين الرياضيات', 'تنظيم المكتب'],
-      autoTasksWinter: ['مراجعة شاملة', 'كتابة ملخصات', 'حل نماذج امتحانات', 'مذاكرة جماعية'],
-    },
-    computed: {
-      formattedTime() {
-        const m = Math.floor(this.timerSeconds / 60);
-        const s = this.timerSeconds % 60;
-        return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-      },
-      overallProgress() {
-        let total = 0, done = 0;
-        for (let cat in this.taskCategories) {
-          const tasks = this.taskCategories[cat].tasks;
-          total += tasks.length;
-          done += tasks.filter(t => t.done).length;
-        }
-        return total === 0 ? 0 : Math.round((done / total) * 100);
-      },
-      autoTasks() {
-        return this.isSummer ? this.autoTasksSummer : this.autoTasksWinter;
-      }
-    },
-    methods: {
-      // بومودورو
-      startTimer() {
-        if (this.isRunning) return;
-        if (this.timerSeconds <= 0) this.timerSeconds = 25 * 60;
-        this.isRunning = true;
-        this.timerInterval = setInterval(() => {
-          if (this.timerSeconds > 0) {
-            this.timerSeconds--;
-          } else {
-            clearInterval(this.timerInterval);
-            this.isRunning = false;
-            // صوت تنبيه
-            try {
-              const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-              const oscillator = audioCtx.createOscillator();
-              const gainNode = audioCtx.createGain();
-              oscillator.connect(gainNode);
-              gainNode.connect(audioCtx.destination);
-              oscillator.frequency.value = 880;
-              oscillator.type = 'sine';
-              gainNode.gain.value = 0.3;
-              oscillator.start();
-              setTimeout(() => oscillator.stop(), 400);
-            } catch(e) { /* بدون صوت في بعض المتصفحات */ }
-            alert('⏰ انتهى الوقت! حان وقت الاستراحة.');
-          }
-        }, 1000);
-      },
-      pauseTimer() {
-        clearInterval(this.timerInterval);
-        this.isRunning = false;
-      },
-      resetTimer() {
-        clearInterval(this.timerInterval);
-        this.isRunning = false;
-        this.timerSeconds = 25 * 60;
-      },
-
-      // تبديل النظام
-      toggleMode() {
-        this.isSummer = !this.isSummer;
-        // إعادة تعيين المهام التلقائية (تظهر تلقائياً)
-      },
-
-      // المهام
-      addTask(categoryKey) {
-        const text = this.newTaskText.trim();
-        if (!text) return;
-        this.taskCategories[categoryKey].tasks.push({ text, done: false });
-        this.newTaskText = '';
-        this.updateProgress();
-      },
-      deleteTask(categoryKey, index) {
-        this.taskCategories[categoryKey].tasks.splice(index, 1);
-        this.updateProgress();
-      },
-      updateProgress() {
-        // reactive
-      },
-      getCategoryProgress(catKey) {
-        const tasks = this.taskCategories[catKey].tasks;
-        if (!tasks.length) return 0;
-        const done = tasks.filter(t => t.done).length;
-        return Math.round((done / tasks.length) * 100);
-      }
-    },
-    mounted() {
-      // بعض المهام الافتراضية
-      this.taskCategories.study.tasks = [
-        { text: 'مراجعة الفصل الثالث', done: false },
-        { text: 'حل واجب الفيزياء', done: false },
-      ];
-      this.taskCategories.personal.tasks = [
-        { text: 'تنظيم الجدول اليومي', done: false },
-        { text: 'ممارسة الرياضة', done: false },
-      ];
-      this.taskCategories.tutoring.tasks = [
-        { text: 'تحضير درس الرياضيات', done: false },
-        { text: 'مراجعة مع الطالب', done: false },
-      ];
+  (function() {
+    // ================ الجسيمات النيونية الخلفية ================
+    const canvas = document.getElementById('particles-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     }
-  });
-</script>
-</body>
-</html>
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.6;
+        this.vy = (Math.random() - 0.5) * 0.6;
+        this.size = Math.random() * 2.5 + 0.8;
+        this.alpha = Math.random() * 0.5 + 0.2;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 26, 26, ${this.alpha})`;
+        ctx.shadowColor = '#ff0040';
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+    for (let i = 0; i < 80; i++) particles.push(new Particle());
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // ================ الحالة العامة للتطبيق ================
+    const state = {
+      branch: 'scientific', // scientific / literary
+      pomodoro: { seconds: 25 * 60, interval: null, running: false },
+      tasks: [],
+      schedule: [],
+      subjects: [],
+      notes: '',
+      studyHoursLog: JSON.parse(localStorage.getItem('studyLog') || '[]'), // {date, hours}
+      currentSection: 'dashboard'
+    };
+
+    // مواد افتراضية حسب الفرع
+    const subjectsScientific = [
+      { name: 'رياضيات', icon: '📐', lessons: 40, completed: 0 },
+      { name: 'فيزياء', icon: '⚛️', lessons: 35, completed: 0 },
+      { name: 'كيمياء', icon: '🧪', lessons: 30, completed: 0 },
+      { name: 'علوم طبيعية', icon: '🌿', lessons: 28, completed: 0 },
+      { name: 'لغة عربية', icon: '📖', lessons: 25, completed: 0 },
+      { name: 'لغة إنكليزية', icon: '🇬🇧', lessons: 24, completed: 0 },
+      { name: 'تربية دينية', icon: '☪️', lessons: 15, completed: 0 },
+      { name: 'تربية وطنية', icon: '🏛️', lessons: 12, completed: 0 },
+    ];
+    const subjectsLiterary = [
+      { name: 'لغة عربية', icon: '📖', lessons: 50, completed: 0 },
+      { name: 'تاريخ', icon: '🏺', lessons: 42, completed: 0 },
+      { name: 'جغرافيا', icon: '🌍', lessons: 38, completed: 0 },
+      { name: 'فلسفة', icon: '💭', 
