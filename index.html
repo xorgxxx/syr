@@ -1,674 +1,441 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>منصة الأسطورة - خطة بكالوريا 2027 سوريا | إدارة وقت خارقة</title>
-  <!-- خطوط وأيقونات -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&family=Changa:wght@200..800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Cairo', 'Changa', sans-serif;
-      scroll-behavior: smooth;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>خارطة الصيف المتطورة - البكالوريا سوريا</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap');
 
-    :root {
-      --neon-red: #ff1a1a;
-      --neon-red-glow: #ff0040;
-      --neon-pink: #ff3366;
-      --neon-dark-bg: #080808;
-      --glass-bg: rgba(20, 0, 0, 0.25);
-      --glass-border: rgba(255, 26, 26, 0.3);
-      --text-primary: #ffeaea;
-      --text-secondary: #ffb3b3;
-      --card-bg: rgba(15, 0, 0, 0.45);
-      --input-bg: rgba(30, 5, 5, 0.6);
-      --shadow-neon: 0 0 25px rgba(255, 26, 26, 0.5), 0 0 60px rgba(255, 0, 64, 0.25);
-      --shadow-neon-sm: 0 0 12px rgba(255, 26, 26, 0.4);
-      --gradient-neon: linear-gradient(135deg, #ff0040, #ff1a1a, #ff3366);
-      --transition-smooth: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
+  :root{
+    --bg:#0a0e1a;
+    --panel:#11162a;
+    --panel-2:#161c34;
+    --line:#1f2640;
+    --line-soft:#181f38;
+    --text:#e7eaf6;
+    --text-dim:#7e88ab;
+    --text-dim-2:#5a6489;
+    --accent:#22d3ee;
+    --accent-soft:#22d3ee1a;
+    --math:#fb4d6f;
+    --phys:#3b82f6;
+    --chem:#22c55e;
+    --extra:#f59e0b;
+    --danger:#ef4444;
+    --warn:#f59e0b;
+    --safe:#22c55e;
+    --gold:#fbbf24;
+  }
 
-    body {
-      background: var(--neon-dark-bg);
-      color: var(--text-primary);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow-x: hidden;
-      position: relative;
-    }
+  *{box-sizing:border-box;}
+  body{
+    font-family:'Cairo',sans-serif;
+    background:
+      radial-gradient(900px 500px at 15% -10%, #15203f 0%, transparent 60%),
+      radial-gradient(700px 600px at 110% 10%, #1b1438 0%, transparent 55%),
+      var(--bg);
+    color:var(--text);
+    min-height:100vh;
+  }
 
-    /* جسيمات خلفية */
-    #particles-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
+  .grain{
+    position:fixed; inset:0; pointer-events:none; opacity:.025; z-index:0;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
 
-    .app-container {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      width: 100%;
-      max-width: 1500px;
-      height: 95vh;
-      background: var(--glass-bg);
-      backdrop-filter: blur(20px);
-      border-radius: 36px;
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--shadow-neon), inset 0 0 40px rgba(255, 0, 64, 0.05);
-      overflow: hidden;
-      margin: 16px;
-    }
+  .panel{ background:var(--panel); border:1px solid var(--line); border-radius:22px; }
+  .panel-soft{ background:var(--panel-2); border:1px solid var(--line-soft); border-radius:18px; }
 
-    /* الشريط الجانبي */
-    .sidebar {
-      width: 260px;
-      background: rgba(5, 0, 0, 0.65);
-      backdrop-filter: blur(16px);
-      border-left: 1px solid var(--glass-border);
-      display: flex;
-      flex-direction: column;
-      padding: 24px 12px;
-      gap: 8px;
-      flex-shrink: 0;
-      z-index: 2;
-      border-radius: 0 36px 36px 0;
-    }
+  .tab-btn{
+    transition:all .25s ease; color:var(--text-dim); position:relative;
+  }
+  .tab-btn.active{ color:var(--text); }
+  .tab-underline{
+    position:absolute; bottom:-1px; right:0; left:0; height:2px;
+    background:linear-gradient(90deg, var(--accent), transparent);
+    transform:scaleX(0); transition:transform .3s ease; transform-origin:right;
+  }
+  .tab-btn.active .tab-underline{ transform:scaleX(1); }
 
-    .sidebar-header {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .sidebar-header h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      background: var(--gradient-neon);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-shadow: 0 0 20px #ff0040;
-      letter-spacing: 2px;
-    }
-    .sidebar-header .subtitle {
-      font-size: 0.7rem;
-      color: #ff8080;
-      margin-top: -4px;
-    }
+  input[type="range"]{
+    -webkit-appearance:none; appearance:none; background:transparent; height:20px;
+  }
+  input[type="range"]::-webkit-slider-runnable-track{
+    background:linear-gradient(90deg, var(--track-color, var(--accent)) var(--fill,50%), #1c2340 var(--fill,50%));
+    height:7px; border-radius:6px;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none;
+    width:20px; height:20px; border-radius:50%;
+    background:#fff; border:3px solid var(--track-color, var(--accent));
+    margin-top:-7px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.4);
+    transition:transform .15s ease;
+  }
+  input[type="range"]::-webkit-slider-thumb:active{ transform:scale(1.15); }
 
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      border-radius: 16px;
-      cursor: pointer;
-      transition: var(--transition-smooth);
-      color: #ffcccc;
-      font-weight: 500;
-      border: 1px solid transparent;
-      margin: 2px 0;
-      font-size: 0.9rem;
-    }
-    .nav-item i {
-      width: 22px;
-      font-size: 1.1rem;
-      color: var(--neon-red);
-      text-shadow: 0 0 10px #ff0040;
-    }
-    .nav-item:hover {
-      background: rgba(255, 26, 26, 0.15);
-      border-color: rgba(255, 26, 26, 0.4);
-      box-shadow: 0 0 25px rgba(255, 0, 64, 0.3);
-      color: #fff;
-      transform: translateX(-4px);
-    }
-    .nav-item.active {
-      background: rgba(255, 26, 26, 0.25);
-      border-color: var(--neon-red);
-      box-shadow: var(--shadow-neon-sm);
-      color: white;
-      font-weight: 700;
-    }
+  .fade-in{ animation:fadeIn .35s ease both; }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
 
-    .sidebar-footer {
-      margin-top: auto;
-      font-size: 0.65rem;
-      text-align: center;
-      color: #993333;
-      padding: 10px 0;
-    }
+  .pulse-dot{
+    animation:pulseDot 2.2s ease-in-out infinite;
+  }
+  @keyframes pulseDot{
+    0%,100%{ box-shadow:0 0 0 0 rgba(34,211,238,.5); }
+    50%{ box-shadow:0 0 0 6px rgba(34,211,238,0); }
+  }
 
-    /* المحتوى الرئيسي */
-    .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      padding: 20px 24px;
-      gap: 20px;
-    }
+  .scrollbar-thin::-webkit-scrollbar{ height:6px; width:6px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb{ background:#2a3155; border-radius:10px; }
+  .scrollbar-thin::-webkit-scrollbar-track{ background:transparent; }
 
-    /* ترويسة */
-    .top-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .greeting {
-      font-size: 1.7rem;
-      font-weight: 700;
-      background: var(--gradient-neon);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-shadow: 0 0 18px #ff1a1a;
-    }
-    .date-badge {
-      background: var(--card-bg);
-      border: 1px solid var(--glass-border);
-      padding: 8px 20px;
-      border-radius: 40px;
-      box-shadow: var(--shadow-neon-sm);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.9rem;
-    }
-    .date-badge i {
-      color: var(--neon-red);
-    }
+  .day-cell{ transition:all .15s ease; cursor:pointer; }
+  .day-cell:hover{ transform:translateY(-1px); }
 
-    /* شبكة البطاقات */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
+  .task-row{ transition:all .2s ease; }
+  .task-row.done{ opacity:.55; }
+  .task-row.done .task-title{ text-decoration:line-through; text-decoration-color:#3a4366; }
 
-    .card {
-      background: var(--card-bg);
-      backdrop-filter: blur(14px);
-      border-radius: 28px;
-      padding: 20px;
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
-      transition: var(--transition-smooth);
-    }
-    .card:hover {
-      border-color: rgba(255, 26, 26, 0.7);
-      box-shadow: var(--shadow-neon-sm);
-    }
-    .card-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border-bottom: 1px dashed rgba(255, 100, 100, 0.3);
-      padding-bottom: 10px;
-      color: #ffaaaa;
-    }
-    .card-title i {
-      color: var(--neon-red);
-      text-shadow: 0 0 10px #ff0040;
-    }
+  .check-circle{
+    width:26px; height:26px; border-radius:50%; border:2px solid var(--line);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+    transition:all .2s ease; flex-shrink:0; background:#0d1226;
+  }
+  .check-circle.checked{ background:var(--safe); border-color:var(--safe); }
+  .check-circle svg{ opacity:0; transition:opacity .15s ease; }
+  .check-circle.checked svg{ opacity:1; }
 
-    /* مؤقت بومودورو */
-    .pomodoro-display {
-      font-size: 4.5rem;
-      font-weight: 300;
-      text-align: center;
-      letter-spacing: 8px;
-      color: #ffe0e0;
-      text-shadow: 0 0 35px #ff0040, 0 0 70px #ff1a1a;
-      margin: 8px 0 16px;
-      font-variant-numeric: tabular-nums;
-    }
-    .pomodoro-controls {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+  .debt-chip{
+    background:rgba(239,68,68,.12); color:#fb7185; border:1px solid rgba(239,68,68,.3);
+    font-size:10px; font-weight:700; padding:2px 8px; border-radius:999px;
+  }
+  .carry-banner{
+    background:linear-gradient(90deg, rgba(251,113,133,.12), rgba(245,158,11,.08));
+    border:1px solid rgba(251,113,133,.25);
+  }
 
-    .btn {
-      background: rgba(30, 5, 5, 0.6);
-      border: 1px solid rgba(255, 26, 26, 0.5);
-      color: #ffdddd;
-      padding: 8px 20px;
-      border-radius: 40px;
-      cursor: pointer;
-      transition: var(--transition-smooth);
-      font-weight: 500;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.85rem;
-    }
-    .btn:hover {
-      background: rgba(255, 26, 26, 0.25);
-      border-color: var(--neon-red);
-      box-shadow: var(--shadow-neon-sm);
-      color: #fff;
-    }
-    .btn-primary {
-      background: rgba(255, 0, 64, 0.3);
-      border-color: var(--neon-red-glow);
-      font-weight: 700;
-    }
-    .btn-primary:hover {
-      background: rgba(255, 0, 64, 0.5);
-    }
+  .ring-progress{ transition:stroke-dashoffset .5s ease; }
 
-    /* شريط التقدم */
-    .progress-container {
-      margin: 10px 0;
-    }
-    .progress-bg {
-      width: 100%;
-      height: 16px;
-      background: #1a0000;
-      border-radius: 40px;
-      overflow: hidden;
-      box-shadow: inset 0 0 12px black;
-    }
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: var(--gradient-neon);
-      border-radius: 40px;
-      transition: width 0.6s ease;
-      box-shadow: 0 0 20px #ff0040;
-    }
-    .progress-text {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 6px;
-      font-size: 0.8rem;
-      color: #ff8888;
-    }
+  .num-font{ font-family:'Cairo',sans-serif; font-feature-settings:"tnum"; }
 
-    /* قائمة المهام */
-    .task-list {
-      list-style: none;
-      max-height: 260px;
-      overflow-y: auto;
-      padding-left: 4px;
-    }
-    .task-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 6px;
-      border-bottom: 1px solid rgba(255, 80, 80, 0.2);
-      font-size: 0.9rem;
-    }
-    .task-item.completed .task-text {
-      text-decoration: line-through;
-      opacity: 0.4;
-    }
-    .task-item input[type="checkbox"] {
-      accent-color: #ff1a1a;
-      width: 17px;
-      height: 17px;
-      cursor: pointer;
-    }
-    .delete-btn {
-      background: none;
-      border: none;
-      color: #ff4444;
-      cursor: pointer;
-      font-size: 1rem;
-      opacity: 0.6;
-      transition: 0.2s;
-    }
-    .delete-btn:hover {
-      opacity: 1;
-      transform: scale(1.3);
-      text-shadow: 0 0 12px red;
-    }
-    .add-task-form {
-      display: flex;
-      gap: 6px;
-      margin-top: 10px;
-    }
-    .add-task-form input {
-      flex: 1;
-      background: var(--input-bg);
-      border: 1px solid rgba(255, 80, 80, 0.4);
-      border-radius: 30px;
-      padding: 8px 14px;
-      color: #ffdddd;
-      outline: none;
-    }
-    .add-task-form input:focus {
-      border-color: var(--neon-red);
-      box-shadow: 0 0 15px #ff004066;
-    }
+  /* مؤشر التقدم الأسبوعي */
+  .weekly-progress-bar{
+    height:4px;
+    border-radius:4px;
+    background:#1c2340;
+    overflow:hidden;
+  }
+  .weekly-progress-bar .fill{
+    height:100%;
+    border-radius:4px;
+    transition:width .6s ease;
+  }
 
-    /* الجدول الزمني */
-    .timeline {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 280px;
-      overflow-y: auto;
-    }
-    .timeline-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      background: rgba(20, 0, 0, 0.5);
-      border-radius: 20px;
-      padding: 10px 14px;
-      border: 1px solid transparent;
-      transition: var(--transition-smooth);
-    }
-    .timeline-item:hover {
-      border-color: rgba(255, 26, 26, 0.6);
-      box-shadow: 0 0 15px #ff000040;
-    }
-    .time-badge {
-      background: #ff1a1a33;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #ffaaaa;
-    }
+  /* بطاقة المهمة اليومية */
+  .daily-task-card{
+    border-right:3px solid transparent;
+    transition:all .2s ease;
+  }
+  .daily-task-card:hover{
+    border-right-color:var(--accent);
+  }
 
-    /* إحصائيات */
-    .stats-row {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    .stat-box {
-      flex: 1;
-      min-width: 120px;
-      background: var(--card-bg);
-      border-radius: 24px;
-      padding: 16px;
-      text-align: center;
-      border: 1px solid var(--glass-border);
-    }
-    .stat-box .value {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--neon-red);
-      text-shadow: 0 0 20px #ff0040;
-    }
+  /* شارة الأسبوع */
+  .week-badge{
+    font-size:10px;
+    background:rgba(34,211,238,0.08);
+    border:1px solid rgba(34,211,238,0.15);
+    border-radius:999px;
+    padding:2px 10px;
+  }
 
-    /* Canvas الرسم البياني */
-    .chart-container {
-      width: 100%;
-      height: 220px;
-      margin-top: 12px;
-    }
-
-    select, textarea {
-      background: var(--input-bg);
-      border: 1px solid rgba(255, 80, 80, 0.4);
-      border-radius: 20px;
-      padding: 8px 14px;
-      color: #ffdddd;
-      outline: none;
-      font-family: inherit;
-    }
-
-    textarea {
-      width: 100%;
-      height: 100px;
-      resize: vertical;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .section-panel {
-      display: none;
-    }
-    .section-panel.active {
-      display: block;
-    }
-
-    /* شريط التمرير */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0a0000;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #ff1a1a55;
-      border-radius: 10px;
-    }
-
-    @media (max-width: 900px) {
-      .app-container {
-        flex-direction: column;
-        height: auto;
-      }
-      .sidebar {
-        width: 100%;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        border-radius: 36px 36px 0 0;
-      }
-    }
-  </style>
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  }
+</style>
 </head>
-<body>
-<canvas id="particles-canvas"></canvas>
+<body class="text-slate-100">
+<div class="grain"></div>
 
-<div class="app-container" id="app">
-  <!-- الشريط الجانبي -->
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <h2>⚡ الأسطورة</h2>
-      <div class="subtitle">بكالوريا 2027 · سوريا</div>
+<div class="relative z-10 min-h-screen px-4 sm:px-6 py-6 sm:py-10 max-w-4xl mx-auto">
+
+  <!-- رأس الصفحة -->
+  <header class="text-center mb-7 fade-in">
+    <div class="inline-flex items-center gap-2 bg-[#11162a] border border-[var(--line)] text-cyan-300 text-[11px] font-semibold px-3.5 py-1.5 rounded-full">
+      <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 pulse-dot"></span>
+      خارطة الطريق الصيفية · البكالوريا 🇸🇾
     </div>
-    <nav>
-      <div class="nav-item active" data-section="dashboard"><i class="fas fa-th-large"></i> لوحة اليوم</div>
-      <div class="nav-item" data-section="yearplan"><i class="fas fa-calendar-alt"></i> الخطة السنوية</div>
-      <div class="nav-item" data-section="subjects"><i class="fas fa-book-open"></i> المواد والدروس</div>
-      <div class="nav-item" data-section="stats"><i class="fas fa-chart-pie"></i> إحصائيات</div>
-      <div class="nav-item" data-section="notes"><i class="fas fa-sticky-note"></i> ملاحظات</div>
-      <div class="nav-item" data-section="settings"><i class="fas fa-cog"></i> إعدادات</div>
-    </nav>
-    <div class="sidebar-footer">⏳ صُممت لتتفوق · 240/240</div>
-  </aside>
+    <h1 class="text-2xl sm:text-4xl font-black mt-4 leading-tight">
+      من اليوم.. وحتى جرس <span class="text-transparent bg-clip-text bg-gradient-to-l from-cyan-300 to-blue-500">العلامة التامة</span>
+    </h1>
+    <p class="text-slate-400 text-xs sm:text-sm mt-2.5 max-w-md mx-auto">
+      مهام يومية محددة وملزمة — إن فوّتت يوماً، ينتقل المطلوب تلقائياً لأيامك القادمة. لا هروب ولا ضياع مجهود.
+    </p>
+  </header>
 
-  <!-- المحتوى الرئيسي -->
-  <main class="main-content">
-    <!-- لوحة اليوم -->
-    <section id="section-dashboard" class="section-panel active">
-      <div class="top-header">
-        <div class="greeting" id="greetingMsg">أهلاً بك أيها البطل 🚀</div>
-        <div class="date-badge"><i class="fas fa-calendar"></i> <span id="currentDate"></span></div>
-      </div>
-      <div class="cards-grid">
-        <!-- بومودورو -->
-        <div class="card">
-          <div class="card-title"><i class="fas fa-hourglass-half"></i> مؤقت بومودورو</div>
-          <div class="pomodoro-display" id="pomodoroDisplay">25:00</div>
-          <div class="pomodoro-controls">
-            <button class="btn" id="btnPomoStart"><i class="fas fa-play"></i> بدء</button>
-            <button class="btn" id="btnPomoPause"><i class="fas fa-pause"></i> إيقاف</button>
-            <button class="btn" id="btnPomoReset"><i class="fas fa-undo-alt"></i> إعادة</button>
-          </div>
-        </div>
-        <!-- مهام اليوم -->
-        <div class="card">
-          <div class="card-title"><i class="fas fa-tasks"></i> مهام اليوم</div>
-          <ul class="task-list" id="taskList"></ul>
-          <div class="add-task-form">
-            <input type="text" id="newTaskInput" placeholder="أضف مهمة جديدة..." autocomplete="off">
-            <button class="btn" id="btnAddTask"><i class="fas fa-plus"></i></button>
-          </div>
-          <div class="progress-container">
-            <div class="progress-bg"><div class="progress-fill" id="taskProgressFill" style="width:0%"></div></div>
-            <div class="progress-text"><span>إنجاز المهام</span><span id="taskProgressPercent">0%</span></div>
-          </div>
-        </div>
-        <!-- جدول اليوم -->
-        <div class="card">
-          <div class="card-title"><i class="fas fa-clock"></i> جدول اليوم</div>
-          <div class="timeline" id="dailySchedule"></div>
-          <button class="btn btn-primary" id="btnResetSchedule" style="margin-top:10px;"><i class="fas fa-sync-alt"></i> إعادة ضبط الجدول</button>
+  <!-- التبويبات -->
+  <div class="flex items-center justify-center gap-1 mb-6 border-b border-[var(--line)] fade-in overflow-x-auto scrollbar-thin">
+    <button data-tab="today" class="tab-btn active px-3.5 py-3 text-sm font-bold whitespace-nowrap">
+      📋 مهام اليوم <span class="tab-underline"></span>
+    </button>
+    <button data-tab="planner" class="tab-btn px-3.5 py-3 text-sm font-bold whitespace-nowrap">
+      🎛️ المخطط <span class="tab-underline"></span>
+    </button>
+    <button data-tab="timeline" class="tab-btn px-3.5 py-3 text-sm font-bold whitespace-nowrap">
+      🗺️ الخط الزمني <span class="tab-underline"></span>
+    </button>
+    <button data-tab="tracker" class="tab-btn px-3.5 py-3 text-sm font-bold whitespace-nowrap">
+      ✅ السجل <span class="tab-underline"></span>
+    </button>
+    <button data-tab="analytics" class="tab-btn px-3.5 py-3 text-sm font-bold whitespace-nowrap">
+      📊 التحليل <span class="tab-underline"></span>
+    </button>
+  </div>
+
+  <!-- ============ تبويب 0: مهام اليوم (الإجباري) ============ -->
+  <section id="tab-today" class="space-y-5">
+
+    <!-- بانر الترحيل -->
+    <div id="carryBanner" class="carry-banner rounded-2xl p-4 hidden fade-in">
+      <div class="flex items-start gap-2.5">
+        <span class="text-lg shrink-0">⚠️</span>
+        <div>
+          <p class="text-xs font-bold text-rose-300">تم ترحيل مهام من أيام سابقة</p>
+          <p class="text-[11px] text-slate-400 mt-1 leading-relaxed" id="carryBannerText">—</p>
         </div>
       </div>
-      <!-- تقدم المواد السريع -->
-      <div class="card">
-        <div class="card-title"><i class="fas fa-graduation-cap"></i> تقدم المواد (نظرة سريعة)</div>
-        <div id="subjectsQuickProgress"></div>
+    </div>
+
+    <!-- بطاقة التقدم اليومي -->
+    <div class="panel p-5 fade-in">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-[11px] text-slate-400" id="todayDateLabel">—</p>
+          <p class="text-lg font-extrabold mt-0.5">مهامك المطلوبة اليوم</p>
+        </div>
+        <div class="relative w-16 h-16 shrink-0">
+          <svg viewBox="0 0 64 64" class="w-16 h-16 -rotate-90">
+            <circle cx="32" cy="32" r="27" fill="none" stroke="#1c2340" stroke-width="6"/>
+            <circle id="dayProgressRing" class="ring-progress" cx="32" cy="32" r="27" fill="none" stroke="#22d3ee" stroke-width="6" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="169.6"/>
+          </svg>
+          <span class="absolute inset-0 flex items-center justify-center text-xs font-extrabold num-font" id="dayProgressPct">0%</span>
+        </div>
       </div>
-    </section>
 
-    <!-- الخطة السنوية -->
-    <section id="section-yearplan" class="section-panel">
-      <div class="card">
-        <div class="card-title"><i class="fas fa-calendar-alt"></i> خطة العام الدراسي حتى البكالوريا</div>
-        <div id="yearPlanContainer"></div>
+      <!-- شريط الأسبوع المصغر -->
+      <div id="weekStrip" class="grid grid-cols-7 gap-1.5 mt-4 pt-4 border-t border-[var(--line-soft)]"></div>
+
+      <!-- شريط التقدم الأسبوعي -->
+      <div class="mt-4 pt-3 border-t border-[var(--line-soft)]">
+        <div class="flex justify-between text-[10px] text-slate-500 mb-1">
+          <span>تقدم الأسبوع</span>
+          <span id="weeklyProgressLabel">0%</span>
+        </div>
+        <div class="weekly-progress-bar">
+          <div id="weeklyProgressFill" class="fill" style="width:0%;background:linear-gradient(90deg,var(--accent),var(--gold))"></div>
+        </div>
       </div>
-    </section>
+    </div>
 
-    <!-- المواد والدروس -->
-    <section id="section-subjects" class="section-panel">
-      <div class="card">
-        <div class="card-title"><i class="fas fa-book-open"></i> المواد الدراسية (بكالوريا علمي / أدبي)</div>
-        <div id="subjectsDetail"></div>
+    <!-- بانر الإنجاز الكامل -->
+    <div id="successBanner" class="hidden fade-in rounded-2xl p-5 text-center" style="background:linear-gradient(135deg, rgba(34,197,94,.12), rgba(34,211,238,.08)); border:1px solid rgba(34,197,94,.3)">
+      <span class="text-2xl">🎉</span>
+      <p class="text-sm font-bold text-emerald-300 mt-1.5" id="successBannerText">أنجزت كل مهام اليوم!</p>
+      <p class="text-[11px] text-slate-400 mt-1">استمر بهذا النسق، كل يوم ملتزم يقرّبك من العلامة التامة</p>
+    </div>
+
+    <!-- قائمة المهام لكل مادة -->
+    <div id="todayTasksContainer" class="space-y-3"></div>
+
+    <!-- ملخص الدين المتراكم -->
+    <div id="debtSummary" class="panel-soft p-4 fade-in hidden">
+      <p class="text-xs font-bold text-amber-300 mb-2">📦 رصيد متراكم لم يُنجز بعد</p>
+      <div id="debtList" class="space-y-1.5"></div>
+      <p class="text-[10px] text-slate-500 mt-2.5 leading-relaxed">هذا الرصيد يتوزّع تلقائياً على أيام الدراسة القادمة حتى تنجزه بالكامل — لا يضيع أي مجهود مطلوب منك.</p>
+    </div>
+
+  </section>
+
+  <!-- ============ تبويب 1: المخطط اليومي ============ -->
+  <section id="tab-planner" class="space-y-5 hidden">
+
+    <!-- إعدادات تاريخ البداية والنهاية -->
+    <div class="panel p-4 sm:p-5 fade-in">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-base">🎯</span>
+        <span class="font-bold text-sm">حدود الصيف الدراسي</span>
       </div>
-    </section>
-
-    <!-- إحصائيات -->
-    <section id="section-stats" class="section-panel">
-      <div class="stats-row" id="statsRow">
-        <div class="stat-box"><div class="value" id="statTotalHours">0</div><small>ساعة دراسة</small></div>
-        <div class="stat-box"><div class="value" id="statTasksDone">0</div><small>مهمة منجزة</small></div>
-        <div class="stat-box"><div class="value" id="statAvgFocus">0%</div><small>تركيز متوسط</small></div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-[11px] text-slate-400 block mb-1.5">بداية الخطة</label>
+          <input type="date" id="startDate" class="w-full bg-[#0d1226] border border-[var(--line)] rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-400">
+        </div>
+        <div>
+          <label class="text-[11px] text-slate-400 block mb-1.5">بداية العام الدراسي</label>
+          <input type="date" id="endDate" class="w-full bg-[#0d1226] border border-[var(--line)] rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-400">
+        </div>
       </div>
-      <div class="card" style="margin-top:20px;">
-        <div class="card-title"><i class="fas fa-chart-line"></i> ساعات الدراسة الأسبوعية</div>
-        <div class="chart-container"><canvas id="weeklyChart"></canvas></div>
+      <p class="text-[11px] text-slate-500 mt-3" id="durationSummary">—</p>
+    </div>
+
+    <!-- سلايدرز المواد -->
+    <div class="panel p-4 sm:p-5 fade-in space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-base">📚</span>
+          <span class="font-bold text-sm">جرعتك اليومية لكل مادة</span>
+        </div>
+        <button id="addSubjectBtn" class="text-[11px] text-cyan-300 border border-cyan-400/30 bg-cyan-400/10 px-2.5 py-1 rounded-lg hover:bg-cyan-400/20 transition">+ مادة إضافية</button>
       </div>
-    </section>
 
-    <!-- ملاحظات -->
-    <section id="section-notes" class="section-panel">
-      <div class="card">
-        <div class="card-title"><i class="fas fa-sticky-note"></i> دفتر الملاحظات السريع</div>
-        <textarea id="notesArea" placeholder="اكتب أفكارك، ملخصات، نصائح لنفسك..."></textarea>
-        <button class="btn btn-primary" id="btnSaveNotes" style="margin-top:8px;">💾 حفظ الملاحظات</button>
+      <div id="subjectsContainer" class="space-y-3.5"></div>
+    </div>
+
+    <!-- أيام الدراسة بالأسبوع -->
+    <div class="panel-soft p-4 sm:p-5 fade-in">
+      <div class="flex justify-between items-center mb-3">
+        <span class="font-bold text-sm flex items-center gap-2">📅 أيام الدراسة والراحة</span>
+        <span class="text-xs bg-indigo-500/10 text-indigo-300 px-2.5 py-0.5 rounded-lg border border-indigo-500/20 font-mono num-font"><span id="daysVal">5</span> أيام دراسة</span>
       </div>
-    </section>
+      <p class="text-[11px] text-slate-500 mb-3">حدد أيام راحتك الثابتة — الباقي تلقائياً أيام دراسة إجبارية</p>
+      <div id="weekdayPicker" class="grid grid-cols-7 gap-1.5"></div>
+    </div>
 
-    <!-- إعدادات -->
-    <section id="section-settings" class="section-panel">
-      <div class="card">
-        <div class="card-title"><i class="fas fa-cog"></i> الإعدادات</div>
-        <label>اختر الفرع: 
-          <select id="branchSelect">
-            <option value="scientific">علمي (رياضيات/فيزياء)</option>
-            <option value="literary">أدبي (عربي/تاريخ)</option>
-          </select>
-        </label>
-        <button class="btn btn-primary" id="btnSaveSettings" style="margin-top:12px;">تطبيق الإعدادات</button>
-        <p style="margin-top:12px; font-size:0.8rem; color:#ff8888;">* الإعدادات تُحفظ تلقائياً في المتصفح</p>
+    <!-- النتائج -->
+    <div class="grid grid-cols-2 gap-3 fade-in">
+      <div class="panel p-4 text-center flex flex-col justify-center">
+        <span class="text-[11px] text-slate-400 font-medium">ساعات أسبوعية</span>
+        <span class="text-2xl sm:text-3xl font-extrabold mt-1 num-font" id="totalHours">0</span>
+        <span class="text-[10px] text-slate-500 mt-1">دراسة ذاتية حقيقية</span>
       </div>
-    </section>
-  </main>
-</div>
+      <div class="panel p-4 text-center flex flex-col justify-center">
+        <span class="text-[11px] text-slate-400 font-medium">إجمالي ساعات الصيف</span>
+        <span class="text-2xl sm:text-3xl font-extrabold mt-1 num-font text-cyan-300" id="totalSummerHours">0</span>
+        <span class="text-[10px] text-slate-500 mt-1">حتى بداية الدوام</span>
+      </div>
+    </div>
 
-<script>
-  (function() {
-    // ================ الجسيمات النيونية الخلفية ================
-    const canvas = document.getElementById('particles-canvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
+    <!-- مؤشر الاحتراق -->
+    <div class="panel p-5 text-center fade-in">
+      <span class="text-xs text-slate-400 font-medium">مستوى خطر الاحتراق الدراسي</span>
+      <div id="burnoutBadge" class="text-sm font-bold px-4 py-1.5 rounded-full mt-2.5 inline-block transition-all duration-300">مستقر وآمن</div>
+      <p class="text-[11px] text-slate-500 mt-2.5 leading-relaxed max-w-sm mx-auto" id="burnoutDesc">خطة رائعة تضمن استمرار شغفك</p>
+    </div>
 
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.vx = (Math.random() - 0.5) * 0.6;
-        this.vy = (Math.random() - 0.5) * 0.6;
-        this.size = Math.random() * 2.5 + 0.8;
-        this.alpha = Math.random() * 0.5 + 0.2;
-      }
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-        if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 26, 26, ${this.alpha})`;
-        ctx.shadowColor = '#ff0040';
-        ctx.shadowBlur = 12;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-      }
-    }
-    for (let i = 0; i < 80; i++) particles.push(new Particle());
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => { p.update(); p.draw(); });
-      requestAnimationFrame(animateParticles);
-    }
-    animateParticles();
+    <!-- مقياس الراحة -->
+    <div class="panel p-5 fade-in">
+      <div class="flex justify-between items-center mb-3">
+        <span class="text-xs sm:text-sm font-bold">🔋 نسبة الفراغ والراحة الأسبوعي</span>
+        <span class="text-sm font-extrabold text-emerald-400 num-font" id="restRatio">0%</span>
+      </div>
+      <div class="w-full bg-[#0d1226] h-3 rounded-full overflow-hidden">
+        <div id="restBar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500" style="width:0%"></div>
+      </div>
+      <p class="text-[11px] text-slate-400 mt-2.5 leading-relaxed">
+        الساعات المتبقية كافية للنوم المريح، الخروج مع الأصدقاء، وأي نشاط يجدد طاقتك الذهنية.
+      </p>
+    </div>
 
-    // ================ الحالة العامة للتطبيق ================
-    const state = {
-      branch: 'scientific', // scientific / literary
-      pomodoro: { seconds: 25 * 60, interval: null, running: false },
-      tasks: [],
-      schedule: [],
-      subjects: [],
-      notes: '',
-      studyHoursLog: JSON.parse(localStorage.getItem('studyLog') || '[]'), // {date, hours}
-      currentSection: 'dashboard'
-    };
+    <!-- توزيع المواد -->
+    <div class="panel p-5 fade-in">
+      <span class="text-xs sm:text-sm font-bold block mb-4">📊 توزيع جهدك بين المواد</span>
+      <div id="distributionContainer" class="space-y-3"></div>
+    </div>
 
-    // مواد افتراضية حسب الفرع
-    const subjectsScientific = [
-      { name: 'رياضيات', icon: '📐', lessons: 40, completed: 0 },
-      { name: 'فيزياء', icon: '⚛️', lessons: 35, completed: 0 },
-      { name: 'كيمياء', icon: '🧪', lessons: 30, completed: 0 },
-      { name: 'علوم طبيعية', icon: '🌿', lessons: 28, completed: 0 },
-      { name: 'لغة عربية', icon: '📖', lessons: 25, completed: 0 },
-      { name: 'لغة إنكليزية', icon: '🇬🇧', lessons: 24, completed: 0 },
-      { name: 'تربية دينية', icon: '☪️', lessons: 15, completed: 0 },
-      { name: 'تربية وطنية', icon: '🏛️', lessons: 12, completed: 0 },
-    ];
-    const subjectsLiterary = [
-      { name: 'لغة عربية', icon: '📖', lessons: 50, completed: 0 },
-      { name: 'تاريخ', icon: '🏺', lessons: 42, completed: 0 },
-      { name: 'جغرافيا', icon: '🌍', lessons: 38, completed: 0 },
-      { name: 'فلسفة', icon: '💭', 
+  </section>
+
+  <!-- ============ تبويب 2: الخط الزمني ============ -->
+  <section id="tab-timeline" class="space-y-5 hidden">
+
+    <div class="panel p-5 fade-in">
+      <div class="flex items-center gap-2 mb-1">
+        <span class="text-base">🗺️</span>
+        <span class="font-bold text-sm">مسار الصيف كاملاً</span>
+      </div>
+      <p class="text-[11px] text-slate-500 mb-5" id="timelineSubtitle">—</p>
+
+      <!-- شريط التقدم الزمني -->
+      <div class="relative mb-2">
+        <div class="w-full h-2.5 rounded-full bg-[#0d1226] overflow-hidden flex">
+          <div id="phaseBuild" style="width:34%" class="h-full bg-[var(--math)]/70"></div>
+          <div id="phaseDeepen" style="width:33%" class="h-full bg-[var(--phys)]/70"></div>
+          <div id="phaseReview" style="width:33%" class="h-full bg-[var(--chem)]/70"></div>
+        </div>
+        <div id="todayMarker" class="absolute -top-1.5 w-5 h-5 rounded-full bg-cyan-300 border-2 border-[#0a0e1a] shadow-lg pulse-dot" style="right:0%; transform:translateX(50%)"></div>
+      </div>
+      <div class="flex justify-between text-[10px] text-slate-500 mt-2 mb-6">
+        <span id="timelineStartLabel">البداية</span>
+        <span class="text-cyan-300 font-bold" id="todayLabel">اليوم</span>
+        <span id="timelineEndLabel">العام الدراسي</span>
+      </div>
+
+      <!-- المراحل الثلاث -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div class="panel-soft p-3.5 rounded-xl border-r-[3px]" style="border-color:var(--math)">
+          <span class="text-[10px] text-rose-300 font-bold">المرحلة ١ · التأسيس</span>
+          <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">بناء الأساسيات ومراجعة فجوات السنة السابقة بهدوء</p>
+          <span class="text-[10px] text-slate-500 mt-1.5 block" id="phase1Dates">—</span>
+        </div>
+        <div class="panel-soft p-3.5 rounded-xl border-r-[3px]" style="border-color:var(--phys)">
+          <span class="text-[10px] text-blue-300 font-bold">المرحلة ٢ · التعميق</span>
+          <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">حل مسائل متقدمة وربط المواد ببعضها</p>
+          <span class="text-[10px] text-slate-500 mt-1.5 block" id="phase2Dates">—</span>
+        </div>
+        <div class="panel-soft p-3.5 rounded-xl border-r-[3px]" style="border-color:var(--chem)">
+          <span class="text-[10px] text-emerald-300 font-bold">المرحلة ٣ · الجاهزية</span>
+          <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">مراجعة شاملة وتثبيت الثقة قبل الدوام</p>
+          <span class="text-[10px] text-slate-500 mt-1.5 block" id="phase3Dates">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- إحصائيات الصيف -->
+    <div class="grid grid-cols-3 gap-3 fade-in">
+      <div class="panel p-4 text-center">
+        <span class="text-xl sm:text-2xl font-extrabold num-font text-cyan-300" id="weeksLeft">0</span>
+        <p class="text-[10px] text-slate-500 mt-1">أسبوعاً متبقياً</p>
+      </div>
+      <div class="panel p-4 text-center">
+        <span class="text-xl sm:text-2xl font-extrabold num-font text-indigo-300" id="studyDaysLeft">0</span>
+        <p class="text-[10px] text-slate-500 mt-1">يوم دراسة مخطط</p>
+      </div>
+      <div class="panel p-4 text-center">
+        <span class="text-xl sm:text-2xl font-extrabold num-font text-emerald-300" id="percentElapsed">0%</span>
+        <p class="text-[10px] text-slate-500 mt-1">من الصيف انقضى</p>
+      </div>
+    </div>
+
+    <!-- توزيع الساعات الكلي لكل مادة على الصيف -->
+    <div class="panel p-5 fade-in">
+      <span class="text-xs sm:text-sm font-bold block mb-4">🧮 إجمالي ساعات كل مادة حتى نهاية الصيف</span>
+      <div id="summaryBySubject" class="space-y-3"></div>
+    </div>
+
+  </section>
+
+  <!-- ============ تبويب 3: سجل الالتزام ============ -->
+  <section id="tab-tracker" class="space-y-5 hidden">
+
+    <div class="panel p-5 fade-in">
+      <div class="flex items-center justify-between mb-1">
+        <div class="flex items-center gap-2">
+          <span class="text-base">✅</span>
+          <span class="font-bold text-sm">سجّل التزامك اليوم</span>
+        </div>
+        <span class="text-[11px] text-slate-500" id="trackerTodayDate">—</span>
+      </div>
+      <p class="text-[11px] text-slate-500 mb-4">اضغط ✓ في نهاية كل يوم نفّذت فيه خطتك. الاستمرارية أهم من الكمال.</p>
+
+      <div class="flex items-center gap-3 panel-soft p-4 rounded-xl">
+        <button id="markTodayBtn" class="shrink-0 w-12 h-12 rounded-full border-2 border-emerald-400/40 text-emerald-300 text-xl font-bold flex items-center justify-center hover:bg-emerald-400/10 transition">✓</button>
+        <div>
+          <p class="text-sm font-bold" id="markTodayText">سجّل اليوم كيوم ملتزم</p>
+          <p class="text-[11px] text-slate-500 mt-0.5">السلسلة الحالية: <span class="text-cyan-300 font-bold num-font" id="streakCount">0</span> يوم · الأطول: <span class="text-indigo-300 font-bold num-font" id="bestStreakCount">0</span> يوم</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- شبكة الأسابيع -->
+    <div class="panel p-5 fade-in">
+      <div class
