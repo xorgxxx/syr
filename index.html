@@ -5,119 +5,131 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>خارطة الصيف - البكالوريا سوريا</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap');
+ @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap');
 
-  :root{
-    --bg:#0a0e1a;
-    --panel:#11162a;
-    --panel-2:#161c34;
-    --line:#1f2640;
-    --line-soft:#181f38;
-    --text:#e7eaf6;
-    --text-dim:#7e88ab;
-    --text-dim-2:#5a6489;
-    --accent:#22d3ee;
-    --math:#fb4d6f;
-    --phys:#3b82f6;
-    --chem:#22c55e;
-    --extra:#f59e0b;
-    --safe:#22c55e;
-  }
+ :root{
+   --bg:#0a0e1a;
+   --panel:#11162a;
+   --panel-2:#161c34;
+   --line:#1f2640;
+   --line-soft:#181f38;
+   --text:#e7eaf6;
+   --text-dim:#7e88ab;
+   --text-dim-2:#5a6489;
+   --accent:#22d3ee;
+   --math:#fb4d6f;
+   --phys:#3b82f6;
+   --chem:#22c55e;
+   --extra:#f59e0b;
+   --safe:#22c55e;
+ }
 
-  *{box-sizing:border-box;}
-  body{
-    font-family:'Cairo',sans-serif;
-    background:
-      radial-gradient(900px 500px at 15% -10%, #15203f 0%, transparent 60%),
-      radial-gradient(700px 600px at 110% 10%, #1b1438 0%, transparent 55%),
-      var(--bg);
-    color:var(--text);
-    min-height:100vh;
-  }
+ *{box-sizing:border-box;}
+ body{
+   font-family:'Cairo',sans-serif;
+   background:
+     radial-gradient(900px 500px at 15% -10%, #15203f 0%, transparent 60%),
+     radial-gradient(700px 600px at 110% 10%, #1b1438 0%, transparent 55%),
+     var(--bg);
+   color:var(--text);
+   min-height:100vh;
+ }
 
-  .grain{
-    position:fixed; inset:0; pointer-events:none; opacity:.025; z-index:0;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
+ .grain{
+   position:fixed; inset:0; pointer-events:none; opacity:.025; z-index:0;
+   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+ }
 
-  .panel{ background:var(--panel); border:1px solid var(--line); border-radius:22px; }
-  .panel-soft{ background:var(--panel-2); border:1px solid var(--line-soft); border-radius:18px; }
+ .panel{ background:var(--panel); border:1px solid var(--line); border-radius:22px; }
+ .panel-soft{ background:var(--panel-2); border:1px solid var(--line-soft); border-radius:18px; }
 
-  .tab-btn{ transition:all .25s ease; color:var(--text-dim); position:relative; }
-  .tab-btn.active{ color:var(--text); }
-  .tab-underline{
-    position:absolute; bottom:-1px; right:0; left:0; height:2px;
-    background:linear-gradient(90deg, var(--accent), transparent);
-    transform:scaleX(0); transition:transform .3s ease; transform-origin:right;
-  }
-  .tab-btn.active .tab-underline{ transform:scaleX(1); }
+ .tab-btn{ transition:all .25s ease; color:var(--text-dim); position:relative; }
+ .tab-btn.active{ color:var(--text); }
+ .tab-underline{
+   position:absolute; bottom:-1px; right:0; left:0; height:2px;
+   background:linear-gradient(90deg, var(--accent), transparent);
+   transform:scaleX(0); transition:transform .3s ease; transform-origin:right;
+ }
+ .tab-btn.active .tab-underline{ transform:scaleX(1); }
 
-  input[type="range"]{ -webkit-appearance:none; appearance:none; background:transparent; height:22px; }
-  input[type="range"]::-webkit-slider-runnable-track{
-    background:linear-gradient(90deg, var(--track-color, var(--accent)) var(--fill,0%), #1c2340 var(--fill,0%));
-    height:8px; border-radius:6px;
-  }
-  input[type="range"]::-webkit-slider-thumb{
-    -webkit-appearance:none; appearance:none;
-    width:22px; height:22px; border-radius:50%;
-    background:#fff; border:3px solid var(--track-color, var(--accent));
-    margin-top:-7px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.4);
-    transition:transform .15s ease;
-  }
-  input[type="range"]::-webkit-slider-thumb:active{ transform:scale(1.15); }
-  input[type="range"]::-moz-range-track{ background:#1c2340; height:8px; border-radius:6px; }
-  input[type="range"]::-moz-range-progress{ background:var(--track-color, var(--accent)); height:8px; border-radius:6px; }
-  input[type="range"]::-moz-range-thumb{
-    width:22px; height:22px; border-radius:50%; background:#fff;
-    border:3px solid var(--track-color, var(--accent)); cursor:pointer;
-  }
+ input[type="range"]{ -webkit-appearance:none; appearance:none; background:transparent; height:22px; }
+ input[type="range"]::-webkit-slider-runnable-track{
+   background:linear-gradient(90deg, var(--track-color, var(--accent)) var(--fill,0%), #1c2340 var(--fill,0%));
+   height:8px; border-radius:6px;
+ }
+ input[type="range"]::-webkit-slider-thumb{
+   -webkit-appearance:none; appearance:none;
+   width:22px; height:22px; border-radius:50%;
+   background:#fff; border:3px solid var(--track-color, var(--accent));
+   margin-top:-7px; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.4);
+   transition:transform .15s ease;
+ }
+ input[type="range"]::-webkit-slider-thumb:active{ transform:scale(1.15); }
+ input[type="range"]::-moz-range-track{ background:#1c2340; height:8px; border-radius:6px; }
+ input[type="range"]::-moz-range-progress{ background:var(--track-color, var(--accent)); height:8px; border-radius:6px; }
+ input[type="range"]::-moz-range-thumb{
+   width:22px; height:22px; border-radius:50%; background:#fff;
+   border:3px solid var(--track-color, var(--accent)); cursor:pointer;
+ }
 
-  .fade-in{ animation:fadeIn .35s ease both; }
-  @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+ .fade-in{ animation:fadeIn .35s ease both; }
+ @keyframes fadeIn{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
 
-  .pulse-dot{ animation:pulseDot 2.2s ease-in-out infinite; }
-  @keyframes pulseDot{
-    0%,100%{ box-shadow:0 0 0 0 rgba(34,211,238,.5); }
-    50%{ box-shadow:0 0 0 6px rgba(34,211,238,0); }
-  }
+ .pulse-dot{ animation:pulseDot 2.2s ease-in-out infinite; }
+ @keyframes pulseDot{
+   0%,100%{ box-shadow:0 0 0 0 rgba(34,211,238,.5); }
+   50%{ box-shadow:0 0 0 6px rgba(34,211,238,0); }
+ }
 
-  .scrollbar-thin::-webkit-scrollbar{ height:6px; width:6px; }
-  .scrollbar-thin::-webkit-scrollbar-thumb{ background:#2a3155; border-radius:10px; }
-  .scrollbar-thin::-webkit-scrollbar-track{ background:transparent; }
+ .scrollbar-thin::-webkit-scrollbar{ height:6px; width:6px; }
+ .scrollbar-thin::-webkit-scrollbar-thumb{ background:#2a3155; border-radius:10px; }
+ .scrollbar-thin::-webkit-scrollbar-track{ background:transparent; }
 
-  .day-cell{ transition:all .15s ease; cursor:pointer; }
-  .day-cell:hover{ transform:translateY(-1px); }
+ .day-cell{ transition:all .15s ease; cursor:pointer; }
+ .day-cell:hover{ transform:translateY(-1px); }
 
-  .task-card{ transition:all .25s ease; }
-  .task-card.done{ opacity:.6; }
-  .task-card.done .task-title{ text-decoration:line-through; text-decoration-color:#3a4366; }
+ .task-card{ transition:all .25s ease; }
+ .task-card.done{ opacity:.6; }
+ .task-card.done .task-title{ text-decoration:line-through; text-decoration-color:#3a4366; }
 
-  .check-circle{
-    width:28px; height:28px; border-radius:50%; border:2px solid var(--line);
-    display:flex; align-items:center; justify-content:center; cursor:pointer;
-    transition:all .2s ease; flex-shrink:0; background:#0d1226;
-  }
-  .check-circle.checked{ background:var(--safe); border-color:var(--safe); }
-  .check-circle svg{ opacity:0; transition:opacity .15s ease; }
-  .check-circle.checked svg{ opacity:1; }
+ .check-circle{
+   width:28px; height:28px; border-radius:50%; border:2px solid var(--line);
+   display:flex; align-items:center; justify-content:center; cursor:pointer;
+   transition:all .2s ease; flex-shrink:0; background:#0d1226;
+ }
+ .check-circle.checked{ background:var(--safe); border-color:var(--safe); }
+ .check-circle svg{ opacity:0; transition:opacity .15s ease; }
+ .check-circle.checked svg{ opacity:1; }
 
-  .debt-chip{
-    background:rgba(239,68,68,.12); color:#fb7185; border:1px solid rgba(239,68,68,.3);
-    font-size:10px; font-weight:700; padding:2px 8px; border-radius:999px;
-  }
-  .carry-banner{
-    background:linear-gradient(90deg, rgba(251,113,133,.14), rgba(245,158,11,.08));
-    border:1px solid rgba(251,113,133,.28);
-  }
+ .debt-chip{
+   background:rgba(239,68,68,.12); color:#fb7185; border:1px solid rgba(239,68,68,.3);
+   font-size:10px; font-weight:700; padding:2px 8px; border-radius:999px;
+ }
+ .carry-banner{
+   background:linear-gradient(90deg, rgba(251,113,133,.14), rgba(245,158,11,.08));
+   border:1px solid rgba(251,113,133,.28);
+ }
 
-  .ring-progress{ transition:stroke-dashoffset .5s ease; }
+ .ring-progress{ transition:stroke-dashoffset .5s ease; }
 
-  .num-font{ font-family:'Cairo',sans-serif; font-feature-settings:"tnum"; }
+ .num-font{ font-family:'Cairo',sans-serif; font-feature-settings:"tnum"; }
 
-  @media (prefers-reduced-motion: reduce){
-    *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
-  }
+ /* تنسيقات الرسائل للمعلم الذكي */
+ .chat-msg { max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 13px; line-height: 1.6; word-wrap: break-word; }
+ .chat-msg.user { background: var(--accent); color: #000; border-bottom-left-radius: 4px; margin-right: auto; }
+ .chat-msg.ai { background: var(--panel-2); border: 1px solid var(--line); border-bottom-right-radius: 4px; margin-left: auto; }
+ .chat-msg img { max-width: 100%; border-radius: 8px; margin-top: 8px; }
+ .chat-msg strong { color: inherit; }
+ .ai-typing-dot { display: inline-block; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: typing 1.4s infinite ease-in-out both; }
+ .ai-typing-dot:nth-child(1) { animation-delay: -0.32s; }
+ .ai-typing-dot:nth-child(2) { animation-delay: -0.16s; }
+ @keyframes typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
+ @media (prefers-reduced-motion: reduce){
+   *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+ }
 </style>
 </head>
 <body class="text-slate-100">
@@ -125,1192 +137,1302 @@
 
 <div class="relative z-10 min-h-screen px-4 sm:px-6 py-6 sm:py-10 max-w-3xl mx-auto">
 
-  <header class="text-center mb-7 fade-in">
-    <div class="inline-flex items-center gap-2 bg-[#11162a] border border-[var(--line)] text-cyan-300 text-[11px] font-semibold px-3.5 py-1.5 rounded-full">
-      <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 pulse-dot"></span>
-      خارطة الطريق الصيفية · البكالوريا 🇸🇾
-    </div>
-    <h1 class="text-2xl sm:text-4xl font-black mt-4 leading-tight">
-      منهج جاهز.. ووقت لا <span class="text-transparent bg-clip-text bg-gradient-to-l from-cyan-300 to-blue-500">يضيع</span>
-    </h1>
-    <p class="text-slate-400 text-xs sm:text-sm mt-2.5 max-w-md mx-auto">
-      مهام يومية محددة بالدقيقة. حرّك الشريط بقدر ما أنجزت — وأي وقت ينقص اليوم يُضاف تلقائياً لباقي أيامك هذا الأسبوع.
-    </p>
-  </header>
+ <header class="text-center mb-7 fade-in">
+   <div class="inline-flex items-center gap-2 bg-[#11162a] border border-[var(--line)] text-cyan-300 text-[11px] font-semibold px-3.5 py-1.5 rounded-full">
+     <span class="w-1.5 h-1.5 rounded-full bg-cyan-400 pulse-dot"></span>
+     خارطة الطريق الصيفية · البكالوريا 🇸🇾
+   </div>
+   <h1 class="text-2xl sm:text-4xl font-black mt-4 leading-tight">
+     منهج جاهز.. ووقت لا <span class="text-transparent bg-clip-text bg-gradient-to-l from-cyan-300 to-blue-500">يضيع</span>
+   </h1>
+   <p class="text-slate-400 text-xs sm:text-sm mt-2.5 max-w-md mx-auto">
+     مهام يومية محددة بالدقيقة. حرّك الشريط بقدر ما أنجزت — وأي وقت ينقص اليوم يُضاف تلقائياً لباقي أيامك هذا الأسبوع.
+   </p>
+ </header>
 
-  <!-- التبويبات -->
-  <div class="flex items-center justify-center gap-1 mb-6 border-b border-[var(--line)] fade-in overflow-x-auto scrollbar-thin">
-    <button data-tab="today" class="tab-btn active px-3.5 py-3 text-sm font-bold whitespace-nowrap">📋 مهام اليوم <span class="tab-underline"></span></button>
-    <button data-tab="planner" class="tab-btn px-3.5 py-3 text-sm font-bold whitespace-nowrap">🎛️ المخطط <span class="tab-underline"></span></button>
-    <button data-tab="timeline" class="tab-btn px-3.5 py-3 text-sm font-bold whitespace-nowrap">🗺️ الخط الزمني <span class="tab-underline"></span></button>
-    <button data-tab="tracker" class="tab-btn px-3.5 py-3 text-sm font-bold whitespace-nowrap">✅ السجل <span class="tab-underline"></span></button>
-    ➕ **أضف تحته مباشرة هذا السطر:**
-    ```html
-    <button data-tab="ai" class="tab-btn px-3.5 py-3 text-sm font-bold text-cyan-300 whitespace-nowrap">🧠 المساعد الذكي <span class="tab-underline"></span></button>
-  </div>
+ <div class="flex items-center justify-center gap-1 mb-6 border-b border-[var(--line)] fade-in overflow-x-auto scrollbar-thin pb-1">
+   <button data-tab="today" class="tab-btn active px-3.5 py-3 text-sm font-bold whitespace-nowrap">📋 مهام اليوم <span class="tab-underline"></span></button>
+   <button data-tab="planner" class="tab-btn px-3.5 py-3 text-sm font-bold whitespace-nowrap">🎛️ المخطط <span class="tab-underline"></span></button>
+   <button data-tab="timeline" class="tab-btn px-3.5 py-3 text-sm font-bold whitespace-nowrap">🗺️ الخط الزمني <span class="tab-underline"></span></button>
+   <button data-tab="tracker" class="tab-btn px-3.5 py-3 text-sm font-bold whitespace-nowrap">✅ السجل <span class="tab-underline"></span></button>
+   <button data-tab="ai" class="tab-btn px-3.5 py-3 text-sm font-bold whitespace-nowrap text-cyan-300">🤖 المعلم الذكي <span class="tab-underline"></span></button>
+ </div>
 
-  <!-- ============ تبويب 0: مهام اليوم ============ -->
-  <section id="tab-today" class="space-y-5">
+ <section id="tab-today" class="space-y-5">
 
-    <div id="carryBanner" class="carry-banner rounded-2xl p-4 hidden fade-in">
-      <div class="flex items-start gap-2.5">
-        <span class="text-lg shrink-0">⚠️</span>
-        <div>
-          <p class="text-xs font-bold text-rose-300">تم ترحيل وقت من أيام سابقة</p>
-          <p class="text-[11px] text-slate-400 mt-1 leading-relaxed" id="carryBannerText">—</p>
-        </div>
-      </div>
-    </div>
+   <div id="carryBanner" class="carry-banner rounded-2xl p-4 hidden fade-in">
+     <div class="flex items-start gap-2.5">
+       <span class="text-lg shrink-0">⚠️</span>
+       <div>
+         <p class="text-xs font-bold text-rose-300">تم ترحيل وقت من أيام سابقة</p>
+         <p class="text-[11px] text-slate-400 mt-1 leading-relaxed" id="carryBannerText">—</p>
+       </div>
+     </div>
+   </div>
 
-    <!-- بطاقة التقدم اليومي -->
-    <div class="panel p-5 fade-in">
-      <div class="flex items-center justify-between gap-3">
-        <div class="min-w-0">
-          <p class="text-[11px] text-slate-400" id="todayDateLabel">—</p>
-          <p class="text-lg font-extrabold mt-0.5">مهامك المطلوبة اليوم</p>
-          <p class="text-[11px] text-cyan-300 mt-0.5 font-mono num-font" id="todayMinutesLabel">٠ من ٠ دقيقة</p>
-        </div>
-        <div class="relative w-16 h-16 shrink-0">
-          <svg viewBox="0 0 64 64" class="w-16 h-16 -rotate-90">
-            <circle cx="32" cy="32" r="27" fill="none" stroke="#1c2340" stroke-width="6"/>
-            <circle id="dayProgressRing" class="ring-progress" cx="32" cy="32" r="27" fill="none" stroke="#22d3ee" stroke-width="6" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="169.6"/>
-          </svg>
-          <span class="absolute inset-0 flex items-center justify-center text-xs font-extrabold num-font" id="dayProgressPct">0%</span>
-        </div>
-      </div>
-      <div id="weekStrip" class="grid grid-cols-7 gap-1.5 mt-4 pt-4 border-t border-[var(--line-soft)]"></div>
-    </div>
+   <div class="panel p-5 fade-in">
+     <div class="flex items-center justify-between gap-3">
+       <div class="min-w-0">
+         <p class="text-[11px] text-slate-400" id="todayDateLabel">—</p>
+         <p class="text-lg font-extrabold mt-0.5">مهامك المطلوبة اليوم</p>
+         <p class="text-[11px] text-cyan-300 mt-0.5 font-mono num-font" id="todayMinutesLabel">٠ من ٠ دقيقة</p>
+       </div>
+       <div class="relative w-16 h-16 shrink-0">
+         <svg viewBox="0 0 64 64" class="w-16 h-16 -rotate-90">
+           <circle cx="32" cy="32" r="27" fill="none" stroke="#1c2340" stroke-width="6"/>
+           <circle id="dayProgressRing" class="ring-progress" cx="32" cy="32" r="27" fill="none" stroke="#22d3ee" stroke-width="6" stroke-linecap="round" stroke-dasharray="169.6" stroke-dashoffset="169.6"/>
+         </svg>
+         <span class="absolute inset-0 flex items-center justify-center text-xs font-extrabold num-font" id="dayProgressPct">0%</span>
+       </div>
+     </div>
+     <div id="weekStrip" class="grid grid-cols-7 gap-1.5 mt-4 pt-4 border-t border-[var(--line-soft)]"></div>
+   </div>
 
-    <div id="successBanner" class="hidden fade-in rounded-2xl p-5 text-center" style="background:linear-gradient(135deg, rgba(34,197,94,.12), rgba(34,211,238,.08)); border:1px solid rgba(34,197,94,.3)">
-      <span class="text-2xl">🎉</span>
-      <p class="text-sm font-bold text-emerald-300 mt-1.5" id="successBannerText">أنجزت كل دقائق اليوم!</p>
-      <p class="text-[11px] text-slate-400 mt-1">استمر بهذا النسق، كل يوم ملتزم يقرّبك من العلامة التامة</p>
-    </div>
+   <div id="successBanner" class="hidden fade-in rounded-2xl p-5 text-center" style="background:linear-gradient(135deg, rgba(34,197,94,.12), rgba(34,211,238,.08)); border:1px solid rgba(34,197,94,.3)">
+     <span class="text-2xl">🎉</span>
+     <p class="text-sm font-bold text-emerald-300 mt-1.5" id="successBannerText">أنجزت كل دقائق اليوم!</p>
+     <p class="text-[11px] text-slate-400 mt-1">استمر بهذا النسق، كل يوم ملتزم يقرّبك من العلامة التامة</p>
+   </div>
 
-    <div id="weekThemeBanner" class="panel-soft p-4 fade-in hidden">
-      <p class="text-[10px] text-indigo-300 font-bold" id="weekThemeLabel">—</p>
-      <p class="text-[11px] text-slate-400 mt-1 leading-relaxed" id="weekThemeDesc">—</p>
-    </div>
+   <div id="weekThemeBanner" class="panel-soft p-4 fade-in hidden">
+     <p class="text-[10px] text-indigo-300 font-bold" id="weekThemeLabel">—</p>
+     <p class="text-[11px] text-slate-400 mt-1 leading-relaxed" id="weekThemeDesc">—</p>
+   </div>
 
-    <!-- قائمة المهام -->
-    <div id="todayTasksContainer" class="space-y-3"></div>
+   <div id="todayTasksContainer" class="space-y-3"></div>
 
-    <!-- ملخص الدين الزمني -->
-    <div id="debtSummary" class="panel-soft p-4 fade-in hidden">
-      <p class="text-xs font-bold text-amber-300 mb-2">📦 وقت متراكم لم يُنجز بعد</p>
-      <div id="debtList" class="space-y-1.5"></div>
-      <p class="text-[10px] text-slate-500 mt-2.5 leading-relaxed">هذا الوقت يتوزّع تلقائياً (بالدقائق) على أيام الدراسة المتبقية هذا الأسبوع، ثم ما تبقى على الأسبوع الذي يليه — حتى تُنجزه بالكامل.</p>
-    </div>
+   <div id="debtSummary" class="panel-soft p-4 fade-in hidden">
+     <p class="text-xs font-bold text-amber-300 mb-2">📦 وقت متراكم لم يُنجز بعد</p>
+     <div id="debtList" class="space-y-1.5"></div>
+     <p class="text-[10px] text-slate-500 mt-2.5 leading-relaxed">هذا الوقت يتوزّع تلقائياً (بالدقائق) على أيام الدراسة المتبقية هذا الأسبوع، ثم ما تبقى على الأسبوع الذي يليه — حتى تُنجزه بالكامل.</p>
+   </div>
 
-  </section>
-```html
-      <!-- ============ تبويب 4: المساعد الدراسي الذكي ============ -->
-      <section id="tab-ai" class="space-y-5 hidden">
-        <div class="panel p-5 fade-in">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="text-base">🔑</span>
-            <span class="font-bold text-sm">مفتاح الذكاء الاصطناعي (Gemini API)</span>
-          </div>
-          <div class="flex gap-2">
-            <input type="password" id="aiApiKeyInput" placeholder="أدخل رمز المفتاح الشخصي هنا..." class="flex-1 bg-[#0d1226] border border-[var(--line)] rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-400">
-            <button onclick="saveAiKey()" class="bg-cyan-500/15 text-cyan-300 border border-cyan-400/30 px-4 py-1.5 rounded-xl text-xs hover:bg-cyan-500/30 transition">حفظ المفتاح</button>
-          </div>
-          <p class="text-[10px] text-emerald-400 mt-2 hidden" id="aiKeySavedMsg">✓ تم حفظ مفتاحك بأمان محلياً على متصفحك الحالي.</p>
-        </div>
+ </section>
 
-        <div class="panel p-5 fade-in space-y-4">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <span class="text-base">📸</span>
-              <span class="font-bold text-sm">حل المسائل وتحليل النشاط الدراسي</span>
-            </div>
-            <button onclick="fillAiPrompt('분석')" class="text-[10px] bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 px-2 py-0.5 rounded-md">اطلب تحليل نشاطي الدراسي</button>
-          </div>
+ <section id="tab-planner" class="space-y-5 hidden">
 
-          <div>
-            <label class="text-[11px] text-slate-400 block mb-1.5">اكتب سؤالك العلمي أو طلب الشرح والمساعدة:</label>
-            <textarea id="aiPromptInput" rows="3" class="w-full bg-[#0d1226] border border-[var(--line)] rounded-xl p-3 text-xs focus:outline-none focus:border-cyan-400 resize-none">يرجى حل المسألة العلمية الموجودة بالصورة المرفقة خطوة بخطوة باللغة العربية مع توضيح القوانين الفيزيائية/الرياضية المستخدمة.</textarea>
-          </div>
+   <div class="panel p-4 sm:p-5 fade-in">
+     <div class="flex items-center gap-2 mb-3">
+       <span class="text-base">🎯</span>
+       <span class="font-bold text-sm">حدود الصيف الدراسي</span>
+     </div>
+     <div class="grid grid-cols-2 gap-3">
+       <div>
+         <label class="text-[11px] text-slate-400 block mb-1.5">بداية الخطة</label>
+         <input type="date" id="startDate" class="w-full bg-[#0d1226] border border-[var(--line)] rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-400">
+       </div>
+       <div>
+         <label class="text-[11px] text-slate-400 block mb-1.5">بداية العام الدراسي</label>
+         <input type="date" id="endDate" class="w-full bg-[#0d1226] border border-[var(--line)] rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-400">
+       </div>
+     </div>
+     <p class="text-[11px] text-slate-500 mt-3" id="durationSummary">—</p>
+   </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label class="text-[11px] text-slate-400 block mb-1.5">أرفق لقطة شاشة للمسألة أو المعادلة المعقدة:</label>
-              <input type="file" id="aiImageInput" accept="image/*" class="w-full text-xs text-slate-400 file:ml-4 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-cyan-400/10 file:text-cyan-300 hover:file:bg-cyan-400/20 file:cursor-pointer">
-            </div>
-            <div class="flex items-end">
-              <button onclick="askGemini()" id="aiSendBtn" class="w-full bg-cyan-400 text-[#0a0e1a] font-bold py-2 rounded-xl text-xs hover:bg-cyan-300 transition shadow-lg shadow-cyan-500/10">إرسال واستخراج الحل 🚀</button>
-            </div>
-          </div>
-        </div>
+   <div class="panel-soft p-4 sm:p-5 fade-in">
+     <div class="flex justify-between items-center mb-3">
+       <span class="font-bold text-sm flex items-center gap-2">📅 أيام الدراسة والراحة</span>
+       <span class="text-xs bg-indigo-500/10 text-indigo-300 px-2.5 py-0.5 rounded-lg border border-indigo-500/20 font-mono num-font"><span id="daysVal">5</span> أيام دراسة</span>
+     </div>
+     <p class="text-[11px] text-slate-500 mb-3">حدد أيام راحتك الثابتة — الباقي تلقائياً أيام دراسة إجبارية</p>
+     <div id="weekdayPicker" class="grid grid-cols-7 gap-1.5"></div>
+   </div>
 
-        <div id="aiResultBox" class="panel p-5 fade-in hidden min-h-[120px]">
-          <div class="flex justify-between items-center mb-3 border-b border-[var(--line)] pb-2">
-            <span class="text-xs font-bold text-cyan-300 flex items-center gap-1.5">🎯 الرد التعليمي للموجه الذكي:</span>
-            <button onclick="document.getElementById('aiResultBox').classList.add('hidden')" class="text-slate-500 hover:text-slate-400 text-xs">إغلاق</button>
-          </div>
-          <div id="aiLoading" class="text-xs text-slate-400 animate-pulse hidden">🔄 يحلل الموجه البيانات ويستخرج الحلول الآن، انتظر لحظة...</div>
-          <div id="aiOutput" class="text-xs leading-relaxed text-slate-200 space-y-2 whitespace-pre-wrap"></div>
-        </div>
-      </section>
-  <!-- ============ تبويب 1: المخطط ============ -->
-  <section id="tab-planner" class="space-y-5 hidden">
+   <div class="panel p-4 sm:p-5 fade-in space-y-4">
+     <div class="flex items-center justify-between">
+       <div class="flex items-center gap-2">
+         <span class="text-base">⏱️</span>
+         <span class="font-bold text-sm">الجرعة اليومية المستهدفة لكل مادة</span>
+       </div>
+       <button id="addSubjectBtn" class="text-[11px] text-cyan-300 border border-cyan-400/30 bg-cyan-400/10 px-2.5 py-1 rounded-lg hover:bg-cyan-400/20 transition">+ مادة</button>
+     </div>
+     <p class="text-[11px] text-slate-500">هذا هو إجمالي الدقائق الإجبارية يومياً لكل مادة — منه تُبنى مهام اليوم تلقائياً من المنهج المُعدّ مسبقاً.</p>
+     <div id="subjectsContainer" class="space-y-3.5"></div>
+   </div>
 
-    <div class="panel p-4 sm:p-5 fade-in">
-      <div class="flex items-center gap-2 mb-3">
-        <span class="text-base">🎯</span>
-        <span class="font-bold text-sm">حدود الصيف الدراسي</span>
-      </div>
-      <div class="grid grid-cols-2 gap-3">
-        <div>
-          <label class="text-[11px] text-slate-400 block mb-1.5">بداية الخطة</label>
-          <input type="date" id="startDate" class="w-full bg-[#0d1226] border border-[var(--line)] rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-400">
-        </div>
-        <div>
-          <label class="text-[11px] text-slate-400 block mb-1.5">بداية العام الدراسي</label>
-          <input type="date" id="endDate" class="w-full bg-[#0d1226] border border-[var(--line)] rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-400">
-        </div>
-      </div>
-      <p class="text-[11px] text-slate-500 mt-3" id="durationSummary">—</p>
-    </div>
+   <div class="grid grid-cols-2 gap-3 fade-in">
+     <div class="panel p-4 text-center flex flex-col justify-center">
+       <span class="text-[11px] text-slate-400 font-medium">دقائق أسبوعية</span>
+       <span class="text-2xl sm:text-3xl font-extrabold mt-1 num-font" id="totalMinutesWeek">0</span>
+       <span class="text-[10px] text-slate-500 mt-1">دراسة ذاتية حقيقية</span>
+     </div>
+     <div class="panel p-4 text-center flex flex-col justify-center">
+       <span class="text-[11px] text-slate-400 font-medium">إجمالي ساعات الصيف</span>
+       <span class="text-2xl sm:text-3xl font-extrabold mt-1 num-font text-cyan-300" id="totalSummerHours">0</span>
+       <span class="text-[10px] text-slate-500 mt-1">حتى بداية الدوام</span>
+     </div>
+   </div>
 
-    <div class="panel-soft p-4 sm:p-5 fade-in">
-      <div class="flex justify-between items-center mb-3">
-        <span class="font-bold text-sm flex items-center gap-2">📅 أيام الدراسة والراحة</span>
-        <span class="text-xs bg-indigo-500/10 text-indigo-300 px-2.5 py-0.5 rounded-lg border border-indigo-500/20 font-mono num-font"><span id="daysVal">5</span> أيام دراسة</span>
-      </div>
-      <p class="text-[11px] text-slate-500 mb-3">حدد أيام راحتك الثابتة — الباقي تلقائياً أيام دراسة إجبارية</p>
-      <div id="weekdayPicker" class="grid grid-cols-7 gap-1.5"></div>
-    </div>
+   <div class="panel p-5 text-center fade-in">
+     <span class="text-xs text-slate-400 font-medium">مستوى خطر الاحتراق الدراسي</span>
+     <div id="burnoutBadge" class="text-sm font-bold px-4 py-1.5 rounded-full mt-2.5 inline-block transition-all duration-300">مستقر وآمن</div>
+     <p class="text-[11px] text-slate-500 mt-2.5 leading-relaxed max-w-sm mx-auto" id="burnoutDesc">خطة رائعة تضمن استمرار شغفك</p>
+   </div>
 
-    <div class="panel p-4 sm:p-5 fade-in space-y-4">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <span class="text-base">⏱️</span>
-          <span class="font-bold text-sm">الجرعة اليومية المستهدفة لكل مادة</span>
-        </div>
-        <button id="addSubjectBtn" class="text-[11px] text-cyan-300 border border-cyan-400/30 bg-cyan-400/10 px-2.5 py-1 rounded-lg hover:bg-cyan-400/20 transition">+ مادة</button>
-      </div>
-      <p class="text-[11px] text-slate-500">هذا هو إجمالي الدقائق الإجبارية يومياً لكل مادة — منه تُبنى مهام اليوم تلقائياً من المنهج المُعدّ مسبقاً.</p>
-      <div id="subjectsContainer" class="space-y-3.5"></div>
-    </div>
+   <div class="panel p-5 fade-in">
+     <div class="flex justify-between items-center mb-3">
+       <span class="text-xs sm:text-sm font-bold">🔋 نسبة الفراغ والراحة الأسبوعي</span>
+       <span class="text-sm font-extrabold text-emerald-400 num-font" id="restRatio">0%</span>
+     </div>
+     <div class="w-full bg-[#0d1226] h-3 rounded-full overflow-hidden">
+       <div id="restBar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500" style="width:0%"></div>
+     </div>
+     <p class="text-[11px] text-slate-400 mt-2.5 leading-relaxed">الساعات المتبقية كافية للنوم المريح، الخروج مع الأصدقاء، وأي نشاط يجدد طاقتك الذهنية.</p>
+   </div>
 
-    <div class="grid grid-cols-2 gap-3 fade-in">
-      <div class="panel p-4 text-center flex flex-col justify-center">
-        <span class="text-[11px] text-slate-400 font-medium">دقائق أسبوعية</span>
-        <span class="text-2xl sm:text-3xl font-extrabold mt-1 num-font" id="totalMinutesWeek">0</span>
-        <span class="text-[10px] text-slate-500 mt-1">دراسة ذاتية حقيقية</span>
-      </div>
-      <div class="panel p-4 text-center flex flex-col justify-center">
-        <span class="text-[11px] text-slate-400 font-medium">إجمالي ساعات الصيف</span>
-        <span class="text-2xl sm:text-3xl font-extrabold mt-1 num-font text-cyan-300" id="totalSummerHours">0</span>
-        <span class="text-[10px] text-slate-500 mt-1">حتى بداية الدوام</span>
-      </div>
-    </div>
+   <div class="panel p-5 fade-in">
+     <span class="text-xs sm:text-sm font-bold block mb-4">📊 توزيع جهدك بين المواد</span>
+     <div id="distributionContainer" class="space-y-3"></div>
+   </div>
 
-    <div class="panel p-5 text-center fade-in">
-      <span class="text-xs text-slate-400 font-medium">مستوى خطر الاحتراق الدراسي</span>
-      <div id="burnoutBadge" class="text-sm font-bold px-4 py-1.5 rounded-full mt-2.5 inline-block transition-all duration-300">مستقر وآمن</div>
-      <p class="text-[11px] text-slate-500 mt-2.5 leading-relaxed max-w-sm mx-auto" id="burnoutDesc">خطة رائعة تضمن استمرار شغفك</p>
-    </div>
+ </section>
 
-    <div class="panel p-5 fade-in">
-      <div class="flex justify-between items-center mb-3">
-        <span class="text-xs sm:text-sm font-bold">🔋 نسبة الفراغ والراحة الأسبوعي</span>
-        <span class="text-sm font-extrabold text-emerald-400 num-font" id="restRatio">0%</span>
-      </div>
-      <div class="w-full bg-[#0d1226] h-3 rounded-full overflow-hidden">
-        <div id="restBar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-500" style="width:0%"></div>
-      </div>
-      <p class="text-[11px] text-slate-400 mt-2.5 leading-relaxed">الساعات المتبقية كافية للنوم المريح، الخروج مع الأصدقاء، وأي نشاط يجدد طاقتك الذهنية.</p>
-    </div>
+ <section id="tab-timeline" class="space-y-5 hidden">
 
-    <div class="panel p-5 fade-in">
-      <span class="text-xs sm:text-sm font-bold block mb-4">📊 توزيع جهدك بين المواد</span>
-      <div id="distributionContainer" class="space-y-3"></div>
-    </div>
+   <div class="panel p-5 fade-in">
+     <div class="flex items-center gap-2 mb-1">
+       <span class="text-base">🗺️</span>
+       <span class="font-bold text-sm">مسار الصيف كاملاً</span>
+     </div>
+     <p class="text-[11px] text-slate-500 mb-5" id="timelineSubtitle">—</p>
 
-  </section>
+     <div class="relative mb-2">
+       <div class="w-full h-2.5 rounded-full bg-[#0d1226] overflow-hidden flex">
+         <div id="phaseBuild" style="width:34%" class="h-full bg-[var(--math)]/70"></div>
+         <div id="phaseDeepen" style="width:33%" class="h-full bg-[var(--phys)]/70"></div>
+         <div id="phaseReview" style="width:33%" class="h-full bg-[var(--chem)]/70"></div>
+       </div>
+       <div id="todayMarker" class="absolute -top-1.5 w-5 h-5 rounded-full bg-cyan-300 border-2 border-[#0a0e1a] shadow-lg pulse-dot" style="right:0%; transform:translateX(50%)"></div>
+     </div>
+     <div class="flex justify-between text-[10px] text-slate-500 mt-2 mb-6">
+       <span id="timelineStartLabel">البداية</span>
+       <span class="text-cyan-300 font-bold" id="todayLabel">اليوم</span>
+       <span id="timelineEndLabel">العام الدراسي</span>
+     </div>
 
-  <!-- ============ تبويب 2: الخط الزمني ============ -->
-  <section id="tab-timeline" class="space-y-5 hidden">
+     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+       <div class="panel-soft p-3.5 rounded-xl border-r-[3px]" style="border-color:var(--math)">
+         <span class="text-[10px] text-rose-300 font-bold">المرحلة ١ · التأسيس</span>
+         <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">بناء الأساسيات ومراجعة فجوات السنة السابقة بهدوء</p>
+         <span class="text-[10px] text-slate-500 mt-1.5 block" id="phase1Dates">—</span>
+       </div>
+       <div class="panel-soft p-3.5 rounded-xl border-r-[3px]" style="border-color:var(--phys)">
+         <span class="text-[10px] text-blue-300 font-bold">المرحلة ٢ · التعميق</span>
+         <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">حل مسائل متقدمة وربط المواد ببعضها</p>
+         <span class="text-[10px] text-slate-500 mt-1.5 block" id="phase2Dates">—</span>
+       </div>
+       <div class="panel-soft p-3.5 rounded-xl border-r-[3px]" style="border-color:var(--chem)">
+         <span class="text-[10px] text-emerald-300 font-bold">المرحلة ٣ · الجاهزية</span>
+         <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">مراجعة شاملة وتثبيت الثقة قبل الدوام</p>
+         <span class="text-[10px] text-slate-500 mt-1.5 block" id="phase3Dates">—</span>
+       </div>
+     </div>
+   </div>
 
-    <div class="panel p-5 fade-in">
-      <div class="flex items-center gap-2 mb-1">
-        <span class="text-base">🗺️</span>
-        <span class="font-bold text-sm">مسار الصيف كاملاً</span>
-      </div>
-      <p class="text-[11px] text-slate-500 mb-5" id="timelineSubtitle">—</p>
+   <div class="grid grid-cols-3 gap-3 fade-in">
+     <div class="panel p-4 text-center">
+       <span class="text-xl sm:text-2xl font-extrabold num-font text-cyan-300" id="weeksLeft">0</span>
+       <p class="text-[10px] text-slate-500 mt-1">أسبوعاً متبقياً</p>
+     </div>
+     <div class="panel p-4 text-center">
+       <span class="text-xl sm:text-2xl font-extrabold num-font text-indigo-300" id="studyDaysLeft">0</span>
+       <p class="text-[10px] text-slate-500 mt-1">يوم دراسة مخطط</p>
+     </div>
+     <div class="panel p-4 text-center">
+       <span class="text-xl sm:text-2xl font-extrabold num-font text-emerald-300" id="percentElapsed">0%</span>
+       <p class="text-[10px] text-slate-500 mt-1">من الصيف انقضى</p>
+     </div>
+   </div>
 
-      <div class="relative mb-2">
-        <div class="w-full h-2.5 rounded-full bg-[#0d1226] overflow-hidden flex">
-          <div id="phaseBuild" style="width:34%" class="h-full bg-[var(--math)]/70"></div>
-          <div id="phaseDeepen" style="width:33%" class="h-full bg-[var(--phys)]/70"></div>
-          <div id="phaseReview" style="width:33%" class="h-full bg-[var(--chem)]/70"></div>
-        </div>
-        <div id="todayMarker" class="absolute -top-1.5 w-5 h-5 rounded-full bg-cyan-300 border-2 border-[#0a0e1a] shadow-lg pulse-dot" style="right:0%; transform:translateX(50%)"></div>
-      </div>
-      <div class="flex justify-between text-[10px] text-slate-500 mt-2 mb-6">
-        <span id="timelineStartLabel">البداية</span>
-        <span class="text-cyan-300 font-bold" id="todayLabel">اليوم</span>
-        <span id="timelineEndLabel">العام الدراسي</span>
-      </div>
+   <div class="panel p-5 fade-in">
+     <span class="text-xs sm:text-sm font-bold block mb-1">📚 منهج الأسابيع المُعدّ مسبقاً</span>
+     <p class="text-[11px] text-slate-500 mb-4">عنوان كل أسبوع وما سيُطلب منك فيه تلقائياً في تبويب «مهام اليوم»</p>
+     <div id="curriculumList" class="space-y-2.5 max-h-96 overflow-y-auto scrollbar-thin pl-1"></div>
+   </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div class="panel-soft p-3.5 rounded-xl border-r-[3px]" style="border-color:var(--math)">
-          <span class="text-[10px] text-rose-300 font-bold">المرحلة ١ · التأسيس</span>
-          <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">بناء الأساسيات ومراجعة فجوات السنة السابقة بهدوء</p>
-          <span class="text-[10px] text-slate-500 mt-1.5 block" id="phase1Dates">—</span>
-        </div>
-        <div class="panel-soft p-3.5 rounded-xl border-r-[3px]" style="border-color:var(--phys)">
-          <span class="text-[10px] text-blue-300 font-bold">المرحلة ٢ · التعميق</span>
-          <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">حل مسائل متقدمة وربط المواد ببعضها</p>
-          <span class="text-[10px] text-slate-500 mt-1.5 block" id="phase2Dates">—</span>
-        </div>
-        <div class="panel-soft p-3.5 rounded-xl border-r-[3px]" style="border-color:var(--chem)">
-          <span class="text-[10px] text-emerald-300 font-bold">المرحلة ٣ · الجاهزية</span>
-          <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">مراجعة شاملة وتثبيت الثقة قبل الدوام</p>
-          <span class="text-[10px] text-slate-500 mt-1.5 block" id="phase3Dates">—</span>
-        </div>
-      </div>
-    </div>
+   <div class="panel p-5 fade-in">
+     <span class="text-xs sm:text-sm font-bold block mb-4">🧮 إجمالي ساعات كل مادة حتى نهاية الصيف</span>
+     <div id="summaryBySubject" class="space-y-3"></div>
+   </div>
 
-    <div class="grid grid-cols-3 gap-3 fade-in">
-      <div class="panel p-4 text-center">
-        <span class="text-xl sm:text-2xl font-extrabold num-font text-cyan-300" id="weeksLeft">0</span>
-        <p class="text-[10px] text-slate-500 mt-1">أسبوعاً متبقياً</p>
-      </div>
-      <div class="panel p-4 text-center">
-        <span class="text-xl sm:text-2xl font-extrabold num-font text-indigo-300" id="studyDaysLeft">0</span>
-        <p class="text-[10px] text-slate-500 mt-1">يوم دراسة مخطط</p>
-      </div>
-      <div class="panel p-4 text-center">
-        <span class="text-xl sm:text-2xl font-extrabold num-font text-emerald-300" id="percentElapsed">0%</span>
-        <p class="text-[10px] text-slate-500 mt-1">من الصيف انقضى</p>
-      </div>
-    </div>
+ </section>
 
-    <!-- منهج الأسابيع -->
-    <div class="panel p-5 fade-in">
-      <span class="text-xs sm:text-sm font-bold block mb-1">📚 منهج الأسابيع المُعدّ مسبقاً</span>
-      <p class="text-[11px] text-slate-500 mb-4">عنوان كل أسبوع وما سيُطلب منك فيه تلقائياً في تبويب «مهام اليوم»</p>
-      <div id="curriculumList" class="space-y-2.5 max-h-96 overflow-y-auto scrollbar-thin pl-1"></div>
-    </div>
+ <section id="tab-tracker" class="space-y-5 hidden">
 
-    <div class="panel p-5 fade-in">
-      <span class="text-xs sm:text-sm font-bold block mb-4">🧮 إجمالي ساعات كل مادة حتى نهاية الصيف</span>
-      <div id="summaryBySubject" class="space-y-3"></div>
-    </div>
+   <div class="panel p-5 fade-in">
+     <div class="flex items-center justify-between mb-1">
+       <div class="flex items-center gap-2">
+         <span class="text-base">✅</span>
+         <span class="font-bold text-sm">سجّل التزامك اليوم</span>
+       </div>
+       <span class="text-[11px] text-slate-500" id="trackerTodayDate">—</span>
+     </div>
+     <p class="text-[11px] text-slate-500 mb-4">يُسجَّل اليوم تلقائياً عند إنجاز كل دقائقه، أو اضغط ✓ يدوياً.</p>
 
-  </section>
+     <div class="flex items-center gap-3 panel-soft p-4 rounded-xl">
+       <button id="markTodayBtn" class="shrink-0 w-12 h-12 rounded-full border-2 border-emerald-400/40 text-emerald-300 text-xl font-bold flex items-center justify-center hover:bg-emerald-400/10 transition">✓</button>
+       <div>
+         <p class="text-sm font-bold" id="markTodayText">سجّل اليوم كيوم ملتزم</p>
+         <p class="text-[11px] text-slate-500 mt-0.5">السلسلة الحالية: <span class="text-cyan-300 font-bold num-font" id="streakCount">0</span> يوم · الأطول: <span class="text-indigo-300 font-bold num-font" id="bestStreakCount">0</span> يوم</p>
+       </div>
+     </div>
+   </div>
 
-  <!-- ============ تبويب 3: السجل ============ -->
-  <section id="tab-tracker" class="space-y-5 hidden">
+   <div class="panel p-5 fade-in">
+     <div class="flex items-center justify-between mb-4">
+       <span class="text-xs sm:text-sm font-bold">📆 خريطة الأسابيع</span>
+       <span class="text-[11px] text-slate-500"><span id="completedDaysCount" class="num-font">0</span> يوم منجز</span>
+     </div>
+     <div id="weeksGrid" class="space-y-2.5 max-h-80 overflow-y-auto scrollbar-thin pl-1"></div>
+   </div>
 
-    <div class="panel p-5 fade-in">
-      <div class="flex items-center justify-between mb-1">
-        <div class="flex items-center gap-2">
-          <span class="text-base">✅</span>
-          <span class="font-bold text-sm">سجّل التزامك اليوم</span>
-        </div>
-        <span class="text-[11px] text-slate-500" id="trackerTodayDate">—</span>
-      </div>
-      <p class="text-[11px] text-slate-500 mb-4">يُسجَّل اليوم تلقائياً عند إنجاز كل دقائقه، أو اضغط ✓ يدوياً.</p>
+   <div class="panel-soft p-4 fade-in flex items-center justify-between">
+     <p class="text-[11px] text-slate-400 leading-relaxed">إعادة ضبط السجل وحذف كل البيانات المحفوظة محلياً</p>
+     <button id="resetTrackerBtn" class="text-[11px] text-rose-300 border border-rose-400/30 bg-rose-400/10 px-3 py-1.5 rounded-lg hover:bg-rose-400/20 transition shrink-0">تصفير</button>
+   </div>
 
-      <div class="flex items-center gap-3 panel-soft p-4 rounded-xl">
-        <button id="markTodayBtn" class="shrink-0 w-12 h-12 rounded-full border-2 border-emerald-400/40 text-emerald-300 text-xl font-bold flex items-center justify-center hover:bg-emerald-400/10 transition">✓</button>
-        <div>
-          <p class="text-sm font-bold" id="markTodayText">سجّل اليوم كيوم ملتزم</p>
-          <p class="text-[11px] text-slate-500 mt-0.5">السلسلة الحالية: <span class="text-cyan-300 font-bold num-font" id="streakCount">0</span> يوم · الأطول: <span class="text-indigo-300 font-bold num-font" id="bestStreakCount">0</span> يوم</p>
-        </div>
-      </div>
-    </div>
+ </section>
 
-    <div class="panel p-5 fade-in">
-      <div class="flex items-center justify-between mb-4">
-        <span class="text-xs sm:text-sm font-bold">📆 خريطة الأسابيع</span>
-        <span class="text-[11px] text-slate-500"><span id="completedDaysCount" class="num-font">0</span> يوم منجز</span>
-      </div>
-      <div id="weeksGrid" class="space-y-2.5 max-h-80 overflow-y-auto scrollbar-thin pl-1"></div>
-    </div>
+ <section id="tab-ai" class="space-y-5 hidden h-[80vh] flex flex-col">
+   <div id="ai-setup" class="panel p-6 fade-in text-center flex-shrink-0">
+     <span class="text-3xl mb-3 block">🔑</span>
+     <h2 class="text-lg font-bold text-cyan-300 mb-2">إعداد مفتاح Google AI Studio</h2>
+     <p class="text-xs text-slate-400 mb-5 leading-relaxed max-w-sm mx-auto">
+       لتفعيل المعلم الذكي، نحتاج إلى مفتاح API مجاني من Google (Gemini 1.5). يُحفظ المفتاح بشكل آمن ومحلي في متصفحك فقط ولا يُرسل لأي سيرفر.
+     </p>
+     <div class="flex flex-col gap-3 max-w-sm mx-auto">
+       <input type="password" id="ai-api-key-input" placeholder="ألصق المفتاح هنا..." class="w-full bg-[#0d1226] border border-[var(--line)] rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-400 text-left" dir="ltr">
+       <button id="ai-save-key-btn" class="w-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 font-bold py-2.5 rounded-xl hover:bg-cyan-500/30 transition text-sm">حفظ وتفعيل المعلم 🤖</button>
+       <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-[11px] text-indigo-400 hover:underline mt-1">احصل على المفتاح مجاناً من هنا ↗</a>
+     </div>
+   </div>
 
-    <div class="panel-soft p-4 fade-in flex items-center justify-between">
-      <p class="text-[11px] text-slate-400 leading-relaxed">إعادة ضبط السجل وحذف كل البيانات المحفوظة محلياً</p>
-      <button id="resetTrackerBtn" class="text-[11px] text-rose-300 border border-rose-400/30 bg-rose-400/10 px-3 py-1.5 rounded-lg hover:bg-rose-400/20 transition shrink-0">تصفير</button>
-    </div>
+   <div id="ai-chat-interface" class="hidden flex flex-col h-full fade-in flex-1 min-h-[500px]">
+     
+     <div class="panel-soft p-3 flex gap-2 overflow-x-auto scrollbar-thin shrink-0 mb-3 rounded-xl border border-[var(--line-soft)]">
+       <button class="ai-quick-btn shrink-0 text-[11px] bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 px-3 py-1.5 rounded-lg hover:bg-indigo-500/20 transition whitespace-nowrap">📊 حلل وضعي الدراسي</button>
+       <button class="ai-quick-btn shrink-0 text-[11px] bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 px-3 py-1.5 rounded-lg hover:bg-emerald-500/20 transition whitespace-nowrap">📝 صحح لي إجابتي</button>
+       <button class="ai-quick-btn shrink-0 text-[11px] bg-amber-500/10 text-amber-300 border border-amber-500/20 px-3 py-1.5 rounded-lg hover:bg-amber-500/20 transition whitespace-nowrap">💡 اشرح لي فكرة صعبة</button>
+       <button id="ai-remove-key-btn" class="shrink-0 text-[10px] text-rose-400 ml-auto px-2 py-1.5 opacity-70 hover:opacity-100 transition whitespace-nowrap">حذف المفتاح 🗑️</button>
+     </div>
 
-  </section>
+     <div id="ai-chat-box" class="panel flex-1 p-4 overflow-y-auto space-y-4 scrollbar-thin bg-[#0d1226] mb-3 relative">
+       <div class="text-center text-[11px] text-slate-500 mt-4">
+         👋 أهلاً بك! أنا معلمك الذكي، جاهز لشرح المواد، تصحيح الحلول عبر الصور، ومتابعة تطورك نحو العلامة التامة.
+       </div>
+     </div>
 
-  <footer class="text-center mt-8 mb-2 text-[10px] text-slate-500 fade-in">
-    العلم صيدٌ والكتابة قيدُه.. خطط بذكاء، لتصل بأمان للعلامة التامة 🎯
-  </footer>
+     <div class="panel p-3 shrink-0 relative bg-[#11162a]">
+       <div id="ai-image-preview-container" class="hidden absolute -top-16 right-4 bg-[#0d1226] border border-[var(--line)] p-1 rounded-lg shadow-lg flex items-start gap-1 fade-in z-20">
+         <img id="ai-image-preview" src="" class="w-12 h-12 object-cover rounded-md">
+         <button id="ai-remove-image" class="text-rose-400 bg-rose-500/10 rounded-full w-5 h-5 flex items-center justify-center text-[10px]">✕</button>
+       </div>
+
+       <div class="flex items-end gap-2">
+         <input type="file" id="ai-image-input" accept="image/*" class="hidden">
+         <label for="ai-image-input" class="w-10 h-10 shrink-0 bg-indigo-500/15 text-indigo-300 rounded-xl flex items-center justify-center cursor-pointer border border-indigo-500/30 hover:bg-indigo-500/25 transition" title="إرفاق صورة مسألة">
+           📷
+         </label>
+         
+         <textarea id="ai-text-input" rows="1" class="flex-1 bg-[#0d1226] border border-[var(--line)] rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-400 resize-none scrollbar-thin" placeholder="اسأل المعلم، أو ارفع صورة مسألة..."></textarea>
+         
+         <button id="ai-send-btn" class="w-10 h-10 shrink-0 bg-cyan-500 text-white rounded-xl flex items-center justify-center cursor-pointer hover:bg-cyan-400 transition shadow-[0_0_10px_rgba(34,211,238,0.3)]">
+           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="translate-x-[-1px]"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+         </button>
+       </div>
+     </div>
+   </div>
+ </section>
+
+ <footer class="text-center mt-8 mb-2 text-[10px] text-slate-500 fade-in">
+   العلم صيدٌ والكتابة قيدُه.. خطط بذكاء، لتصل بأمان للعلامة التامة 🎯
+ </footer>
 
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function(){
 
-  /* ====================================================================
-     المنهج المُعدّ مسبقاً: 9 أسابيع نموذجية (رياضيات / فيزياء / كيمياء)
-     تُسحب تلقائياً وفق ترتيب الأسبوع الفعلي من تاريخ بداية الخطة.
-     إذا كان الصيف أطول من 9 أسابيع، يتكرر آخر أسبوعين (مراجعة) للإكمال.
-     إذا كان أقصر، تُقتطع الأسابيع الأخيرة فقط (المراجعة الشاملة تبقى أولوية).
-  ==================================================================== */
-  const CURRICULUM = [
-    { theme:'الأسبوع ١ · تشخيص الفجوات', desc:'مراجعة سريعة لأساسيات الصف السابق قبل البدء بالجديد', tasks:{
-      math:'مراجعة الدوال والمتباينات الأساسية + حل 10 تمارين تأسيسية',
-      phys:'مراجعة القوانين الأساسية للحركة والقوى',
-      chem:'مراجعة الذرة والجدول الدوري والروابط الكيميائية' }},
-    { theme:'الأسبوع ٢ · النهايات والاتصال', desc:'دخول حقيقي لمنهج البكالوريا: النهايات، الاتصال، والتمثيل البياني', tasks:{
-      math:'دروس النهايات والاتصال + حل 8 تمارين متنوعة',
-      phys:'الحركة المستقيمة المتغيرة بانتظام: قوانين ورسوم بيانية',
-      chem:'التفاعلات الكيميائية وحساب الكميات (المول والتركيز)' }},
-    { theme:'الأسبوع ٣ · الاشتقاق', desc:'قواعد الاشتقاق وتطبيقاته الأولى على دراسة الدوال', tasks:{
-      math:'قواعد الاشتقاق (مجموع، جداء، قسمة، دالة مركبة) + تمارين',
-      phys:'قوانين نيوتن الثلاثة وتطبيقاتها على أجسام متعددة',
-      chem:'حساب pH والتفاعلات الحمضية القاعدية الأساسية' }},
-    { theme:'الأسبوع ٤ · دراسة تغيرات الدوال', desc:'تجميع الاشتقاق مع رسم الدوال ودراسة تغيراتها بشكل كامل', tasks:{
-      math:'دراسة تغيرات دالة كاملة (مجال، نهايات، اشتقاق، جدول، رسم) + مسألتان كاملتان',
-      phys:'الطاقة الميكانيكية: الشغل، القدرة، وحفظ الطاقة',
-      chem:'معايرة الحموض والأسس وحساب التراكيز المجهولة' }},
-    { theme:'الأسبوع ٥ · المتتاليات', desc:'المتتاليات العددية: حسابية وهندسية، نهاياتها وتطبيقاتها', tasks:{
-      math:'المتتاليات الحسابية والهندسية + مسائل تطبيقية مالية وفيزيائية',
-      phys:'الكهرباء: قانون أوم والدارات الكهربائية البسيطة',
-      chem:'الكيمياء العضوية: الألكانات والألكينات وتفاعلاتها الأساسية' }},
-    { theme:'الأسبوع ٦ · المرحلة الثانية: التعميق', desc:'بداية مرحلة ربط المواضيع ببعضها وحل مسائل مدمجة', tasks:{
-      math:'مسائل مدمجة (اشتقاق + متتاليات) من نمط أسئلة البكالوريا',
-      phys:'دارات كهربائية معقدة (توالي وتفرع) + قوانين كيرشوف الأساسية',
-      chem:'الكيمياء العضوية المتقدمة: الكحولات والأحماض الكربوكسيلية' }},
-    { theme:'الأسبوع ٧ · التكامل والاحتمالات', desc:'فصل جديد كامل: مبادئ التكامل، وتوسّع في الاحتمالات', tasks:{
-      math:'مبادئ التكامل (الدالة الأصلية، المساحات) + مدخل للاحتمالات',
-      phys:'المجال المغناطيسي والكهرومغناطيسية الأساسية',
-      chem:'موازنة المعادلات الكيميائية المعقدة وحسابات الديناميك الحراري' }},
-    { theme:'الأسبوع ٨ · حل أسئلة بكالوريا سابقة', desc:'تطبيق كل ما سبق على أسئلة دورات فعلية بشروط محاكاة للامتحان', tasks:{
-      math:'حل دورة بكالوريا كاملة سابقة لمادة الرياضيات تحت ضغط الوقت',
-      phys:'حل دورة بكالوريا كاملة سابقة لمادة الفيزياء تحت ضغط الوقت',
-      chem:'حل دورة بكالوريا كاملة سابقة لمادة الكيمياء تحت ضغط الوقت' }},
-    { theme:'الأسبوع ٩ · المراجعة الشاملة والجاهزية', desc:'تثبيت نهائي: الأخطاء الشائعة، القوانين المتكررة، وثقة الامتحان', tasks:{
-      math:'مراجعة شاملة لكل الفصول + قائمة الأخطاء الشائعة وتصحيحها',
-      phys:'مراجعة شاملة للقوانين والوحدات + حل أسئلة سريعة متنوعة',
-      chem:'مراجعة شاملة للمعادلات والتعاريف المفصلية قبل الامتحان' }}
-  ];
-  const REVIEW_WEEK_FALLBACK = CURRICULUM[CURRICULUM.length-1];
-
-  function curriculumForWeekIndex(i){
-    if(i < CURRICULUM.length) return CURRICULUM[i];
-    return REVIEW_WEEK_FALLBACK; // أي أسبوع زائد يصبح مراجعة شاملة إضافية
-  }
-
-  /* ============== الحالة والتخزين ============== */
-  const STORAGE_KEY = 'syr_bac_summer_planner_v2';
-  const todayISO = () => new Date().toISOString().slice(0,10);
-
-  function defaultStartEnd(){
-    const today = new Date();
-    const end = new Date(today.getFullYear(), 8, 1);
-    if(end <= today) end.setFullYear(end.getFullYear()+1);
-    return { start: today.toISOString().slice(0,10), end: end.toISOString().slice(0,10) };
-  }
-
-  let state = {
-    startDate: null,
-    endDate: null,
-    restDays: [5,6], // 0=أحد..6=سبت
-    subjects: [
-      { id:'math', name:'الرياضيات', emoji:'🔺', color:'var(--math)', track:'#fb4d6f', dailyMinutes:90 },
-      { id:'phys', name:'الفيزياء', emoji:'⚛️', color:'var(--phys)', track:'#3b82f6', dailyMinutes:60 },
-      { id:'chem', name:'الكيمياء', emoji:'🧪', color:'var(--chem)', track:'#22c55e', dailyMinutes:45 },
-    ],
-    nextSubjectIdx: 1,
-    completedDays: {},     // 'YYYY-MM-DD': true
-    minutesLog: {},        // 'YYYY-MM-DD': { subjId: minutesDone }
-    debtMinutes: {},        // subjId: دقائق متراكمة غير منجزة
-    lastDebtCheckDate: null
-  };
-
-  function loadState(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if(raw){
-        const parsed = JSON.parse(raw);
-        state = Object.assign({}, state, parsed);
-      }
-    }catch(e){}
-    if(!state.startDate || !state.endDate){
-      const d = defaultStartEnd();
-      state.startDate = state.startDate || d.start;
-      state.endDate = state.endDate || d.end;
-    }
-    if(!Array.isArray(state.restDays)) state.restDays = [5,6];
-  }
-  function saveState(){
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
-  }
-  loadState();
-
-  /* ============== عناصر مشتركة ============== */
-  const startDateInput = document.getElementById('startDate');
-  const endDateInput = document.getElementById('endDate');
-  const durationSummary = document.getElementById('durationSummary');
-  const daysVal = document.getElementById('daysVal');
-  const weekdayPicker = document.getElementById('weekdayPicker');
-  const subjectsContainer = document.getElementById('subjectsContainer');
-  const distributionContainer = document.getElementById('distributionContainer');
-  const addSubjectBtn = document.getElementById('addSubjectBtn');
-
-  const totalMinutesWeekEl = document.getElementById('totalMinutesWeek');
-  const totalSummerHoursEl = document.getElementById('totalSummerHours');
-  const burnoutBadge = document.getElementById('burnoutBadge');
-  const burnoutDesc = document.getElementById('burnoutDesc');
-  const restRatio = document.getElementById('restRatio');
-  const restBar = document.getElementById('restBar');
-
-  startDateInput.value = state.startDate;
-  endDateInput.value = state.endDate;
-
-  /* ============== منتقي أيام الأسبوع ============== */
-  const WEEKDAY_LABELS = ['أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
-  const WEEKDAY_SHORT = ['ح','ن','ث','ر','خ','ج','س'];
-
-  function studyDaysCount(){ return 7 - state.restDays.length; }
-
-  function renderWeekdayPicker(){
-    weekdayPicker.innerHTML = '';
-    for(let i=0;i<7;i++){
-      const isRest = state.restDays.includes(i);
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'aspect-square rounded-xl text-xs font-bold flex flex-col items-center justify-center gap-0.5 transition ' +
-        (isRest ? 'bg-[#0d1226] text-slate-500 border border-[var(--line-soft)]' : 'bg-indigo-500/15 text-indigo-300 border border-indigo-400/40');
-      btn.innerHTML = `<span>${WEEKDAY_SHORT[i]}</span><span class="text-[14px]">${isRest?'🌴':'📖'}</span>`;
-      btn.title = WEEKDAY_LABELS[i] + (isRest ? ' (راحة)' : ' (دراسة)');
-      btn.addEventListener('click', ()=>{
-        if(isRest){ state.restDays = state.restDays.filter(d=>d!==i); }
-        else { if(state.restDays.length >= 6) return; state.restDays.push(i); }
-        renderWeekdayPicker();
-        update();
-      });
-      weekdayPicker.appendChild(btn);
-    }
-    daysVal.textContent = studyDaysCount();
-  }
-
-  /* ============== أدوات تواريخ ============== */
-  function diffDays(a,b){
-    const A = new Date(a+'T00:00:00'), B = new Date(b+'T00:00:00');
-    return Math.max(0, Math.round((B - A) / 86400000));
-  }
-  function fmtDate(iso){
-    return new Date(iso+'T00:00:00').toLocaleDateString('ar-EG', { day:'numeric', month:'short' });
-  }
-  function isStudyDay(date){ return !state.restDays.includes(date.getDay()); }
-  function isTodayStudyDay(){ return isStudyDay(new Date()); }
-
-  // رقم الأسبوع الحالي (0-based) منذ بداية الخطة
-  function weekIndexForDate(date){
-    const start = new Date(state.startDate+'T00:00:00');
-    const d = Math.floor((new Date(date.toDateString()) - start) / 86400000);
-    return Math.max(0, Math.floor(d/7));
-  }
-  function currentWeekTheme(){
-    return curriculumForWeekIndex(weekIndexForDate(new Date()));
-  }
-
-  function remainingStudyDaysFromToday(){
-    const end = new Date(state.endDate+'T00:00:00');
-    let cursor = new Date(new Date().toDateString());
-    let count = 0;
-    while(cursor <= end && count < 400){
-      if(isStudyDay(cursor)) count++;
-      cursor = new Date(cursor.getTime()+86400000);
-    }
-    return Math.max(1, count);
-  }
-
-  /* ============== منطق الدين الزمني وإعادة التوزيع ============== */
-  let pendingCarryMessage = null;
-
-  function reconcileDebt(){
-    const today = todayISO();
-    if(state.lastDebtCheckDate === today) return;
-    const lastCheck = state.lastDebtCheckDate;
-    state.lastDebtCheckDate = today;
-    if(!lastCheck){ saveState(); return; }
-
-    let cursor = new Date(lastCheck+'T00:00:00');
-    const todayDate = new Date(today+'T00:00:00');
-    let anyDebtAdded = false;
-    const addedPerSubject = {};
-
-    while(cursor < todayDate){
-      const iso = cursor.toISOString().slice(0,10);
-      if(isStudyDay(cursor)){
-        state.subjects.forEach(s=>{
-          const target = s.dailyMinutes || 0;
-          if(target <= 0) return;
-          const done = (state.minutesLog[iso] || {})[s.id] || 0;
-          const missing = Math.max(0, target - done);
-          if(missing > 0){
-            state.debtMinutes[s.id] = (state.debtMinutes[s.id] || 0) + missing;
-            addedPerSubject[s.id] = (addedPerSubject[s.id] || 0) + missing;
-            anyDebtAdded = true;
-          }
-        });
-      }
-      cursor = new Date(cursor.getTime()+86400000);
-    }
-
-    if(anyDebtAdded){
-      const parts = Object.entries(addedPerSubject).map(([id, mins])=>{
-        const s = state.subjects.find(x=>x.id===id);
-        return s ? `${mins} د ${s.emoji}${s.name}` : null;
-      }).filter(Boolean);
-      pendingCarryMessage = 'لم تُكمل وقت الأيام الماضية: ' + parts.join('، ') + '. أُضيف لمهامك القادمة هذا الأسبوع موزّعاً بالدقيقة.';
-    }
-    saveState();
-  }
-
-  // المطلوب اليوم بالدقائق لكل مادة = الهدف الأساسي + حصة من الدين الزمني المتراكم
-  function todayRequirement(subj){
-    const base = subj.dailyMinutes || 0;
-    const debtAmt = state.debtMinutes[subj.id] || 0;
-    if(debtAmt <= 0) return { base, extra:0, total:base };
-    const spread = remainingStudyDaysFromToday();
-    const extra = Math.ceil(debtAmt / spread);
-    return { base, extra, total: base + extra };
-  }
-
-  function settleDebtOnProgress(subjId, doneMinutes, requirement){
-    const debtAmt = state.debtMinutes[subjId] || 0;
-    if(debtAmt <= 0) return;
-    const overBase = Math.max(0, doneMinutes - requirement.base);
-    if(overBase > 0) state.debtMinutes[subjId] = Math.max(0, debtAmt - overBase);
-  }
-
-  /* ============== سلايدرز المواد (تبويب المخطط) ============== */
-  function renderSubjectSliders(){
-    subjectsContainer.innerHTML = '';
-    state.subjects.forEach(subj=>{
-      const max = subj.maxMinutes || 240;
-      const fillPct = Math.min(100, (subj.dailyMinutes / max) * 100);
-      const wrap = document.createElement('div');
-      wrap.className = 'bg-[#0d1226] p-4 rounded-2xl border border-[var(--line-soft)]';
-      wrap.innerHTML = `
-        <div class="flex justify-between items-center mb-2">
-          <span class="font-bold text-sm flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full" style="background:${subj.color}"></span>
-            ${subj.emoji} ${subj.name} يومياً
-          </span>
-          <div class="flex items-center gap-1.5">
-            <span class="text-xs px-2 py-0.5 rounded-lg border font-mono num-font" style="background:${subj.color}1a;color:${subj.color};border-color:${subj.color}33">
-              <span class="subj-val">${subj.dailyMinutes}</span> د
-            </span>
-            ${subj.removable ? `<button class="remove-subj text-slate-500 hover:text-rose-400 text-xs px-1.5" title="حذف">✕</button>` : ''}
-          </div>
-        </div>
-        <input type="range" class="w-full cursor-pointer subj-slider" min="0" max="${max}" step="5" value="${subj.dailyMinutes}" style="--track-color:${subj.track}; --fill:${fillPct}%">
-      `;
-      const slider = wrap.querySelector('.subj-slider');
-      const valSpan = wrap.querySelector('.subj-val');
-      slider.addEventListener('input', ()=>{
-        subj.dailyMinutes = parseInt(slider.value);
-        valSpan.textContent = subj.dailyMinutes;
-        slider.style.setProperty('--fill', Math.min(100,(subj.dailyMinutes/max)*100) + '%');
-        update();
-      });
-      if(subj.removable){
-        wrap.querySelector('.remove-subj').addEventListener('click', ()=>{
-          state.subjects = state.subjects.filter(s=>s.id !== subj.id);
-          renderSubjectSliders();
-          update();
-        });
-      }
-      subjectsContainer.appendChild(wrap);
-    });
-  }
-
-  const palette = [
-    { track:'#f59e0b', color:'var(--extra)' },
-    { track:'#a855f7', color:'#a855f7' },
-    { track:'#ec4899', color:'#ec4899' },
-    { track:'#14b8a6', color:'#14b8a6' },
-  ];
-  addSubjectBtn.addEventListener('click', ()=>{
-    const p = palette[state.nextSubjectIdx % palette.length];
-    state.nextSubjectIdx++;
-    state.subjects.push({
-      id:'subj_'+Date.now(), name:'مادة إضافية', emoji:'📘', color:p.color, track:p.track,
-      dailyMinutes:30, maxMinutes:180, removable:true
-    });
-    renderSubjectSliders();
-    update();
-  });
-
-  startDateInput.addEventListener('change', ()=>{ state.startDate = startDateInput.value; update(); });
-  endDateInput.addEventListener('change', ()=>{ state.endDate = endDateInput.value; update(); });
-
-  /* ============== التحديث الرئيسي (تبويب المخطط) ============== */
-  function dailyTotalMinutes(){
-    return state.subjects.reduce((sum,s)=>sum + (s.dailyMinutes||0), 0);
-  }
-
-  function update(){
-    daysVal.textContent = studyDaysCount();
-
-    const totalDaysSpan = diffDays(state.startDate, state.endDate);
-    const weeksSpan = totalDaysSpan / 7;
-    durationSummary.textContent = totalDaysSpan > 0
-      ? `من ${fmtDate(state.startDate)} إلى ${fmtDate(state.endDate)} — حوالي ${Math.round(weeksSpan)} أسبوعاً متبقياً`
-      : 'اختر تاريخين صحيحين لعرض مدة الصيف';
-
-    const dailyMin = dailyTotalMinutes();
-    const weeklyMin = dailyMin * studyDaysCount();
-    const weeklyHours = weeklyMin/60;
-    const totalSummerHours = weeklyHours * weeksSpan;
-
-    totalMinutesWeekEl.textContent = weeklyMin;
-    totalSummerHoursEl.textContent = Math.round(totalSummerHours);
-
-    if(weeklyHours === 0){
-      setBurnout('بدون دراسة حالياً 💤', 'bg-slate-800 text-slate-400 border border-slate-700', 'ابدأ بضبط بعض الدقائق للوصول إلى هدفك!');
-    } else if(weeklyHours <= 18){
-      setBurnout('آمن ومستقر جداً ✅', 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20', 'خطة متزنة تمنحك استمرارية طويلة دون ملل.');
-    } else if(weeklyHours <= 28){
-      setBurnout('مثالي ونشط 🚀', 'bg-blue-500/10 text-blue-400 border border-blue-500/20', 'مجهود ممتاز يتناسب مع طموح العلامة التامة.');
-    } else if(weeklyHours <= 35){
-      setBurnout('حمل دراسي مرتفع ⚠️', 'bg-amber-500/10 text-amber-400 border border-amber-500/20', 'احذر قد تشعر ببعض التعب بعد أسابيع. خفف قليلاً.');
-    } else {
-      setBurnout('خطر احتراق دراسي مرتفع ❌', 'bg-red-500/10 text-red-400 border border-red-500/20', 'هذا الحمل غير واقعي للصيف وقد يؤدي للنفور سريعاً!');
-    }
-
-    const totalWeekHours = 168;
-    const freeHours = totalWeekHours - weeklyHours;
-    const restPct = Math.max(0, Math.min(100, Math.round((freeHours/totalWeekHours)*100)));
-    restRatio.textContent = restPct + '%';
-    restBar.style.width = restPct + '%';
-
-    renderDistribution(dailyMin);
-    if(!sections.today.classList.contains('hidden')) renderToday();
-    if(!sections.timeline.classList.contains('hidden')) renderTimeline();
-    if(!sections.tracker.classList.contains('hidden')) renderTracker();
-```javascript
-    if(!sections.ai.classList.contains('hidden')) initAiTab();
-    saveState();
-  }
-
-  function setBurnout(text, cls, desc){
-    burnoutBadge.textContent = text;
-    burnoutBadge.className = 'text-sm font-bold px-4 py-1.5 rounded-full mt-2.5 inline-block transition-all duration-300 ' + cls;
-    burnoutDesc.textContent = desc;
-  }
-
-  function renderDistribution(dailyMin){
-    distributionContainer.innerHTML = '';
-    state.subjects.forEach(s=>{
-      const pct = dailyMin > 0 ? Math.round(((s.dailyMinutes||0)/dailyMin)*100) : 0;
-      const row = document.createElement('div');
-      row.innerHTML = `
-        <div class="flex justify-between text-xs mb-1">
-          <span class="text-slate-400">${s.emoji} ${s.name}</span>
-          <span class="font-mono num-font" style="color:${s.color}">${pct}%</span>
-        </div>
-        <div class="w-full bg-[#0d1226] h-1.5 rounded-full overflow-hidden">
-          <div class="h-full transition-all duration-500" style="width:${pct}%; background:${s.color}"></div>
-        </div>`;
-      distributionContainer.appendChild(row);
-    });
-  }
-
-  /* ============== تبويب الخط الزمني ============== */
-  function renderTimeline(){
-    const totalDays = diffDays(state.startDate, state.endDate);
-    const elapsed = diffDays(state.startDate, todayISO() < state.endDate ? todayISO() : state.endDate);
-    const clampedElapsed = Math.max(0, Math.min(totalDays, elapsed));
-    const pct = totalDays > 0 ? (clampedElapsed/totalDays)*100 : 0;
-
-    document.getElementById('timelineSubtitle').textContent =
-      `${fmtDate(state.startDate)} ← اليوم ← ${fmtDate(state.endDate)} (${Math.round(pct)}٪ من الصيف انقضى)`;
-    document.getElementById('timelineStartLabel').textContent = fmtDate(state.startDate);
-    document.getElementById('timelineEndLabel').textContent = fmtDate(state.endDate);
-    document.getElementById('todayMarker').style.right = Math.max(0, Math.min(100, pct)) + '%';
-
-    document.getElementById('weeksLeft').textContent = Math.max(0, Math.round((totalDays - clampedElapsed)/7));
-    document.getElementById('studyDaysLeft').textContent = remainingStudyDaysFromToday();
-    document.getElementById('percentElapsed').textContent = Math.round(pct) + '%';
-
-    const start = new Date(state.startDate+'T00:00:00');
-    const addDays = (d,n)=> new Date(d.getTime() + n*86400000);
-    const p1End = addDays(start, Math.round(totalDays*0.34));
-    const p2End = addDays(start, Math.round(totalDays*0.67));
-    const end = new Date(state.endDate+'T00:00:00');
-    const fmt = d => d.toLocaleDateString('ar-EG',{day:'numeric',month:'short'});
-    document.getElementById('phase1Dates').textContent = `${fmt(start)} – ${fmt(p1End)}`;
-    document.getElementById('phase2Dates').textContent = `${fmt(p1End)} – ${fmt(p2End)}`;
-    document.getElementById('phase3Dates').textContent = `${fmt(p2End)} – ${fmt(end)}`;
-
-    const weeksSpan = totalDays/7;
-    const summaryContainer = document.getElementById('summaryBySubject');
-    summaryContainer.innerHTML = '';
-    state.subjects.forEach(s=>{
-      const weeklyHrs = ((s.dailyMinutes||0) * studyDaysCount())/60;
-      const totalHrs = Math.round(weeklyHrs * weeksSpan);
-      const row = document.createElement('div');
-      row.className = 'flex items-center justify-between panel-soft px-4 py-3 rounded-xl';
-      row.innerHTML = `
-        <span class="text-xs sm:text-sm flex items-center gap-2">
-          <span class="w-2.5 h-2.5 rounded-full" style="background:${s.color}"></span>
-          ${s.emoji} ${s.name}
-        </span>
-        <span class="text-sm font-extrabold num-font" style="color:${s.color}">${totalHrs} <span class="text-[10px] text-slate-500 font-normal">ساعة</span></span>`;
-      summaryContainer.appendChild(row);
-    });
-
-    // عرض منهج الأسابيع كاملاً
-    const curriculumList = document.getElementById('curriculumList');
-    curriculumList.innerHTML = '';
-    const totalWeeks = Math.max(1, Math.ceil(totalDays/7));
-    const curWeekIdx = weekIndexForDate(new Date());
-    for(let w=0; w<Math.min(totalWeeks, 26); w++){
-      const item = curriculumForWeekIndex(w);
-      const isPast = w < curWeekIdx;
-      const isCurrent = w === curWeekIdx;
-      const row = document.createElement('div');
-      row.className = 'panel-soft p-3.5 rounded-xl' + (isCurrent ? ' ring-1 ring-cyan-400/50' : '') + (isPast ? ' opacity-50' : '');
-      row.innerHTML = `
-        <div class="flex items-center justify-between">
-          <span class="text-[11px] font-bold ${isCurrent?'text-cyan-300':'text-slate-300'}">${item.theme}</span>
-          ${isCurrent ? '<span class="text-[9px] bg-cyan-400/15 text-cyan-300 px-2 py-0.5 rounded-full">الأسبوع الحالي</span>' : ''}
-        </div>
-        <p class="text-[10px] text-slate-500 mt-1">${item.desc}</p>`;
-      curriculumList.appendChild(row);
-    }
-  }
-
-  /* ============== شريط الأسبوع المصغر (مهام اليوم) ============== */
-  function renderWeekStrip(){
-    const strip = document.getElementById('weekStrip');
-    strip.innerHTML = '';
-    const today = new Date(new Date().toDateString());
-    const todayDow = today.getDay();
-    const sunday = new Date(today.getTime() - todayDow*86400000);
-
-    for(let i=0;i<7;i++){
-      const d = new Date(sunday.getTime() + i*86400000);
-      const iso = d.toISOString().slice(0,10);
-      const isRest = state.restDays.includes(i);
-      const isToday = iso === todayISO();
-      const isPast = d < today;
-      const isDoneDay = !!state.completedDays[iso];
-
-      let stateCls, icon;
-      if(isRest){ stateCls = 'bg-[#0d1226] text-slate-600 border border-[var(--line-soft)]'; icon = '🌴'; }
-      else if(isDoneDay){ stateCls = 'bg-emerald-500/80 text-[#0a0e1a] border border-emerald-400'; icon = '✓'; }
-      else if(isPast){ stateCls = 'bg-rose-500/15 text-rose-300 border border-rose-500/30'; icon = '✕'; }
-      else if(isToday){ stateCls = 'bg-cyan-500/15 text-cyan-300 border border-cyan-400/50'; icon = '•'; }
-      else { stateCls = 'bg-[#0d1226] text-slate-500 border border-[var(--line-soft)]'; icon = ''; }
-
-      const cell = document.createElement('div');
-      cell.className = 'aspect-square rounded-lg text-[10px] font-bold flex flex-col items-center justify-center gap-0.5 ' + stateCls + (isToday?' ring-2 ring-cyan-300':'');
-      cell.innerHTML = `<span>${WEEKDAY_SHORT[i]}</span><span class="text-[11px]">${icon}</span>`;
-      cell.title = d.toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'});
-      strip.appendChild(cell);
-    }
-  }
-
-  /* ============== تبويب مهام اليوم ============== */
-  function getTodayLog(){
-    const today = todayISO();
-    if(!state.minutesLog[today]) state.minutesLog[today] = {};
-    return state.minutesLog[today];
-  }
-
-  function renderToday(){
-    reconcileDebt();
-
-    const today = new Date();
-    document.getElementById('todayDateLabel').textContent =
-      today.toLocaleDateString('ar-EG', { weekday:'long', day:'numeric', month:'long' });
-
-    renderWeekStrip();
-
-    const carryBanner = document.getElementById('carryBanner');
-    const carryBannerText = document.getElementById('carryBannerText');
-    if(pendingCarryMessage){
-      carryBanner.classList.remove('hidden');
-      carryBannerText.textContent = pendingCarryMessage;
-    } else {
-      carryBanner.classList.add('hidden');
-    }
-
-    const log = getTodayLog();
-    const container = document.getElementById('todayTasksContainer');
-    container.innerHTML = '';
-    document.getElementById('successBanner').classList.add('hidden');
-
-    const studyToday = isTodayStudyDay();
-    const weekThemeBanner = document.getElementById('weekThemeBanner');
-
-    if(!studyToday){
-      weekThemeBanner.classList.add('hidden');
-      container.innerHTML = `
-        <div class="panel p-6 text-center fade-in">
-          <span class="text-2xl">🌴</span>
-          <p class="text-sm font-bold mt-2">اليوم يوم راحة مجدول</p>
-          <p class="text-[11px] text-slate-500 mt-1">لا مهام إجبارية اليوم حسب توزيعك الأسبوعي. استرح بلا شعور بالذنب.</p>
-        </div>`;
-      document.getElementById('todayMinutesLabel').textContent = 'يوم راحة';
-      const ring = document.getElementById('dayProgressRing');
-      document.getElementById('dayProgressPct').textContent = '🌴';
-      ring.style.strokeDashoffset = '0';
-      return;
-    }
-
-    if(state.subjects.every(s => !(s.dailyMinutes>0))){
-      weekThemeBanner.classList.add('hidden');
-      container.innerHTML = `
-        <div class="panel p-6 text-center fade-in">
-          <span class="text-2xl">🛠️</span>
-          <p class="text-sm font-bold mt-2">لم تحدد دقائق إجبارية بعد</p>
-          <p class="text-[11px] text-slate-500 mt-1">اذهب لتبويب «المخطط» وحدد عدد الدقائق اليومية لكل مادة.</p>
-        </div>`;
-      document.getElementById('todayMinutesLabel').textContent = '٠ من ٠ دقيقة';
-      return;
-    }
-
-    const theme = currentWeekTheme();
-    weekThemeBanner.classList.remove('hidden');
-    document.getElementById('weekThemeLabel').textContent = '🗂️ ' + theme.theme;
-    document.getElementById('weekThemeDesc').textContent = theme.desc;
-
-    let totalReq = 0, totalDone = 0;
-
-    state.subjects.forEach(s=>{
-      if(!(s.dailyMinutes>0)) return;
-      const req = todayRequirement(s);
-      const doneRaw = log[s.id] || 0;
-      const done = Math.min(req.total, doneRaw);
-      const isDone = done >= req.total;
-      totalReq += req.total;
-      totalDone += done;
-
-      const taskDesc = (theme.tasks && theme.tasks[s.id]) || 'مراجعة عامة وحل تمارين متنوعة في المادة';
-      const fillPct = req.total>0 ? Math.min(100,(done/req.total)*100) : 0;
-
-      const card = document.createElement('div');
-      card.className = 'panel p-4 fade-in task-card' + (isDone ? ' done' : '');
-      card.innerHTML = `
-        <div class="flex items-start gap-3">
-          <div class="check-circle ${isDone?'checked':''} mt-0.5" data-subj="${s.id}">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0a0e1a" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between gap-2">
-              <span class="text-sm font-bold task-title flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full shrink-0" style="background:${s.color}"></span>
-                ${s.emoji} ${s.name}
-              </span>
-              <span class="text-xs font-mono num-font shrink-0" style="color:${s.color}">${done}/${req.total} د</span>
-            </div>
-            <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">${taskDesc}</p>
-            ${req.extra>0 ? `<span class="debt-chip inline-block mt-1.5">+${req.extra} د مُرحّلة من أيام سابقة</span>` : ''}
-          </div>
-        </div>
-
-        <div class="mt-3.5 pr-9">
-          <input type="range" class="w-full cursor-pointer minutes-slider" min="0" max="${req.total}" step="5" value="${done}" style="--track-color:${s.color}; --fill:${fillPct}%">
-          <div class="flex justify-between text-[10px] text-slate-500 mt-1 num-font">
-            <span>0</span>
-            <span>حرّك بحسب دقائقك الفعلية</span>
-            <span>${req.total} د</span>
-          </div>
-        </div>
-      `;
-      container.appendChild(card);
-
-      const slider = card.querySelector('.minutes-slider');
-      slider.addEventListener('input', ()=>{
-        const v = parseInt(slider.value);
-        const l = getTodayLog();
-        l[s.id] = v;
-        const pctFill = req.total>0 ? Math.min(100,(v/req.total)*100) : 0;
-        slider.style.setProperty('--fill', pctFill + '%');
-        settleDebtOnProgress(s.id, v, req);
-        saveState();
-        // تحديث خفيف بدون إعادة بناء كامل القائمة أثناء السحب
-        const valEl = card.querySelector('.font-mono.num-font');
-        if(valEl) valEl.textContent = `${v}/${req.total} د`;
-        card.classList.toggle('done', v >= req.total);
-        const circle = card.querySelector('.check-circle');
-        circle.classList.toggle('checked', v >= req.total);
-      });
-      slider.addEventListener('change', ()=>{ renderToday(); });
-
-      card.querySelector('.check-circle').addEventListener('click', ()=>{
-        const l = getTodayLog();
-        l[s.id] = isDone ? 0 : req.total;
-        settleDebtOnProgress(s.id, l[s.id], req);
-        saveState();
-        renderToday();
-      });
-    });
-
-    const pct = totalReq>0 ? Math.round((totalDone/totalReq)*100) : 0;
-    document.getElementById('dayProgressPct').textContent = pct + '%';
-    document.getElementById('todayMinutesLabel').textContent = `${totalDone} من ${totalReq} دقيقة`;
-    const ring = document.getElementById('dayProgressRing');
-    const circumference = 169.6;
-    ring.style.strokeDashoffset = circumference - (circumference*pct/100);
-
-    const banner = document.getElementById('successBanner');
-    if(totalReq>0 && totalDone>=totalReq){
-      if(!state.completedDays[todayISO()]){
-        state.completedDays[todayISO()] = true;
-        saveState();
-        renderWeekStrip();
-      }
-      banner.classList.remove('hidden');
-      document.getElementById('successBannerText').textContent =
-        Object.values(state.debtMinutes).some(v=>v>0)
-          ? 'أنجزت كل دقائق اليوم! ولا يزال هناك وقت متراكم يتقلّص تدريجياً 💪'
-          : 'أنجزت كل دقائق اليوم بالكامل، ولا رصيد متراكم عليك! 🎉';
-    } else {
-      banner.classList.add('hidden');
-    }
-
-    const debtSummary = document.getElementById('debtSummary');
-    const debtList = document.getElementById('debtList');
-    const activeDebts = Object.entries(state.debtMinutes).filter(([id,amt])=>amt>0);
-    if(activeDebts.length){
-      debtSummary.classList.remove('hidden');
-      debtList.innerHTML = activeDebts.map(([id,amt])=>{
-        const s = state.subjects.find(x=>x.id===id);
-        if(!s) return '';
-        return `<div class="flex justify-between text-[11px]"><span class="text-slate-400">${s.emoji} ${s.name}</span><span class="font-mono num-font text-amber-300">${amt} دقيقة</span></div>`;
-      }).join('');
-    } else {
-      debtSummary.classList.add('hidden');
-    }
-  }
-
-  /* ============== تبويب السجل ============== */
-  const markTodayBtn = document.getElementById('markTodayBtn');
-  const markTodayText = document.getElementById('markTodayText');
-  const streakCount = document.getElementById('streakCount');
-  const completedDaysCount = document.getElementById('completedDaysCount');
-  const weeksGrid = document.getElementById('weeksGrid');
-  const resetTrackerBtn = document.getElementById('resetTrackerBtn');
-
-  document.getElementById('trackerTodayDate').textContent = new Date().toLocaleDateString('ar-EG', { weekday:'long', day:'numeric', month:'long' });
-
-  function calcStreak(){
-    let streak = 0;
-    let cursor = new Date();
-    while(true){
-      const iso = cursor.toISOString().slice(0,10);
-      if(state.completedDays[iso]){ streak++; cursor = new Date(cursor.getTime() - 86400000); }
-      else break;
-    }
-    return streak;
-  }
-  function calcBestStreak(){
-    const isoList = Object.keys(state.completedDays).filter(k=>state.completedDays[k]).sort();
-    if(!isoList.length) return 0;
-    let best = 1, cur = 1;
-    for(let i=1;i<isoList.length;i++){
-      const prev = new Date(isoList[i-1]+'T00:00:00');
-      const curr = new Date(isoList[i]+'T00:00:00');
-      const gap = Math.round((curr-prev)/86400000);
-      cur = (gap === 1) ? cur+1 : 1;
-      if(cur > best) best = cur;
-    }
-    return best;
-  }
-
-  function renderTracker(){
-    const today = todayISO();
-    const isMarked = !!state.completedDays[today];
-    markTodayBtn.className = 'shrink-0 w-12 h-12 rounded-full border-2 text-xl font-bold flex items-center justify-center transition ' +
-      (isMarked ? 'border-emerald-400 bg-emerald-400/20 text-emerald-300' : 'border-emerald-400/40 text-emerald-300 hover:bg-emerald-400/10');
-    markTodayText.textContent = isMarked ? 'أحسنت! تم تسجيل اليوم ✨' : 'سجّل اليوم كيوم ملتزم';
-
-    streakCount.textContent = calcStreak();
-    document.getElementById('bestStreakCount').textContent = Math.max(calcBestStreak(), calcStreak());
-    completedDaysCount.textContent = Object.values(state.completedDays).filter(Boolean).length;
-
-    weeksGrid.innerHTML = '';
-    const start = new Date(state.startDate+'T00:00:00');
-    const end = new Date(state.endDate+'T00:00:00');
-    const totalDays = Math.max(1, diffDays(state.startDate, state.endDate));
-    const totalWeeks = Math.min(20, Math.ceil(totalDays/7));
-
-    for(let w=0; w<totalWeeks; w++){
-      const weekRow = document.createElement('div');
-      weekRow.className = 'flex items-center gap-2';
-      const label = document.createElement('span');
-      label.className = 'text-[10px] text-slate-500 w-12 shrink-0 num-font';
-      label.textContent = 'أسبوع ' + (w+1);
-      weekRow.appendChild(label);
-
-      const cellsWrap = document.createElement('div');
-      cellsWrap.className = 'flex gap-1.5 flex-1';
-      for(let d=0; d<7; d++){
-        const dayIdx = w*7 + d;
-        const cellDate = new Date(start.getTime() + dayIdx*86400000);
-        if(cellDate > end) break;
-        const iso = cellDate.toISOString().slice(0,10);
-        const isDone = !!state.completedDays[iso];
-        const isToday = iso === today;
-        const isFuture = cellDate > new Date(new Date().toDateString());
-
-        const cell = document.createElement('button');
-        cell.className = 'day-cell flex-1 aspect-square rounded-md text-[9px] flex items-center justify-center font-bold num-font ' +
-          (isDone ? 'bg-emerald-500/80 text-[#0a0e1a]' : 'bg-[#0d1226] text-slate-600 border border-[var(--line-soft)]') +
-          (isToday ? ' ring-2 ring-cyan-300' : '');
-        cell.textContent = cellDate.getDate();
-        cell.title = cellDate.toLocaleDateString('ar-EG', { weekday:'long', day:'numeric', month:'long' });
-        cell.disabled = isFuture;
-        if(isFuture) cell.style.opacity = '0.35';
-        cell.addEventListener('click', ()=>{
-          if(state.completedDays[iso]) delete state.completedDays[iso];
-          else state.completedDays[iso] = true;
-          saveState();
-          renderTracker();
-        });
-        cellsWrap.appendChild(cell);
-      }
-      weekRow.appendChild(cellsWrap);
-      weeksGrid.appendChild(weekRow);
-    }
-  }
-
-  markTodayBtn.addEventListener('click', ()=>{
-    const today = todayISO();
-    if(state.completedDays[today]) delete state.completedDays[today];
-    else state.completedDays[today] = true;
-    saveState();
-    renderTracker();
-  });
-
-  resetTrackerBtn.addEventListener('click', ()=>{
-    if(confirm('هل أنت متأكد من حذف كل سجل الالتزام؟ لا يمكن التراجع عن هذا.')){
-      state.completedDays = {};
-      saveState();
-      renderTracker();
-    }
-  });
-
-  /* ============== التبويبات ============== */
-  const tabs = document.querySelectorAll('.tab-btn');
- ```javascript
-    const sections = {
-      today: document.getElementById('tab-today'),
-      planner: document.getElementById('tab-planner'),
-      timeline: document.getElementById('tab-timeline'),
-      tracker: document.getElementById('tab-tracker'),
-      ai: document.getElementById('tab-ai')
-    };
-  tabs.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      tabs.forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      Object.values(sections).forEach(s=>s.classList.add('hidden'));
-      const target = sections[btn.dataset.tab];
-      target.classList.remove('hidden');
-      target.classList.add('fade-in');
-      if(btn.dataset.tab === 'today') renderToday();
-      if(btn.dataset.tab === 'timeline') renderTimeline();
-      if(btn.dataset.tab === 'tracker') renderTracker();
-      if(btn.dataset.tab === 'ai') initAiTab();
-    });
-  });
-
-  /* ============== التهيئة الأولى ============== */
-  renderWeekdayPicker();
-  renderSubjectSliders();
-  update();
-  renderToday();
+ /* ====================================================================
+    المنهج المُعدّ مسبقاً: 9 أسابيع نموذجية (رياضيات / فيزياء / كيمياء)
+    تُسحب تلقائياً وفق ترتيب الأسبوع الفعلي من تاريخ بداية الخطة.
+    إذا كان الصيف أطول من 9 أسابيع، يتكرر آخر أسبوعين (مراجعة) للإكمال.
+    إذا كان أقصر، تُقتطع الأسابيع الأخيرة فقط (المراجعة الشاملة تبقى أولوية).
+ ==================================================================== */
+ const CURRICULUM = [
+   { theme:'الأسبوع ١ · تشخيص الفجوات', desc:'مراجعة سريعة لأساسيات الصف السابق قبل البدء بالجديد', tasks:{
+     math:'مراجعة الدوال والمتباينات الأساسية + حل 10 تمارين تأسيسية',
+     phys:'مراجعة القوانين الأساسية للحركة والقوى',
+     chem:'مراجعة الذرة والجدول الدوري والروابط الكيميائية' }},
+   { theme:'الأسبوع ٢ · النهايات والاتصال', desc:'دخول حقيقي لمنهج البكالوريا: النهايات، الاتصال، والتمثيل البياني', tasks:{
+     math:'دروس النهايات والاتصال + حل 8 تمارين متنوعة',
+     phys:'الحركة المستقيمة المتغيرة بانتظام: قوانين ورسوم بيانية',
+     chem:'التفاعلات الكيميائية وحساب الكميات (المول والتركيز)' }},
+   { theme:'الأسبوع ٣ · الاشتقاق', desc:'قواعد الاشتقاق وتطبيقاته الأولى على دراسة الدوال', tasks:{
+     math:'قواعد الاشتقاق (مجموع، جداء، قسمة، دالة مركبة) + تمارين',
+     phys:'قوانين نيوتن الثلاثة وتطبيقاتها على أجسام متعددة',
+     chem:'حساب pH والتفاعلات الحمضية القاعدية الأساسية' }},
+   { theme:'الأسبوع ٤ · دراسة تغيرات الدوال', desc:'تجميع الاشتقاق مع رسم الدوال ودراسة تغيراتها بشكل كامل', tasks:{
+     math:'دراسة تغيرات دالة كاملة (مجال، نهايات، اشتقاق، جدول، رسم) + مسألتان كاملتان',
+     phys:'الطاقة الميكانيكية: الشغل، القدرة، وحفظ الطاقة',
+     chem:'معايرة الحموض والأسس وحساب التراكيز المجهولة' }},
+   { theme:'الأسبوع ٥ · المتتاليات', desc:'المتتاليات العددية: حسابية وهندسية، نهاياتها وتطبيقاتها', tasks:{
+     math:'المتتاليات الحسابية والهندسية + مسائل تطبيقية مالية وفيزيائية',
+     phys:'الكهرباء: قانون أوم والدارات الكهربائية البسيطة',
+     chem:'الكيمياء العضوية: الألكانات والألكينات وتفاعلاتها الأساسية' }},
+   { theme:'الأسبوع ٦ · المرحلة الثانية: التعميق', desc:'بداية مرحلة ربط المواضيع ببعضها وحل مسائل مدمجة', tasks:{
+     math:'مسائل مدمجة (اشتقاق + متتاليات) من نمط أسئلة البكالوريا',
+     phys:'دارات كهربائية معقدة (توالي وتفرع) + قوانين كيرشوف الأساسية',
+     chem:'الكيمياء العضوية المتقدمة: الكحولات والأحماض الكربوكسيلية' }},
+   { theme:'الأسبوع ٧ · التكامل والاحتمالات', desc:'فصل جديد كامل: مبادئ التكامل، وتوسّع في الاحتمالات', tasks:{
+     math:'مبادئ التكامل (الدالة الأصلية، المساحات) + مدخل للاحتمالات',
+     phys:'المجال المغناطيسي والكهرومغناطيسية الأساسية',
+     chem:'موازنة المعادلات الكيميائية المعقدة وحسابات الديناميك الحراري' }},
+   { theme:'الأسبوع ٨ · حل أسئلة بكالوريا سابقة', desc:'تطبيق كل ما سبق على أسئلة دورات فعلية بشروط محاكاة للامتحان', tasks:{
+     math:'حل دورة بكالوريا كاملة سابقة لمادة الرياضيات تحت ضغط الوقت',
+     phys:'حل دورة بكالوريا كاملة سابقة لمادة الفيزياء تحت ضغط الوقت',
+     chem:'حل دورة بكالوريا كاملة سابقة لمادة الكيمياء تحت ضغط الوقت' }},
+   { theme:'الأسبوع ٩ · المراجعة الشاملة والجاهزية', desc:'تثبيت نهائي: الأخطاء الشائعة، القوانين المتكررة، وثقة الامتحان', tasks:{
+     math:'مراجعة شاملة لكل الفصول + قائمة الأخطاء الشائعة وتصحيحها',
+     phys:'مراجعة شاملة للقوانين والوحدات + حل أسئلة سريعة متنوعة',
+     chem:'مراجعة شاملة للمعادلات والتعاريف المفصلية قبل الامتحان' }}
+ ];
+ const REVIEW_WEEK_FALLBACK = CURRICULUM[CURRICULUM.length-1];
+
+ function curriculumForWeekIndex(i){
+   if(i < CURRICULUM.length) return CURRICULUM[i];
+   return REVIEW_WEEK_FALLBACK; // أي أسبوع زائد يصبح مراجعة شاملة إضافية
+ }
+
+ /* ============== الحالة والتخزين ============== */
+ const STORAGE_KEY = 'syr_bac_summer_planner_v2';
+ const todayISO = () => new Date().toISOString().slice(0,10);
+
+ function defaultStartEnd(){
+   const today = new Date();
+   const end = new Date(today.getFullYear(), 8, 1);
+   if(end <= today) end.setFullYear(end.getFullYear()+1);
+   return { start: today.toISOString().slice(0,10), end: end.toISOString().slice(0,10) };
+ }
+
+ let state = {
+   startDate: null,
+   endDate: null,
+   restDays: [5,6], // 0=أحد..6=سبت
+   subjects: [
+     { id:'math', name:'الرياضيات', emoji:'🔺', color:'var(--math)', track:'#fb4d6f', dailyMinutes:90 },
+     { id:'phys', name:'الفيزياء', emoji:'⚛️', color:'var(--phys)', track:'#3b82f6', dailyMinutes:60 },
+     { id:'chem', name:'الكيمياء', emoji:'🧪', color:'var(--chem)', track:'#22c55e', dailyMinutes:45 },
+   ],
+   nextSubjectIdx: 1,
+   completedDays: {},     // 'YYYY-MM-DD': true
+   minutesLog: {},        // 'YYYY-MM-DD': { subjId: minutesDone }
+   debtMinutes: {},        // subjId: دقائق متراكمة غير منجزة
+   lastDebtCheckDate: null
+ };
+
+ function loadState(){
+   try{
+     const raw = localStorage.getItem(STORAGE_KEY);
+     if(raw){
+       const parsed = JSON.parse(raw);
+       state = Object.assign({}, state, parsed);
+     }
+   }catch(e){}
+   if(!state.startDate || !state.endDate){
+     const d = defaultStartEnd();
+     state.startDate = state.startDate || d.start;
+     state.endDate = state.endDate || d.end;
+   }
+   if(!Array.isArray(state.restDays)) state.restDays = [5,6];
+ }
+ function saveState(){
+   try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+ }
+ loadState();
+
+ /* ============== عناصر مشتركة ============== */
+ const startDateInput = document.getElementById('startDate');
+ const endDateInput = document.getElementById('endDate');
+ const durationSummary = document.getElementById('durationSummary');
+ const daysVal = document.getElementById('daysVal');
+ const weekdayPicker = document.getElementById('weekdayPicker');
+ const subjectsContainer = document.getElementById('subjectsContainer');
+ const distributionContainer = document.getElementById('distributionContainer');
+ const addSubjectBtn = document.getElementById('addSubjectBtn');
+
+ const totalMinutesWeekEl = document.getElementById('totalMinutesWeek');
+ const totalSummerHoursEl = document.getElementById('totalSummerHours');
+ const burnoutBadge = document.getElementById('burnoutBadge');
+ const burnoutDesc = document.getElementById('burnoutDesc');
+ const restRatio = document.getElementById('restRatio');
+ const restBar = document.getElementById('restBar');
+
+ startDateInput.value = state.startDate;
+ endDateInput.value = state.endDate;
+
+ /* ============== منتقي أيام الأسبوع ============== */
+ const WEEKDAY_LABELS = ['أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
+ const WEEKDAY_SHORT = ['ح','ن','ث','ر','خ','ج','س'];
+
+ function studyDaysCount(){ return 7 - state.restDays.length; }
+
+ function renderWeekdayPicker(){
+   weekdayPicker.innerHTML = '';
+   for(let i=0;i<7;i++){
+     const isRest = state.restDays.includes(i);
+     const btn = document.createElement('button');
+     btn.type = 'button';
+     btn.className = 'aspect-square rounded-xl text-xs font-bold flex flex-col items-center justify-center gap-0.5 transition ' +
+       (isRest ? 'bg-[#0d1226] text-slate-500 border border-[var(--line-soft)]' : 'bg-indigo-500/15 text-indigo-300 border border-indigo-400/40');
+     btn.innerHTML = `<span>${WEEKDAY_SHORT[i]}</span><span class="text-[14px]">${isRest?'🌴':'📖'}</span>`;
+     btn.title = WEEKDAY_LABELS[i] + (isRest ? ' (راحة)' : ' (دراسة)');
+     btn.addEventListener('click', ()=>{
+       if(isRest){ state.restDays = state.restDays.filter(d=>d!==i); }
+       else { if(state.restDays.length >= 6) return; state.restDays.push(i); }
+       renderWeekdayPicker();
+       update();
+     });
+     weekdayPicker.appendChild(btn);
+   }
+   daysVal.textContent = studyDaysCount();
+ }
+
+ /* ============== أدوات تواريخ ============== */
+ function diffDays(a,b){
+   const A = new Date(a+'T00:00:00'), B = new Date(b+'T00:00:00');
+   return Math.max(0, Math.round((B - A) / 86400000));
+ }
+ function fmtDate(iso){
+   return new Date(iso+'T00:00:00').toLocaleDateString('ar-EG', { day:'numeric', month:'short' });
+ }
+ function isStudyDay(date){ return !state.restDays.includes(date.getDay()); }
+ function isTodayStudyDay(){ return isStudyDay(new Date()); }
+
+ function weekIndexForDate(date){
+   const start = new Date(state.startDate+'T00:00:00');
+   const d = Math.floor((new Date(date.toDateString()) - start) / 86400000);
+   return Math.max(0, Math.floor(d/7));
+ }
+ function currentWeekTheme(){
+   return curriculumForWeekIndex(weekIndexForDate(new Date()));
+ }
+
+ function remainingStudyDaysFromToday(){
+   const end = new Date(state.endDate+'T00:00:00');
+   let cursor = new Date(new Date().toDateString());
+   let count = 0;
+   while(cursor <= end && count < 400){
+     if(isStudyDay(cursor)) count++;
+     cursor = new Date(cursor.getTime()+86400000);
+   }
+   return Math.max(1, count);
+ }
+
+ /* ============== منطق الدين الزمني وإعادة التوزيع ============== */
+ let pendingCarryMessage = null;
+
+ function reconcileDebt(){
+   const today = todayISO();
+   if(state.lastDebtCheckDate === today) return;
+   const lastCheck = state.lastDebtCheckDate;
+   state.lastDebtCheckDate = today;
+   if(!lastCheck){ saveState(); return; }
+
+   let cursor = new Date(lastCheck+'T00:00:00');
+   const todayDate = new Date(today+'T00:00:00');
+   let anyDebtAdded = false;
+   const addedPerSubject = {};
+
+   while(cursor < todayDate){
+     const iso = cursor.toISOString().slice(0,10);
+     if(isStudyDay(cursor)){
+       state.subjects.forEach(s=>{
+         const target = s.dailyMinutes || 0;
+         if(target <= 0) return;
+         const done = (state.minutesLog[iso] || {})[s.id] || 0;
+         const missing = Math.max(0, target - done);
+         if(missing > 0){
+           state.debtMinutes[s.id] = (state.debtMinutes[s.id] || 0) + missing;
+           addedPerSubject[s.id] = (addedPerSubject[s.id] || 0) + missing;
+           anyDebtAdded = true;
+         }
+       });
+     }
+     cursor = new Date(cursor.getTime()+86400000);
+   }
+
+   if(anyDebtAdded){
+     const parts = Object.entries(addedPerSubject).map(([id, mins])=>{
+       const s = state.subjects.find(x=>x.id===id);
+       return s ? `${mins} د ${s.emoji}${s.name}` : null;
+     }).filter(Boolean);
+     pendingCarryMessage = 'لم تُكمل وقت الأيام الماضية: ' + parts.join('، ') + '. أُضيف لمهامك القادمة هذا الأسبوع موزّعاً بالدقيقة.';
+   }
+   saveState();
+ }
+
+ function todayRequirement(subj){
+   const base = subj.dailyMinutes || 0;
+   const debtAmt = state.debtMinutes[subj.id] || 0;
+   if(debtAmt <= 0) return { base, extra:0, total:base };
+   const spread = remainingStudyDaysFromToday();
+   const extra = Math.ceil(debtAmt / spread);
+   return { base, extra, total: base + extra };
+ }
+
+ function settleDebtOnProgress(subjId, doneMinutes, requirement){
+   const debtAmt = state.debtMinutes[subjId] || 0;
+   if(debtAmt <= 0) return;
+   const overBase = Math.max(0, doneMinutes - requirement.base);
+   if(overBase > 0) state.debtMinutes[subjId] = Math.max(0, debtAmt - overBase);
+ }
+
+ /* ============== سلايدرز المواد (تبويب المخطط) ============== */
+ function renderSubjectSliders(){
+   subjectsContainer.innerHTML = '';
+   state.subjects.forEach(subj=>{
+     const max = subj.maxMinutes || 240;
+     const fillPct = Math.min(100, (subj.dailyMinutes / max) * 100);
+     const wrap = document.createElement('div');
+     wrap.className = 'bg-[#0d1226] p-4 rounded-2xl border border-[var(--line-soft)]';
+     wrap.innerHTML = `
+       <div class="flex justify-between items-center mb-2">
+         <span class="font-bold text-sm flex items-center gap-2">
+           <span class="w-2.5 h-2.5 rounded-full" style="background:${subj.color}"></span>
+           ${subj.emoji} ${subj.name} يومياً
+         </span>
+         <div class="flex items-center gap-1.5">
+           <span class="text-xs px-2 py-0.5 rounded-lg border font-mono num-font" style="background:${subj.color}1a;color:${subj.color};border-color:${subj.color}33">
+             <span class="subj-val">${subj.dailyMinutes}</span> د
+           </span>
+           ${subj.removable ? `<button class="remove-subj text-slate-500 hover:text-rose-400 text-xs px-1.5" title="حذف">✕</button>` : ''}
+         </div>
+       </div>
+       <input type="range" class="w-full cursor-pointer subj-slider" min="0" max="${max}" step="5" value="${subj.dailyMinutes}" style="--track-color:${subj.track}; --fill:${fillPct}%">
+     `;
+     const slider = wrap.querySelector('.subj-slider');
+     const valSpan = wrap.querySelector('.subj-val');
+     slider.addEventListener('input', ()=>{
+       subj.dailyMinutes = parseInt(slider.value);
+       valSpan.textContent = subj.dailyMinutes;
+       slider.style.setProperty('--fill', Math.min(100,(subj.dailyMinutes/max)*100) + '%');
+       update();
+     });
+     if(subj.removable){
+       wrap.querySelector('.remove-subj').addEventListener('click', ()=>{
+         state.subjects = state.subjects.filter(s=>s.id !== subj.id);
+         renderSubjectSliders();
+         update();
+       });
+     }
+     subjectsContainer.appendChild(wrap);
+   });
+ }
+
+ const palette = [
+   { track:'#f59e0b', color:'var(--extra)' },
+   { track:'#a855f7', color:'#a855f7' },
+   { track:'#ec4899', color:'#ec4899' },
+   { track:'#14b8a6', color:'#14b8a6' },
+ ];
+ addSubjectBtn.addEventListener('click', ()=>{
+   const p = palette[state.nextSubjectIdx % palette.length];
+   state.nextSubjectIdx++;
+   state.subjects.push({
+     id:'subj_'+Date.now(), name:'مادة إضافية', emoji:'📘', color:p.color, track:p.track,
+     dailyMinutes:30, maxMinutes:180, removable:true
+   });
+   renderSubjectSliders();
+   update();
+ });
+
+ startDateInput.addEventListener('change', ()=>{ state.startDate = startDateInput.value; update(); });
+ endDateInput.addEventListener('change', ()=>{ state.endDate = endDateInput.value; update(); });
+
+ /* ============== التحديث الرئيسي (تبويب المخطط) ============== */
+ function dailyTotalMinutes(){
+   return state.subjects.reduce((sum,s)=>sum + (s.dailyMinutes||0), 0);
+ }
+
+ function update(){
+   daysVal.textContent = studyDaysCount();
+
+   const totalDaysSpan = diffDays(state.startDate, state.endDate);
+   const weeksSpan = totalDaysSpan / 7;
+   durationSummary.textContent = totalDaysSpan > 0
+     ? `من ${fmtDate(state.startDate)} إلى ${fmtDate(state.endDate)} — حوالي ${Math.round(weeksSpan)} أسبوعاً متبقياً`
+     : 'اختر تاريخين صحيحين لعرض مدة الصيف';
+
+   const dailyMin = dailyTotalMinutes();
+   const weeklyMin = dailyMin * studyDaysCount();
+   const weeklyHours = weeklyMin/60;
+   const totalSummerHours = weeklyHours * weeksSpan;
+
+   totalMinutesWeekEl.textContent = weeklyMin;
+   totalSummerHoursEl.textContent = Math.round(totalSummerHours);
+
+   if(weeklyHours === 0){
+     setBurnout('بدون دراسة حالياً 💤', 'bg-slate-800 text-slate-400 border border-slate-700', 'ابدأ بضبط بعض الدقائق للوصول إلى هدفك!');
+   } else if(weeklyHours <= 18){
+     setBurnout('آمن ومستقر جداً ✅', 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20', 'خطة متزنة تمنحك استمرارية طويلة دون ملل.');
+   } else if(weeklyHours <= 28){
+     setBurnout('مثالي ونشط 🚀', 'bg-blue-500/10 text-blue-400 border border-blue-500/20', 'مجهود ممتاز يتناسب مع طموح العلامة التامة.');
+   } else if(weeklyHours <= 35){
+     setBurnout('حمل دراسي مرتفع ⚠️', 'bg-amber-500/10 text-amber-400 border border-amber-500/20', 'احذر قد تشعر ببعض التعب بعد أسابيع. خفف قليلاً.');
+   } else {
+     setBurnout('خطر احتراق دراسي مرتفع ❌', 'bg-red-500/10 text-red-400 border border-red-500/20', 'هذا الحمل غير واقعي للصيف وقد يؤدي للنفور سريعاً!');
+   }
+
+   const totalWeekHours = 168;
+   const freeHours = totalWeekHours - weeklyHours;
+   const restPct = Math.max(0, Math.min(100, Math.round((freeHours/totalWeekHours)*100)));
+   restRatio.textContent = restPct + '%';
+   restBar.style.width = restPct + '%';
+
+   renderDistribution(dailyMin);
+   if(!sections.today.classList.contains('hidden')) renderToday();
+   if(!sections.timeline.classList.contains('hidden')) renderTimeline();
+   if(!sections.tracker.classList.contains('hidden')) renderTracker();
+
+   saveState();
+ }
+
+ function setBurnout(text, cls, desc){
+   burnoutBadge.textContent = text;
+   burnoutBadge.className = 'text-sm font-bold px-4 py-1.5 rounded-full mt-2.5 inline-block transition-all duration-300 ' + cls;
+   burnoutDesc.textContent = desc;
+ }
+
+ function renderDistribution(dailyMin){
+   distributionContainer.innerHTML = '';
+   state.subjects.forEach(s=>{
+     const pct = dailyMin > 0 ? Math.round(((s.dailyMinutes||0)/dailyMin)*100) : 0;
+     const row = document.createElement('div');
+     row.innerHTML = `
+       <div class="flex justify-between text-xs mb-1">
+         <span class="text-slate-400">${s.emoji} ${s.name}</span>
+         <span class="font-mono num-font" style="color:${s.color}">${pct}%</span>
+       </div>
+       <div class="w-full bg-[#0d1226] h-1.5 rounded-full overflow-hidden">
+         <div class="h-full transition-all duration-500" style="width:${pct}%; background:${s.color}"></div>
+       </div>`;
+     distributionContainer.appendChild(row);
+   });
+ }
+
+ /* ============== تبويب الخط الزمني ============== */
+ function renderTimeline(){
+   const totalDays = diffDays(state.startDate, state.endDate);
+   const elapsed = diffDays(state.startDate, todayISO() < state.endDate ? todayISO() : state.endDate);
+   const clampedElapsed = Math.max(0, Math.min(totalDays, elapsed));
+   const pct = totalDays > 0 ? (clampedElapsed/totalDays)*100 : 0;
+
+   document.getElementById('timelineSubtitle').textContent =
+     `${fmtDate(state.startDate)} ← اليوم ← ${fmtDate(state.endDate)} (${Math.round(pct)}٪ من الصيف انقضى)`;
+   document.getElementById('timelineStartLabel').textContent = fmtDate(state.startDate);
+   document.getElementById('timelineEndLabel').textContent = fmtDate(state.endDate);
+   document.getElementById('todayMarker').style.right = Math.max(0, Math.min(100, pct)) + '%';
+
+   document.getElementById('weeksLeft').textContent = Math.max(0, Math.round((totalDays - clampedElapsed)/7));
+   document.getElementById('studyDaysLeft').textContent = remainingStudyDaysFromToday();
+   document.getElementById('percentElapsed').textContent = Math.round(pct) + '%';
+
+   const start = new Date(state.startDate+'T00:00:00');
+   const addDays = (d,n)=> new Date(d.getTime() + n*86400000);
+   const p1End = addDays(start, Math.round(totalDays*0.34));
+   const p2End = addDays(start, Math.round(totalDays*0.67));
+   const end = new Date(state.endDate+'T00:00:00');
+   const fmt = d => d.toLocaleDateString('ar-EG',{day:'numeric',month:'short'});
+   document.getElementById('phase1Dates').textContent = `${fmt(start)} – ${fmt(p1End)}`;
+   document.getElementById('phase2Dates').textContent = `${fmt(p1End)} – ${fmt(p2End)}`;
+   document.getElementById('phase3Dates').textContent = `${fmt(p2End)} – ${fmt(end)}`;
+
+   const weeksSpan = totalDays/7;
+   const summaryContainer = document.getElementById('summaryBySubject');
+   summaryContainer.innerHTML = '';
+   state.subjects.forEach(s=>{
+     const weeklyHrs = ((s.dailyMinutes||0) * studyDaysCount())/60;
+     const totalHrs = Math.round(weeklyHrs * weeksSpan);
+     const row = document.createElement('div');
+     row.className = 'flex items-center justify-between panel-soft px-4 py-3 rounded-xl';
+     row.innerHTML = `
+       <span class="text-xs sm:text-sm flex items-center gap-2">
+         <span class="w-2.5 h-2.5 rounded-full" style="background:${s.color}"></span>
+         ${s.emoji} ${s.name}
+       </span>
+       <span class="text-sm font-extrabold num-font" style="color:${s.color}">${totalHrs} <span class="text-[10px] text-slate-500 font-normal">ساعة</span></span>`;
+     summaryContainer.appendChild(row);
+   });
+
+   const curriculumList = document.getElementById('curriculumList');
+   curriculumList.innerHTML = '';
+   const totalWeeks = Math.max(1, Math.ceil(totalDays/7));
+   const curWeekIdx = weekIndexForDate(new Date());
+   for(let w=0; w<Math.min(totalWeeks, 26); w++){
+     const item = curriculumForWeekIndex(w);
+     const isPast = w < curWeekIdx;
+     const isCurrent = w === curWeekIdx;
+     const row = document.createElement('div');
+     row.className = 'panel-soft p-3.5 rounded-xl' + (isCurrent ? ' ring-1 ring-cyan-400/50' : '') + (isPast ? ' opacity-50' : '');
+     row.innerHTML = `
+       <div class="flex items-center justify-between">
+         <span class="text-[11px] font-bold ${isCurrent?'text-cyan-300':'text-slate-300'}">${item.theme}</span>
+         ${isCurrent ? '<span class="text-[9px] bg-cyan-400/15 text-cyan-300 px-2 py-0.5 rounded-full">الأسبوع الحالي</span>' : ''}
+       </div>
+       <p class="text-[10px] text-slate-500 mt-1">${item.desc}</p>`;
+     curriculumList.appendChild(row);
+   }
+ }
+
+ /* ============== شريط الأسبوع المصغر (مهام اليوم) ============== */
+ function renderWeekStrip(){
+   const strip = document.getElementById('weekStrip');
+   strip.innerHTML = '';
+   const today = new Date(new Date().toDateString());
+   const todayDow = today.getDay();
+   const sunday = new Date(today.getTime() - todayDow*86400000);
+
+   for(let i=0;i<7;i++){
+     const d = new Date(sunday.getTime() + i*86400000);
+     const iso = d.toISOString().slice(0,10);
+     const isRest = state.restDays.includes(i);
+     const isToday = iso === todayISO();
+     const isPast = d < today;
+     const isDoneDay = !!state.completedDays[iso];
+
+     let stateCls, icon;
+     if(isRest){ stateCls = 'bg-[#0d1226] text-slate-600 border border-[var(--line-soft)]'; icon = '🌴'; }
+     else if(isDoneDay){ stateCls = 'bg-emerald-500/80 text-[#0a0e1a] border border-emerald-400'; icon = '✓'; }
+     else if(isPast){ stateCls = 'bg-rose-500/15 text-rose-300 border border-rose-500/30'; icon = '✕'; }
+     else if(isToday){ stateCls = 'bg-cyan-500/15 text-cyan-300 border border-cyan-400/50'; icon = '•'; }
+     else { stateCls = 'bg-[#0d1226] text-slate-500 border border-[var(--line-soft)]'; icon = ''; }
+
+     const cell = document.createElement('div');
+     cell.className = 'aspect-square rounded-lg text-[10px] font-bold flex flex-col items-center justify-center gap-0.5 ' + stateCls + (isToday?' ring-2 ring-cyan-300':'');
+     cell.innerHTML = `<span>${WEEKDAY_SHORT[i]}</span><span class="text-[11px]">${icon}</span>`;
+     cell.title = d.toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'});
+     strip.appendChild(cell);
+   }
+ }
+
+ /* ============== تبويب مهام اليوم ============== */
+ function getTodayLog(){
+   const today = todayISO();
+   if(!state.minutesLog[today]) state.minutesLog[today] = {};
+   return state.minutesLog[today];
+ }
+
+ function renderToday(){
+   reconcileDebt();
+
+   const today = new Date();
+   document.getElementById('todayDateLabel').textContent =
+     today.toLocaleDateString('ar-EG', { weekday:'long', day:'numeric', month:'long' });
+
+   renderWeekStrip();
+
+   const carryBanner = document.getElementById('carryBanner');
+   const carryBannerText = document.getElementById('carryBannerText');
+   if(pendingCarryMessage){
+     carryBanner.classList.remove('hidden');
+     carryBannerText.textContent = pendingCarryMessage;
+   } else {
+     carryBanner.classList.add('hidden');
+   }
+
+   const log = getTodayLog();
+   const container = document.getElementById('todayTasksContainer');
+   container.innerHTML = '';
+   document.getElementById('successBanner').classList.add('hidden');
+
+   const studyToday = isTodayStudyDay();
+   const weekThemeBanner = document.getElementById('weekThemeBanner');
+
+   if(!studyToday){
+     weekThemeBanner.classList.add('hidden');
+     container.innerHTML = `
+       <div class="panel p-6 text-center fade-in">
+         <span class="text-2xl">🌴</span>
+         <p class="text-sm font-bold mt-2">اليوم يوم راحة مجدول</p>
+         <p class="text-[11px] text-slate-500 mt-1">لا مهام إجبارية اليوم حسب توزيعك الأسبوعي. استرح بلا شعور بالذنب.</p>
+       </div>`;
+     document.getElementById('todayMinutesLabel').textContent = 'يوم راحة';
+     const ring = document.getElementById('dayProgressRing');
+     document.getElementById('dayProgressPct').textContent = '🌴';
+     ring.style.strokeDashoffset = '0';
+     return;
+   }
+
+   if(state.subjects.every(s => !(s.dailyMinutes>0))){
+     weekThemeBanner.classList.add('hidden');
+     container.innerHTML = `
+       <div class="panel p-6 text-center fade-in">
+         <span class="text-2xl">🛠️</span>
+         <p class="text-sm font-bold mt-2">لم تحدد دقائق إجبارية بعد</p>
+         <p class="text-[11px] text-slate-500 mt-1">اذهب لتبويب «المخطط» وحدد عدد الدقائق اليومية لكل مادة.</p>
+       </div>`;
+     document.getElementById('todayMinutesLabel').textContent = '٠ من ٠ دقيقة';
+     return;
+   }
+
+   const theme = currentWeekTheme();
+   weekThemeBanner.classList.remove('hidden');
+   document.getElementById('weekThemeLabel').textContent = '🗂️ ' + theme.theme;
+   document.getElementById('weekThemeDesc').textContent = theme.desc;
+
+   let totalReq = 0, totalDone = 0;
+
+   state.subjects.forEach(s=>{
+     if(!(s.dailyMinutes>0)) return;
+     const req = todayRequirement(s);
+     const doneRaw = log[s.id] || 0;
+     const done = Math.min(req.total, doneRaw);
+     const isDone = done >= req.total;
+     totalReq += req.total;
+     totalDone += done;
+
+     const taskDesc = (theme.tasks && theme.tasks[s.id]) || 'مراجعة عامة وحل تمارين متنوعة في المادة';
+     const fillPct = req.total>0 ? Math.min(100,(done/req.total)*100) : 0;
+
+     const card = document.createElement('div');
+     card.className = 'panel p-4 fade-in task-card' + (isDone ? ' done' : '');
+     card.innerHTML = `
+       <div class="flex items-start gap-3">
+         <div class="check-circle ${isDone?'checked':''} mt-0.5" data-subj="${s.id}">
+           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0a0e1a" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+         </div>
+         <div class="flex-1 min-w-0">
+           <div class="flex items-center justify-between gap-2">
+             <span class="text-sm font-bold task-title flex items-center gap-1.5">
+               <span class="w-2 h-2 rounded-full shrink-0" style="background:${s.color}"></span>
+               ${s.emoji} ${s.name}
+             </span>
+             <span class="text-xs font-mono num-font shrink-0" style="color:${s.color}">${done}/${req.total} د</span>
+           </div>
+           <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">${taskDesc}</p>
+           ${req.extra>0 ? `<span class="debt-chip inline-block mt-1.5">+${req.extra} د مُرحّلة من أيام سابقة</span>` : ''}
+         </div>
+       </div>
+
+       <div class="mt-3.5 pr-9">
+         <input type="range" class="w-full cursor-pointer minutes-slider" min="0" max="${req.total}" step="5" value="${done}" style="--track-color:${s.color}; --fill:${fillPct}%">
+         <div class="flex justify-between text-[10px] text-slate-500 mt-1 num-font">
+           <span>0</span>
+           <span>حرّك بحسب دقائقك الفعلية</span>
+           <span>${req.total} د</span>
+         </div>
+       </div>
+     `;
+     container.appendChild(card);
+
+     const slider = card.querySelector('.minutes-slider');
+     slider.addEventListener('input', ()=>{
+       const v = parseInt(slider.value);
+       const l = getTodayLog();
+       l[s.id] = v;
+       const pctFill = req.total>0 ? Math.min(100,(v/req.total)*100) : 0;
+       slider.style.setProperty('--fill', pctFill + '%');
+       settleDebtOnProgress(s.id, v, req);
+       saveState();
+       const valEl = card.querySelector('.font-mono.num-font');
+       if(valEl) valEl.textContent = `${v}/${req.total} د`;
+       card.classList.toggle('done', v >= req.total);
+       const circle = card.querySelector('.check-circle');
+       circle.classList.toggle('checked', v >= req.total);
+     });
+     slider.addEventListener('change', ()=>{ renderToday(); });
+
+     card.querySelector('.check-circle').addEventListener('click', ()=>{
+       const l = getTodayLog();
+       l[s.id] = isDone ? 0 : req.total;
+       settleDebtOnProgress(s.id, l[s.id], req);
+       saveState();
+       renderToday();
+     });
+   });
+
+   const pct = totalReq>0 ? Math.round((totalDone/totalReq)*100) : 0;
+   document.getElementById('dayProgressPct').textContent = pct + '%';
+   document.getElementById('todayMinutesLabel').textContent = `${totalDone} من ${totalReq} دقيقة`;
+   const ring = document.getElementById('dayProgressRing');
+   const circumference = 169.6;
+   ring.style.strokeDashoffset = circumference - (circumference*pct/100);
+
+   const banner = document.getElementById('successBanner');
+   if(totalReq>0 && totalDone>=totalReq){
+     if(!state.completedDays[todayISO()]){
+       state.completedDays[todayISO()] = true;
+       saveState();
+       renderWeekStrip();
+     }
+     banner.classList.remove('hidden');
+     document.getElementById('successBannerText').textContent =
+       Object.values(state.debtMinutes).some(v=>v>0)
+         ? 'أنجزت كل دقائق اليوم! ولا يزال هناك وقت متراكم يتقلّص تدريجياً 💪'
+         : 'أنجزت كل دقائق اليوم بالكامل، ولا رصيد متراكم عليك! 🎉';
+   } else {
+     banner.classList.add('hidden');
+   }
+
+   const debtSummary = document.getElementById('debtSummary');
+   const debtList = document.getElementById('debtList');
+   const activeDebts = Object.entries(state.debtMinutes).filter(([id,amt])=>amt>0);
+   if(activeDebts.length){
+     debtSummary.classList.remove('hidden');
+     debtList.innerHTML = activeDebts.map(([id,amt])=>{
+       const s = state.subjects.find(x=>x.id===id);
+       if(!s) return '';
+       return `<div class="flex justify-between text-[11px]"><span class="text-slate-400">${s.emoji} ${s.name}</span><span class="font-mono num-font text-amber-300">${amt} دقيقة</span></div>`;
+     }).join('');
+   } else {
+     debtSummary.classList.add('hidden');
+   }
+ }
+
+ /* ============== تبويب السجل ============== */
+ const markTodayBtn = document.getElementById('markTodayBtn');
+ const markTodayText = document.getElementById('markTodayText');
+ const streakCount = document.getElementById('streakCount');
+ const completedDaysCount = document.getElementById('completedDaysCount');
+ const weeksGrid = document.getElementById('weeksGrid');
+ const resetTrackerBtn = document.getElementById('resetTrackerBtn');
+
+ document.getElementById('trackerTodayDate').textContent = new Date().toLocaleDateString('ar-EG', { weekday:'long', day:'numeric', month:'long' });
+
+ function calcStreak(){
+   let streak = 0;
+   let cursor = new Date();
+   while(true){
+     const iso = cursor.toISOString().slice(0,10);
+     if(state.completedDays[iso]){ streak++; cursor = new Date(cursor.getTime() - 86400000); }
+     else break;
+   }
+   return streak;
+ }
+ function calcBestStreak(){
+   const isoList = Object.keys(state.completedDays).filter(k=>state.completedDays[k]).sort();
+   if(!isoList.length) return 0;
+   let best = 1, cur = 1;
+   for(let i=1;i<isoList.length;i++){
+     const prev = new Date(isoList[i-1]+'T00:00:00');
+     const curr = new Date(isoList[i]+'T00:00:00');
+     const gap = Math.round((curr-prev)/86400000);
+     cur = (gap === 1) ? cur+1 : 1;
+     if(cur > best) best = cur;
+   }
+   return best;
+ }
+
+ function renderTracker(){
+   const today = todayISO();
+   const isMarked = !!state.completedDays[today];
+   markTodayBtn.className = 'shrink-0 w-12 h-12 rounded-full border-2 text-xl font-bold flex items-center justify-center transition ' +
+     (isMarked ? 'border-emerald-400 bg-emerald-400/20 text-emerald-300' : 'border-emerald-400/40 text-emerald-300 hover:bg-emerald-400/10');
+   markTodayText.textContent = isMarked ? 'أحسنت! تم تسجيل اليوم ✨' : 'سجّل اليوم كيوم ملتزم';
+
+   streakCount.textContent = calcStreak();
+   document.getElementById('bestStreakCount').textContent = Math.max(calcBestStreak(), calcStreak());
+   completedDaysCount.textContent = Object.values(state.completedDays).filter(Boolean).length;
+
+   weeksGrid.innerHTML = '';
+   const start = new Date(state.startDate+'T00:00:00');
+   const end = new Date(state.endDate+'T00:00:00');
+   const totalDays = Math.max(1, diffDays(state.startDate, state.endDate));
+   const totalWeeks = Math.min(20, Math.ceil(totalDays/7));
+
+   for(let w=0; w<totalWeeks; w++){
+     const weekRow = document.createElement('div');
+     weekRow.className = 'flex items-center gap-2';
+     const label = document.createElement('span');
+     label.className = 'text-[10px] text-slate-500 w-12 shrink-0 num-font';
+     label.textContent = 'أسبوع ' + (w+1);
+     weekRow.appendChild(label);
+
+     const cellsWrap = document.createElement('div');
+     cellsWrap.className = 'flex gap-1.5 flex-1';
+     for(let d=0; d<7; d++){
+       const dayIdx = w*7 + d;
+       const cellDate = new Date(start.getTime() + dayIdx*86400000);
+       if(cellDate > end) break;
+       const iso = cellDate.toISOString().slice(0,10);
+       const isDone = !!state.completedDays[iso];
+       const isToday = iso === today;
+       const isFuture = cellDate > new Date(new Date().toDateString());
+
+       const cell = document.createElement('button');
+       cell.className = 'day-cell flex-1 aspect-square rounded-md text-[9px] flex items-center justify-center font-bold num-font ' +
+         (isDone ? 'bg-emerald-500/80 text-[#0a0e1a]' : 'bg-[#0d1226] text-slate-600 border border-[var(--line-soft)]') +
+         (isToday ? ' ring-2 ring-cyan-300' : '');
+       cell.textContent = cellDate.getDate();
+       cell.title = cellDate.toLocaleDateString('ar-EG', { weekday:'long', day:'numeric', month:'long' });
+       cell.disabled = isFuture;
+       if(isFuture) cell.style.opacity = '0.35';
+       cell.addEventListener('click', ()=>{
+         if(state.completedDays[iso]) delete state.completedDays[iso];
+         else state.completedDays[iso] = true;
+         saveState();
+         renderTracker();
+       });
+       cellsWrap.appendChild(cell);
+     }
+     weekRow.appendChild(cellsWrap);
+     weeksGrid.appendChild(weekRow);
+   }
+ }
+
+ markTodayBtn.addEventListener('click', ()=>{
+   const today = todayISO();
+   if(state.completedDays[today]) delete state.completedDays[today];
+   else state.completedDays[today] = true;
+   saveState();
+   renderTracker();
+ });
+
+ resetTrackerBtn.addEventListener('click', ()=>{
+   if(confirm('هل أنت متأكد من حذف كل سجل الالتزام؟ لا يمكن التراجع عن هذا.')){
+     state.completedDays = {};
+     saveState();
+     renderTracker();
+   }
+ });
+
+ /* ============== التبويبات ============== */
+ const tabs = document.querySelectorAll('.tab-btn');
+ const sections = {
+   today: document.getElementById('tab-today'),
+   planner: document.getElementById('tab-planner'),
+   timeline: document.getElementById('tab-timeline'),
+   tracker: document.getElementById('tab-tracker'),
+   ai: document.getElementById('tab-ai') // التبويب الجديد
+ };
+ 
+ tabs.forEach(btn=>{
+   btn.addEventListener('click', ()=>{
+     tabs.forEach(b=>b.classList.remove('active'));
+     btn.classList.add('active');
+     Object.values(sections).forEach(s=>s.classList.add('hidden'));
+     const target = sections[btn.dataset.tab];
+     target.classList.remove('hidden');
+     target.classList.add('fade-in');
+     if(btn.dataset.tab === 'today') renderToday();
+     if(btn.dataset.tab === 'timeline') renderTimeline();
+     if(btn.dataset.tab === 'tracker') renderTracker();
+     if(btn.dataset.tab === 'ai') renderAiTab();
+   });
+ });
+
+ /* ============== المعلم الذكي (Gemini API Integration) ============== */
+ const AI_KEY_STORAGE = 'gemini_api_key';
+ const aiSetupDiv = document.getElementById('ai-setup');
+ const aiChatInterface = document.getElementById('ai-chat-interface');
+ const aiKeyInput = document.getElementById('ai-api-key-input');
+ const aiSaveKeyBtn = document.getElementById('ai-save-key-btn');
+ const aiRemoveKeyBtn = document.getElementById('ai-remove-key-btn');
+ 
+ const aiChatBox = document.getElementById('ai-chat-box');
+ const aiTextInput = document.getElementById('ai-text-input');
+ const aiSendBtn = document.getElementById('ai-send-btn');
+ const aiImageInput = document.getElementById('ai-image-input');
+ const aiImagePreviewContainer = document.getElementById('ai-image-preview-container');
+ const aiImagePreview = document.getElementById('ai-image-preview');
+ const aiRemoveImageBtn = document.getElementById('ai-remove-image');
+
+ let currentAiImageBase64 = null;
+ let currentAiImageMime = null;
+
+ // تهيئة مكتبة Marked إذا كانت موجودة لجعل النصوص أجمل
+ if(typeof marked !== 'undefined'){
+   marked.setOptions({ breaks: true, gfm: true });
+ }
+
+ function getAiKey() { return localStorage.getItem(AI_KEY_STORAGE); }
+ 
+ function renderAiTab() {
+   if (getAiKey()) {
+     aiSetupDiv.classList.add('hidden');
+     aiChatInterface.classList.remove('hidden');
+   } else {
+     aiSetupDiv.classList.remove('hidden');
+     aiChatInterface.classList.add('hidden');
+   }
+ }
+
+ aiSaveKeyBtn.addEventListener('click', () => {
+   const key = aiKeyInput.value.trim();
+   if (key.length > 20) {
+     localStorage.setItem(AI_KEY_STORAGE, key);
+     renderAiTab();
+   } else {
+     alert("الرجاء إدخال مفتاح API صحيح.");
+   }
+ });
+
+ aiRemoveKeyBtn.addEventListener('click', () => {
+   if(confirm("هل تريد حذف المفتاح من المتصفح؟")) {
+     localStorage.removeItem(AI_KEY_STORAGE);
+     renderAiTab();
+   }
+ });
+
+ // معالجة اختيار الصورة
+ aiImageInput.addEventListener('change', (e) => {
+   const file = e.target.files[0];
+   if (file) {
+     const reader = new FileReader();
+     reader.onload = (event) => {
+       currentAiImageBase64 = event.target.result.split(',')[1];
+       currentAiImageMime = file.type;
+       aiImagePreview.src = event.target.result;
+       aiImagePreviewContainer.classList.remove('hidden');
+     };
+     reader.readAsDataURL(file);
+   }
+ });
+
+ aiRemoveImageBtn.addEventListener('click', () => {
+   aiImageInput.value = '';
+   currentAiImageBase64 = null;
+   currentAiImageMime = null;
+   aiImagePreviewContainer.classList.add('hidden');
+ });
+
+ function addChatMessage(text, sender, imageUrl = null) {
+   const msgDiv = document.createElement('div');
+   msgDiv.className = `chat-msg fade-in ${sender}`;
+   
+   // استخدام Marked للردود إذا كان الذكاء الاصطناعي، أو نص عادي للمستخدم
+   if (sender === 'ai' && typeof marked !== 'undefined') {
+     msgDiv.innerHTML = marked.parse(text);
+   } else {
+     msgDiv.textContent = text;
+   }
+
+   if (imageUrl) {
+     const img = document.createElement('img');
+     img.src = imageUrl;
+     msgDiv.appendChild(img);
+   }
+   
+   aiChatBox.appendChild(msgDiv);
+   aiChatBox.scrollTop = aiChatBox.scrollHeight;
+ }
+
+ function addTypingIndicator() {
+   const msgDiv = document.createElement('div');
+   msgDiv.className = `chat-msg ai fade-in flex items-center gap-1 min-h-[40px]`;
+   msgDiv.id = 'ai-typing';
+   msgDiv.innerHTML = `<span class="ai-typing-dot"></span><span class="ai-typing-dot"></span><span class="ai-typing-dot"></span>`;
+   aiChatBox.appendChild(msgDiv);
+   aiChatBox.scrollTop = aiChatBox.scrollHeight;
+ }
+
+ function removeTypingIndicator() {
+   const typing = document.getElementById('ai-typing');
+   if (typing) typing.remove();
+ }
+
+ // إنشاء سياق الخطة ليفهم الذكاء الاصطناعي حالة الطالب
+ function buildPlannerContext() {
+   const totalDays = Object.keys(state.completedDays).length;
+   const debtsStr = Object.entries(state.debtMinutes)
+     .map(([k,v]) => `${state.subjects.find(s=>s.id===k)?.name || k}: ${v} دقيقة`)
+     .join('، ');
+   
+   return `
+     [سياق النظام الداخلي:
+     أنت "المعلم الذكي"، موجه ومدرس افتراضي مخصص لطالب بالصف الثالث الثانوي (بكالوريا) فرع علمي في سوريا، يدرس ضمن المنهاج السوري الحالي، ويسعى بجدية لتحقيق العلامة التامة (240/240) في الرياضيات والفيزياء والكيمياء.
+     وظيفتك:
+     1. تصحيح صور الحلول التي يرفعها الطالب للمسائل بدقة متناهية، وشرح الأخطاء بلطف واحترافية.
+     2. شرح المفاهيم العلمية بطريقة مبسطة، وتذكير الطالب بالقوانين المهمة.
+     3. تشجيع الطالب باستخدام لغة عربية فصحى سلسة، تتخللها بعض العبارات المحفزة باللهجة السورية الخفيفة (مثل: بطل، يعطيك العافية، وحش).
+     4. استخدام التنسيق Markdown في الردود لتلوين وتنظيم العناوين والمعادلات (استخدم $ للمعادلات المدمجة و $$ للمنفصلة).
+     
+     بيانات أداء الطالب الحالية في خطته:
+     - الأيام الملتزم بها بالكامل: ${totalDays} أيام.
+     - السلسلة الحالية (Streak): ${calcStreak()} يوم.
+     - الدين الزمني (المهام المتراكمة التي تكاسل عنها): ${debtsStr || 'لا يوجد، أداء مثالي!'}
+     استخدم هذه البيانات حصراً إذا طلب الطالب تحليل وضعه أو طلب نصيحة للجدول.]
+   `;
+ }
+
+ async function sendToGemini(userText, imageBase64, mimeType, previewUrl) {
+   const key = getAiKey();
+   if (!key) return;
+
+   if (!userText.trim() && !imageBase64) return;
+
+   // إضافة رسالة المستخدم للواجهة
+   addChatMessage(userText, 'user', previewUrl);
+   
+   // تنظيف المدخلات
+   aiTextInput.value = '';
+   aiRemoveImageBtn.click(); // يحذف الصورة المحملة
+   addTypingIndicator();
+
+   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
+   
+   const parts = [
+     { text: buildPlannerContext() + "\n\nنص رسالة الطالب: " + (userText || "مرفق صورة للتصحيح أو الشرح") }
+   ];
+
+   if (imageBase64) {
+     parts.push({
+       inlineData: { data: imageBase64, mimeType: mimeType }
+     });
+   }
+
+   try {
+     const response = await fetch(url, {
+       method: 'POST',
+       headers: { 'Content-Type': 'application/json' },
+       body: JSON.stringify({ contents: [{ parts: parts }] })
+     });
+
+     const data = await response.json();
+     removeTypingIndicator();
+
+     if (data.error) {
+       addChatMessage("❌ عذراً، حدث خطأ: " + data.error.message, 'ai');
+     } else if (data.candidates && data.candidates[0].content) {
+       const aiText = data.candidates[0].content.parts[0].text;
+       addChatMessage(aiText, 'ai');
+     } else {
+       addChatMessage("عذراً، لم أتمكن من توليد الرد. حاول مرة أخرى.", 'ai');
+     }
+   } catch (err) {
+     removeTypingIndicator();
+     addChatMessage("❌ حدث خطأ في الاتصال. تأكد من اتصالك بالإنترنت ومن صحة مفتاح API.", 'ai');
+   }
+ }
+
+ aiSendBtn.addEventListener('click', () => {
+   sendToGemini(aiTextInput.value, currentAiImageBase64, currentAiImageMime, aiImagePreview.src);
+ });
+
+ aiTextInput.addEventListener('keypress', (e) => {
+   if (e.key === 'Enter' && !e.shiftKey) {
+     e.preventDefault();
+     aiSendBtn.click();
+   }
+ });
+
+ // الأزرار السريعة
+ document.querySelectorAll('.ai-quick-btn').forEach(btn => {
+   btn.addEventListener('click', () => {
+     const prompt = btn.textContent.replace(/[\u{1F300}-\u{1F6FF}\u{1F900}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
+     aiTextInput.value = prompt;
+     aiSendBtn.click();
+   });
+ });
+
+ /* ============== التهيئة الأولى ============== */
+ renderWeekdayPicker();
+ renderSubjectSliders();
+ update();
+ renderToday();
 
 });
-/* ============== البرمجة الخاصة بالمساعد الدراسي الذكي (AI) ============== */
-  function initAiTab() {
-    document.getElementById('aiApiKeyInput').value = localStorage.getItem('user_gemini_key') || '';
-    if(localStorage.getItem('user_gemini_key')) {
-      document.getElementById('aiKeySavedMsg').classList.remove('hidden');
-    }
-  }
-
-  window.saveAiKey = function() {
-    const key = document.getElementById('aiApiKeyInput').value.trim();
-    if(key) {
-      localStorage.setItem('user_gemini_key', key);
-      document.getElementById('aiKeySavedMsg').classList.remove('hidden');
-      alert('تم حفظ مفتاح الـ API بنجاح في متصفحك! يمكنك الآن البدء بالاستخدام.');
-    }
-  }
-
-  window.fillAiPrompt = function(type) {
-    const area = document.getElementById('aiPromptInput');
-    if(type === '분석') {
-      const dailyMin = typeof dailyTotalMinutes === 'function' ? dailyTotalMinutes() : 0;
-      const doneDays = state && state.completedDays ? Object.values(state.completedDays).filter(Boolean).length : 0;
-
-      area.value = `أنا طالب بكالوريا علمي في سوريا، وهذا ملخص نشاطي الدراسي الحالي المستخرج من موقعي:\n- إجمالي الدقائق المستهدفة يومياً: ${dailyMin} دقيقة لجميع المواد المحددة.\n- عدد الأيام الملتزمة والمنجزة بالكامل حتى الآن: ${doneDays} يوم.\n\nيرجى تحليل التزامي الدراسي وإعطائي نصائح مخصصة، للتغلب على التراكمات وتفادي خطر الاحتراق الدراسي.`;
-    }
-  }
-
-  async function fileToGenerativePart(file) {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onloadend = () => resolve({
-        inlineData: { data: reader.result.split(',')[1], mimeType: file.type }
-      });
-      reader.readAsDataURL(file);
-    });
-  }
-
-  window.askGemini = async function() {
-    const key = localStorage.getItem('user_gemini_key');
-    if(!key) { alert('الرجاء إدخال مفتاح الـ API وحفظه في الصندوق المخصص أولاً!'); return; }
-
-    const promptText = document.getElementById('aiPromptInput').value;
-    const fileInput = document.getElementById('aiImageInput');
-    const outputDiv = document.getElementById('aiOutput');
-    const resultBox = document.getElementById('aiResultBox');
-    const loading = document.getElementById('aiLoading');
-
-    resultBox.classList.remove('hidden');
-    loading.classList.remove('hidden');
-    outputDiv.textContent = '';
-
-    try {
-      let contents = [];
-      let payload = { parts: [{ text: promptText }] };
-
-      if (fileInput.files.length > 0) {
-        const imagePart = await fileToGenerativePart(fileInput.files[0]);
-        payload.parts.push(imagePart);
-      }
-
-      contents.push(payload);
-
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: contents })
-      });
-
-      const data = await response.json();
-      loading.classList.add('hidden');
-
-      if(data.candidates && data.candidates[0].content.parts[0].text) {
-        outputDiv.textContent = data.candidates[0].content.parts[0].text;
-      } else {
-        outputDiv.textContent = 'عذراً، واجهت مشكلة في معالجة طلبك، يرجى التحقق من صحة الصورة أو كتابة السؤال بوضوح.';
-      }
-    } catch (error) {
-      loading.classList.add('hidden');
-      outputDiv.innerHTML = `<span class="text-rose-400">حدث خطأ في الاتصال بالنموذج: ${error.message}</span>`;
-    }
-  }
 </script>
 </body>
 </html>
